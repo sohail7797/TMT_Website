@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk, Chakra_Petch } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/site";
 import { baseKeywords, organizationJsonLd, JsonLd } from "@/lib/seo";
@@ -16,6 +16,14 @@ const display = Space_Grotesk({
   variable: "--font-display",
   display: "swap",
   weight: ["400", "500", "600", "700"],
+});
+
+// Modular, techy wordmark font (HK Modular-style look) for the brand lockup.
+const wordmark = Chakra_Petch({
+  subsets: ["latin"],
+  variable: "--font-wordmark",
+  display: "swap",
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -56,7 +64,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${display.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${sans.variable} ${display.variable} ${wordmark.variable} h-full antialiased`}
+    >
       <body className="flex min-h-full flex-col bg-ink-950 text-bone-50">
         <JsonLd data={organizationJsonLd()} />
         <SiteFrame>{children}</SiteFrame>

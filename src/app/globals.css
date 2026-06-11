@@ -43,6 +43,7 @@
   /* Typography */
   --font-display: var(--font-display), "Space Grotesk", system-ui, sans-serif;
   --font-sans: var(--font-sans), "Inter", system-ui, sans-serif;
+  --font-wordmark: var(--font-wordmark), "Chakra Petch", "Space Grotesk", sans-serif;
 
   /* Radii */
   --radius-xl: 1rem;

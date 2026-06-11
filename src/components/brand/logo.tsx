@@ -30,11 +30,11 @@ export function Logo({
         className="h-10 w-auto shrink-0"
       />
       {showWordmark && (
-        <span className="flex flex-col leading-none">
-          <span className="font-display text-[15px] font-bold tracking-tight text-bone-50">
+        <span className="flex flex-col items-start gap-[3px] leading-none">
+          <span className="font-wordmark text-[16px] font-bold uppercase tracking-[0.08em] text-gradient-gold">
             THE MAHIR TECH
           </span>
-          <span className="text-[9.5px] font-medium uppercase tracking-[0.22em] text-gold-400/90">
+          <span className="rounded-[4px] bg-gradient-to-b from-gold-300 to-gold-500 px-1.5 py-[2.5px] font-wordmark text-[7px] font-semibold uppercase leading-none tracking-[0.16em] text-ink-950 shadow-[0_2px_8px_-2px_rgba(230,180,60,0.4)]">
             {siteConfig.tagline}
           </span>
         </span>
