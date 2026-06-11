@@ -23,8 +23,8 @@ export function Logo({
       <Image
         src="/brand/logo-mark.png"
         alt={`${siteConfig.name} logo`}
-        width={44}
-        height={44}
+        width={352}
+        height={624}
         priority
         unoptimized
         className="h-10 w-auto shrink-0"
@@ -56,8 +56,8 @@ export function LogoFull({ className }: { className?: string }) {
     <Image
       src="/brand/logo-full.png"
       alt={`${siteConfig.name}, ${siteConfig.tagline}`}
-      width={420}
-      height={140}
+      width={1080}
+      height={1080}
       unoptimized
       className={cn("h-auto w-auto", className)}
     />

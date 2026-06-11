@@ -30,18 +30,24 @@ const timeline = [
   { year: "Coming soon", title: "Our own products", detail: "We are building EVA, our E-Virtual Assistant, and ZMap, a GIS tool for beginners and experts alike." },
 ];
 
-const team = [
+const team: {
+  name: string;
+  role: string;
+  photo: string | null;
+  link: string;
+  bio: string;
+}[] = [
   {
     name: siteConfig.team.projectManager,
     role: "Project Manager",
-    photo: "/team/sohail-1.jpg",
+    photo: "/team/founder-portrait.png",
     link: siteConfig.social.linkedinFounder,
     bio: "Leads delivery end to end, from first conversation to deployed, supported solution.",
   },
   {
     name: "Muhammad Adnan Zia",
     role: "Technology Partner",
-    photo: "/team/sohail-4.jpg",
+    photo: null,
     link: siteConfig.social.linkedinPartner,
     bio: "Drives technical direction across software, AI and infrastructure engagements.",
   },
@@ -74,10 +80,10 @@ export default function AboutPage() {
               <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-gold-500/10 blur-2xl" />
               <div className="relative overflow-hidden rounded-3xl border border-white/10">
                 <Image
-                  src="/team/sohail-2.jpg"
+                  src="/team/founder-laptop.png"
                   alt="The Mahir Tech, working with a client"
-                  width={1024}
-                  height={1280}
+                  width={1536}
+                  height={1024}
                   unoptimized
                   className="h-full w-full object-cover"
                 />
@@ -186,14 +192,23 @@ export default function AboutPage() {
                 className="group card-surface flex h-full flex-col overflow-hidden transition-colors hover:border-gold-400/30"
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
-                  <Image
-                    src={p.photo}
-                    alt={p.name}
-                    width={800}
-                    height={1000}
-                    unoptimized
-                    className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                  />
+                  {p.photo ? (
+                    <Image
+                      src={p.photo}
+                      alt={p.name}
+                      width={800}
+                      height={1000}
+                      unoptimized
+                      className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-ink-800 to-ink-900">
+                      <div className="absolute inset-0 bg-grid opacity-30" />
+                      <span className="relative font-display text-5xl font-bold text-gradient-gold">
+                        {p.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
+                      </span>
+                    </div>
+                  )}
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-950 via-ink-950/40 to-transparent p-5">
                     <p className="text-lg font-semibold text-bone-50">{p.name}</p>
                     <p className="text-sm text-gold-300">{p.role}</p>

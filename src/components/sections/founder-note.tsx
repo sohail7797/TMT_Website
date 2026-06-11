@@ -17,10 +17,10 @@ export function FounderNote() {
               <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-gold-500/10 blur-2xl" />
               <div className="relative overflow-hidden rounded-3xl border border-white/10">
                 <Image
-                  src="/team/sohail-3.jpg"
+                  src="/team/founder-tablet.png"
                   alt={`${siteConfig.team.projectManager}, ${siteConfig.name}`}
-                  width={900}
-                  height={900}
+                  width={1024}
+                  height={1536}
                   unoptimized
                   className="h-full w-full object-cover"
                 />
