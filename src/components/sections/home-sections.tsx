@@ -24,7 +24,7 @@ export function Intro() {
               <span className="text-gradient-gold">registered technology partner</span>
             </>
           }
-          description="The Mahir Tech grew through years of referral-driven work — GIS, enterprise software, websites, apps, AI automation, hardware, and infrastructure. Today we operate as a formally registered business with the compliance to match, partnering with organisations that need technology designed, built, deployed, and supported as one ecosystem."
+          description="The Mahir Tech grew through years of referral-driven work, GIS, enterprise software, websites, apps, AI automation, hardware, and infrastructure. Today we operate as a formally registered business with the compliance to match, partnering with organisations that need technology designed, built, deployed, and supported as one ecosystem."
         />
         <Reveal delay={0.1}>
           <div className="grid grid-cols-2 gap-4">
@@ -57,7 +57,7 @@ export function ServicesOverview() {
             One partner, the <span className="text-gradient-gold">full technology stack</span>
           </>
         }
-        description="From the AI agents and automation clients want today to the GIS, software, and infrastructure that run an organisation — delivered end-to-end."
+        description="From the AI agents and automation clients want today to the GIS, software, and infrastructure that run an organisation, delivered end-to-end."
       />
       <RevealGroup className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {services.map((s) => (
@@ -87,7 +87,7 @@ export function WhyUs() {
             Built for <span className="text-gradient-gold">trust and execution</span>
           </>
         }
-        description="The reasons organisations choose us — and stay with us."
+        description="The reasons organisations choose us, and stay with us."
       />
       <RevealGroup className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {differentiators.map((d) => (
@@ -181,7 +181,7 @@ export function TechAndIndustries() {
                 Modern tools, <span className="text-gradient-gold">chosen to fit</span>
               </>
             }
-            description="We pick the right technology for the job — not the trendiest. Here's what we work with."
+            description="We pick the right technology for the job, not the trendiest. Here's what we work with."
           />
           <RevealGroup className="mt-8 space-y-3">
             {techStack.map((group) => (
@@ -215,7 +215,7 @@ export function TechAndIndustries() {
                 Sectors we <span className="text-gradient-gold">serve</span>
               </>
             }
-            description="From public institutions to startups — we adapt to the standards each sector demands."
+            description="From public institutions to startups, we adapt to the standards each sector demands."
           />
           <RevealGroup className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {industries.slice(0, 8).map((ind) => (
@@ -259,7 +259,7 @@ export async function Testimonials() {
             What partners <span className="text-gradient-gold">say</span>
           </>
         }
-        description="Selected feedback from teams we've worked with. (Attributions are being finalised with client consent.)"
+        description="Feedback from teams we've worked with across defence, public utilities, education and private business."
       />
       <RevealGroup className="mt-14 grid gap-6 md:grid-cols-3">
         {testimonials.map((t, i) => (

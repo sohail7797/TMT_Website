@@ -7,7 +7,7 @@ import { siteConfig, WHATSAPP_GREETING } from "@/lib/site";
 import { whatsappLink } from "@/lib/utils";
 
 /**
- * Floating WhatsApp button — bottom-right, opens a chat with The Mahir Tech
+ * Floating WhatsApp button, bottom-right, opens a chat with The Mahir Tech
  * pre-filled. Shows a one-time inviting tooltip after a short delay.
  */
 export function WhatsAppButton() {
@@ -46,7 +46,7 @@ export function WhatsAppButton() {
             </button>
             <p className="text-sm font-medium text-bone-50">Need a quick answer?</p>
             <p className="mt-0.5 text-xs text-bone-300">
-              Chat with us on WhatsApp — we usually reply fast.
+              Chat with us on WhatsApp, we usually reply fast.
             </p>
             <span className="absolute -bottom-1.5 right-6 h-3 w-3 rotate-45 border-b border-r border-white/10 bg-ink-850" />
           </motion.div>

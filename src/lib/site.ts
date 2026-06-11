@@ -1,5 +1,5 @@
 /**
- * THE MAHIR TECH — central site configuration.
+ * THE MAHIR TECH, central site configuration.
  * Single source of truth for brand, contact, navigation and SEO defaults.
  * Edit values here; they propagate across the whole site.
  */
@@ -32,7 +32,7 @@ export const siteConfig = {
     country: "Pakistan",
     postalCode: "46000",
     geo: { lat: 33.5973, lng: 73.0479 },
-    hours: "Mon – Sat · 10:00 AM – 8:00 PM (PKT)",
+    hours: "Mon, Sat · 10:00 AM, 8:00 PM (PKT)",
   },
 
   social: {
@@ -97,4 +97,4 @@ export const footerNav: { title: string; links: NavItem[] }[] = [
 
 /** Default WhatsApp greeting used by the floating button & CTAs. */
 export const WHATSAPP_GREETING =
-  "Hello The Mahir Tech 👋 — I'd like to discuss a project.";
+  "Hello The Mahir Tech 👋, I'd like to discuss a project.";

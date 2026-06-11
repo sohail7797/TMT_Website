@@ -8,7 +8,7 @@ export function ProjectCard({ project }: { project: Project }) {
       href={`/projects/${project.slug}`}
       className="group card-surface relative flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-gold-400/30"
     >
-      {/* Visual band (placeholder — replace with project imagery in Sanity) */}
+      {/* Visual band (placeholder, replace with project imagery in Sanity) */}
       <div className="relative h-44 overflow-hidden border-b border-white/10 bg-gradient-to-br from-ink-800 to-ink-900">
         <div className="absolute inset-0 bg-grid opacity-40" />
         <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gold-500/15 blur-2xl transition-transform duration-500 group-hover:scale-150" />

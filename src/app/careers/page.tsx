@@ -17,8 +17,8 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const perks = [
-  { icon: Rocket, title: "Real, shipped work", detail: "Work on projects that go live for government and enterprise clients — not throwaway demos." },
-  { icon: Heart, title: "Learn the full stack", detail: "AI, automation, GIS, software, and infrastructure under one roof — broaden your range fast." },
+  { icon: Rocket, title: "Real, shipped work", detail: "Work on projects that go live for government and enterprise clients, not throwaway demos." },
+  { icon: Heart, title: "Learn the full stack", detail: "AI, automation, GIS, software, and infrastructure under one roof, broaden your range fast." },
   { icon: Users, title: "Lean, senior team", detail: "Direct mentorship and ownership. Your work is seen and your ideas count." },
 ];
 
@@ -39,7 +39,7 @@ export default function CareersPage() {
             Build technology that <span className="text-gradient-gold">delivers</span>
           </>
         }
-        description="We're a growing team that values craft, ownership, and curiosity. If you want to ship real work across AI, software, GIS, and infrastructure — let's talk."
+        description="We're a growing team that values craft, ownership, and curiosity. If you want to ship real work across AI, software, GIS, and infrastructure, let's talk."
       >
         <Button
           href={whatsappLink(siteConfig.contact.whatsapp, "Hi, I'm interested in career opportunities at The Mahir Tech.")}
@@ -76,7 +76,7 @@ export default function CareersPage() {
         <SectionHeading
           eyebrow="Open positions"
           title={<>Current <span className="text-gradient-gold">openings</span></>}
-          description="Don't see your exact role? We still want to hear from exceptional people — send us your profile."
+          description="Don't see your exact role? We still want to hear from exceptional people, send us your profile."
         />
         <RevealGroup className="mx-auto mt-12 max-w-3xl space-y-3">
           {openRoles.map((r) => (

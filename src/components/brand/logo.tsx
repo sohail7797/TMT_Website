@@ -1,37 +1,14 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/lib/site";
 
 /**
- * Brand mark. Uses an inline gold "M" monogram so it renders crisp at any size
- * with no asset dependency. To use the official artwork instead, drop
- * `public/logo.svg` (or .png) and swap the <Monogram/> for an <Image/>.
+ * Brand mark. Uses the official artwork:
+ *   public/brand/logo-mark.png, the square "M" figure mark
+ *   public/brand/logo-full.png, the full horizontal lockup
+ * The wordmark text is rendered in-app for crispness next to the mark.
  */
-function Monogram({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <defs>
-        <linearGradient id="tmt-gold" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#f4d77e" />
-          <stop offset="45%" stopColor="#e6b43c" />
-          <stop offset="100%" stopColor="#b8860b" />
-        </linearGradient>
-      </defs>
-      <rect x="1.5" y="1.5" width="45" height="45" rx="11" fill="#0a0a0b" stroke="url(#tmt-gold)" strokeWidth="1.5" />
-      <path
-        d="M11 35V14l9 12 9-12v21"
-        fill="none"
-        stroke="url(#tmt-gold)"
-        strokeWidth="3.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M33 35V20" stroke="url(#tmt-gold)" strokeWidth="3.2" strokeLinecap="round" />
-      <circle cx="33" cy="14.5" r="2.2" fill="url(#tmt-gold)" />
-    </svg>
-  );
-}
-
 export function Logo({
   className,
   showWordmark = true,
@@ -43,7 +20,15 @@ export function Logo({
 }) {
   const content = (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <Monogram className="h-9 w-9 shrink-0" />
+      <Image
+        src="/brand/logo-mark.png"
+        alt={`${siteConfig.name} logo`}
+        width={44}
+        height={44}
+        priority
+        unoptimized
+        className="h-10 w-auto shrink-0"
+      />
       {showWordmark && (
         <span className="flex flex-col leading-none">
           <span className="font-display text-[15px] font-bold tracking-tight text-bone-50">
@@ -62,5 +47,19 @@ export function Logo({
     <Link href={href} aria-label={siteConfig.name} className="group">
       {content}
     </Link>
+  );
+}
+
+/** Full horizontal lockup image, for large surfaces (footer, hero). */
+export function LogoFull({ className }: { className?: string }) {
+  return (
+    <Image
+      src="/brand/logo-full.png"
+      alt={`${siteConfig.name}, ${siteConfig.tagline}`}
+      width={420}
+      height={140}
+      unoptimized
+      className={cn("h-auto w-auto", className)}
+    />
   );
 }

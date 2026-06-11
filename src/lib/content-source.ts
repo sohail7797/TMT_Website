@@ -1,6 +1,6 @@
 /**
  * Unified content source. Reads from Sanity when configured, otherwise falls
- * back to local seed data — so the site always works, even before the CMS is
+ * back to local seed data, so the site always works, even before the CMS is
  * populated. Pages should import from here, not from the raw data files.
  */
 import { sanityClient } from "@/sanity/client";
@@ -20,10 +20,9 @@ type Testimonial = {
   company: string;
   rating?: number;
   featured?: boolean;
-  placeholder?: boolean;
 };
 
-const REVALIDATE = 60; // seconds — ISR for CMS content
+const REVALIDATE = 60; // seconds, ISR for CMS content
 
 export async function getAllProjects(): Promise<Project[]> {
   if (!sanityClient) return seedProjects;

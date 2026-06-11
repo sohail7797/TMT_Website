@@ -22,7 +22,7 @@ export function buildMetadata({
   const url = `${siteConfig.url}${path}`;
   const desc = description ?? siteConfig.description;
   const fullTitle =
-    path === "/" ? `${siteConfig.name} — ${siteConfig.tagline}` : `${title} · ${siteConfig.name}`;
+    path === "/" ? `${siteConfig.name}, ${siteConfig.tagline}` : `${title} · ${siteConfig.name}`;
 
   return {
     title,
@@ -82,7 +82,7 @@ export function organizationJsonLd() {
     foundingDate: String(siteConfig.foundingYear),
     email: c.email,
     telephone: c.phone,
-    logo: `${siteConfig.url}/icon`,
+    logo: `${siteConfig.url}/brand/logo-mark.png`,
     image: `${siteConfig.url}/opengraph-image`,
     address: {
       "@type": "PostalAddress",

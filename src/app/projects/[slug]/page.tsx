@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Target, Lightbulb, TrendingUp, Layers, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Target, Lightbulb, TrendingUp, Layers, ExternalLink } from "lucide-react";
 import { PageHeader } from "@/components/shared/page-header";
 import { Section } from "@/components/shared/section";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal";
@@ -75,25 +75,24 @@ export default async function ProjectDetailPage({
           <span className="rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-sm text-bone-300">
             Client: <span className="text-bone-100">{project.client}</span>
           </span>
-          {project.year && (
+          {project.industry && (
             <span className="rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-sm text-bone-300">
-              {project.year}
+              {project.industry}
             </span>
+          )}
+          {project.href && (
+            <a
+              href={project.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-gold-400/30 bg-gold-400/[0.06] px-3.5 py-1.5 text-sm text-gold-200 transition-colors hover:bg-gold-400/10"
+            >
+              Visit live site
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
           )}
         </div>
       </PageHeader>
-
-      {project.placeholder && (
-        <div className="container-page pt-8">
-          <Reveal className="flex items-start gap-3 rounded-xl border border-gold-400/25 bg-gold-400/[0.06] px-4 py-3 text-sm text-gold-100">
-            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-gold-300" />
-            <p>
-              Some details on this case study are placeholders pending client verification and consent.
-              Metrics shown as “—” will be finalised before publication.
-            </p>
-          </Reveal>
-        </div>
-      )}
 
       <Section>
         <div className="grid gap-6 lg:grid-cols-2">

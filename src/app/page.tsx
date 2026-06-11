@@ -9,6 +9,7 @@ import {
   TechAndIndustries,
   Testimonials,
 } from "@/components/sections/home-sections";
+import { FounderNote } from "@/components/sections/founder-note";
 import { CTA } from "@/components/sections/cta";
 import { JsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
@@ -53,6 +54,7 @@ export default function HomePage() {
       <Process />
       <TechAndIndustries />
       <Testimonials />
+      <FounderNote />
       <CTA />
     </>
   );

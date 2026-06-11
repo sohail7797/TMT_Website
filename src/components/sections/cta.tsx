@@ -6,7 +6,7 @@ import { whatsappLink } from "@/lib/utils";
 
 export function CTA({
   title = "Let's build something that delivers",
-  description = "Tell us about your project. We'll respond with a clear plan, timeline, and quote — no jargon, no pressure.",
+  description = "Tell us about your project. We'll respond with a clear plan, timeline, and quote, no jargon, no pressure.",
 }: {
   title?: string;
   description?: string;

@@ -1,6 +1,6 @@
 import { defineType, defineField } from "sanity";
 
-/** Blog / insights post — ready for future content marketing & SEO. */
+/** Blog / insights post, ready for future content marketing & SEO. */
 export const post = defineType({
   name: "post",
   title: "Blog Post",

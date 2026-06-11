@@ -46,9 +46,9 @@ export function Hero() {
             transition={{ duration: 0.7, ease, delay: 0.14 }}
             className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-bone-300 sm:text-lg"
           >
-            We design, build, deploy, and support complete technology ecosystems — from{" "}
+            We design, build, deploy, and support complete technology ecosystems, from{" "}
             <span className="text-bone-100">AI agents and automation</span> to GIS, enterprise
-            software, and IT infrastructure — for government and private-sector organisations.
+            software, and IT infrastructure, for government and private-sector organisations.
           </motion.p>
 
           <motion.div

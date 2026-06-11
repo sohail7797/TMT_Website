@@ -23,7 +23,7 @@ const faqs = [
   },
   {
     q: "Do you work with clients outside Pakistan?",
-    a: "Yes — we work with international and remote clients alongside our local government and private-sector partners.",
+    a: "Yes, we work with international and remote clients alongside our local government and private-sector partners.",
   },
   {
     q: "Can we start with a small project?",
@@ -121,16 +121,16 @@ export default function ContactPage() {
               </Button>
             </div>
 
-            {/* Map placeholder */}
-            <div className="card-surface relative flex h-48 items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 bg-grid opacity-40" />
-              <div className="relative text-center">
-                <MapPin className="mx-auto h-6 w-6 text-gold-400" />
-                <p className="mt-2 text-sm text-bone-300">
-                  Saddar, Rawalpindi
-                </p>
-                <p className="text-xs text-bone-500">[ Google Map embed placeholder ]</p>
-              </div>
+            {/* Live map */}
+            <div className="card-surface relative h-56 overflow-hidden">
+              <iframe
+                title="The Mahir Tech location, Saddar, Rawalpindi"
+                src="https://www.google.com/maps?q=Abbas+Plaza+Computer+Market+Saddar+Rawalpindi&output=embed"
+                className="h-full w-full grayscale-[0.2] contrast-[1.05]"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                style={{ border: 0 }}
+              />
             </div>
           </Reveal>
 

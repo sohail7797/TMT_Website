@@ -12,7 +12,7 @@ export const testimonial = defineType({
     defineField({ name: "avatar", title: "Avatar", type: "image", options: { hotspot: true } }),
     defineField({
       name: "rating",
-      title: "Rating (1–5)",
+      title: "Rating (1 to 5)",
       type: "number",
       initialValue: 5,
       validation: (r) => r.min(1).max(5),

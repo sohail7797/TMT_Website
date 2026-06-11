@@ -23,8 +23,8 @@ export function Footer() {
           <div className="flex flex-col gap-5">
             <Logo />
             <p className="max-w-xs text-sm leading-relaxed text-bone-300">
-              A complete technology execution partner — AI, software, GIS, and
-              infrastructure — for government and private-sector organisations.
+              A complete technology execution partner, AI, software, GIS, and
+              infrastructure, for government and private-sector organisations.
             </p>
             <div className="flex flex-col gap-2.5 text-sm text-bone-300">
               <a

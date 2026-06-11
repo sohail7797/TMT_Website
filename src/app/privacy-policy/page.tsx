@@ -36,12 +36,12 @@ export default function PrivacyPolicyPage() {
           <p>We collect information in the following ways:</p>
           <ul>
             <li>
-              <strong>Information you provide</strong> — such as your name, email, phone number,
+              <strong>Information you provide</strong>, such as your name, email, phone number,
               company, and project details when you submit a contact or quote form, or message us
               via WhatsApp or email.
             </li>
             <li>
-              <strong>Usage data</strong> — basic technical information such as browser type, device,
+              <strong>Usage data</strong>, basic technical information such as browser type, device,
               pages visited, and referring URLs, collected through cookies and analytics where
               enabled.
             </li>

@@ -66,7 +66,7 @@ export function LeadForm() {
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gold-400/15 text-gold-300">
           <CheckCircle2 className="h-7 w-7" />
         </div>
-        <h3 className="text-xl font-semibold text-bone-50">Thank you — message received</h3>
+        <h3 className="text-xl font-semibold text-bone-50">Thank you, message received</h3>
         <p className="max-w-sm text-sm text-bone-300">
           We&apos;ll get back to you shortly. Need a faster reply? Message us on WhatsApp.
         </p>
@@ -141,7 +141,7 @@ export function LeadForm() {
             <option value="" disabled>
               Select a range
             </option>
-            {["Under $1k", "$1k – $5k", "$5k – $15k", "$15k+", "Not sure yet"].map((b) => (
+            {["Under $1k", "$1k, $5k", "$5k, $15k", "$15k+", "Not sure yet"].map((b) => (
               <option key={b} value={b} className="bg-ink-900">
                 {b}
               </option>
