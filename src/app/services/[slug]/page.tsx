@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Check, ChevronRight } from "lucide-react";
 import { PageHeader } from "@/components/shared/page-header";
 import { Section, SectionHeading } from "@/components/shared/section";
-import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal";
+import { RevealGroup, RevealItem } from "@/components/motion/reveal";
 import { Icon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import { CTA } from "@/components/sections/cta";

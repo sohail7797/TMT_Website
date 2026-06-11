@@ -39,12 +39,20 @@ type ButtonAsLink = CommonProps &
 
 export type ButtonProps = ButtonAsButton | ButtonAsLink;
 
+/** Strip the styling-only props so the rest can spread safely onto a DOM node. */
+function domProps<T extends CommonProps>(props: T) {
+  const { variant, size, className, ...rest } = props;
+  void variant;
+  void size;
+  void className;
+  return rest;
+}
+
 export function Button(props: ButtonProps) {
-  const { className, variant, size } = props;
-  const classes = cn(buttonVariants({ variant, size }), className);
+  const classes = cn(buttonVariants({ variant: props.variant, size: props.size }), props.className);
 
   if ("href" in props && props.href !== undefined) {
-    const { href, external, variant: _v, size: _s, className: _c, ...rest } = props;
+    const { href, external, ...rest } = domProps(props) as Omit<ButtonAsLink, "variant" | "size" | "className">;
     if (external) {
       return (
         <a href={href} className={classes} target="_blank" rel="noopener noreferrer" {...rest} />
@@ -53,7 +61,7 @@ export function Button(props: ButtonProps) {
     return <Link href={href} className={classes} {...rest} />;
   }
 
-  const { variant: _v, size: _s, className: _c, ...rest } = props as ButtonAsButton;
+  const rest = domProps(props) as Omit<ButtonAsButton, "variant" | "size" | "className">;
   return <button className={classes} {...rest} />;
 }
 

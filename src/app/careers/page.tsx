@@ -6,7 +6,7 @@ import { RevealGroup, RevealItem } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
 import { CTA } from "@/components/sections/cta";
 import { buildMetadata } from "@/lib/seo";
-import { siteConfig, WHATSAPP_GREETING } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
 import { whatsappLink } from "@/lib/utils";
 
 export const metadata: Metadata = buildMetadata({
