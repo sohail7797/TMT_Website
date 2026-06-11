@@ -1,0 +1,12 @@
+# Normalise line endings to LF for all text files.
+# Prevents CRLF issues when the repo is built on Linux (Coolify/Docker).
+* text=auto eol=lf
+
+# Binary assets — never normalise.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.woff binary
+*.woff2 binary
