@@ -11,10 +11,11 @@ import { buildMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = buildMetadata({
-  title: "About",
+  title: "About Our AI & Automation Agency",
   path: "/about",
   description:
-    "The Mahir Tech is a Rawalpindi-based technology partner. Years of referral-driven delivery, now a registered business spanning AI, automation, GIS, software and infrastructure.",
+    "The Mahir Tech is a worldwide AI, automation and web development agency. Years of delivery across AI agents, GIS, software and IT. Meet the team and our proven approach.",
+  keywords: ["about The Mahir Tech", "AI automation agency", "AI development company", "Mahir Tech team"],
 });
 
 const values = [

@@ -26,7 +26,7 @@ const wordmark = Chakra_Petch({
   weight: ["500", "600", "700"],
 });
 
-const HOME_TITLE = `${siteConfig.name} | AI Agents, Automation, GIS & IT Solutions in Rawalpindi`;
+const HOME_TITLE = "AI Automation, AI Agents & Web App Agency Worldwide | The Mahir Tech";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),

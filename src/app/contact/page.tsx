@@ -10,10 +10,11 @@ import { siteConfig, WHATSAPP_GREETING } from "@/lib/site";
 import { whatsappLink } from "@/lib/utils";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Contact",
+  title: "Get a Free Project Quote",
   path: "/contact",
   description:
-    "Get in touch with The Mahir Tech in Rawalpindi. Request a quote for AI, automation, GIS, software, web, mobile, or IT infrastructure projects.",
+    "Tell us your project and get a free estimate within 24 hours. AI, automation, web, mobile, GIS and IT solutions for clients worldwide. Reach us by email or WhatsApp.",
+  keywords: ["get free project quote", "hire AI automation agency", "free project estimate", "contact The Mahir Tech"],
 });
 
 const faqs = [

@@ -48,35 +48,44 @@ export function buildMetadata({
   };
 }
 
-/** Default keyword set used on the home page and as a base. */
+/**
+ * Keyword set: brand terms (to own name searches), plus high-intent,
+ * lower-competition long-tail buyer phrases that convert better than
+ * vague high-volume heads like "AI agency".
+ */
 export const baseKeywords = [
-  // Brand (rank #1 for name searches)
+  // Brand (own #1 for name searches, worldwide)
   "The Mahir Tech",
   "Mahir Tech",
-  "Mahir Tech Rawalpindi",
-  "Mahir Tech Pakistan",
-  "Mahir Tech AI",
   "themahirtech",
   "themahirtech.com",
-  "TMT technology",
-  // Services
-  "AI agents Pakistan",
-  "AI automation company Rawalpindi",
-  "AI automation Pakistan",
-  "AI agency Pakistan",
-  "AI chatbot development",
-  "voice AI agents",
-  "AI calling agent",
-  "workflow automation n8n",
-  "GIS solutions Pakistan",
-  "enterprise software development Rawalpindi",
-  "web development company Pakistan",
-  "mobile app development Rawalpindi",
-  "IT infrastructure Pakistan",
-  "hardware supply Rawalpindi",
-  "servers and NAS Pakistan",
-  "computer lab setup Pakistan",
-  "government IT projects Pakistan",
+  "Mahir Tech agency",
+  // High-intent buyer long-tail (AI & automation)
+  "hire AI automation agency",
+  "AI automation agency",
+  "AI agent development company",
+  "AI chatbot development services",
+  "AI voice agent development",
+  "build AI chatbot for website",
+  "custom workflow automation services",
+  "n8n automation expert",
+  "AI automation for small business",
+  "AI customer support automation",
+  "business process automation services",
+  // Web / app / GIS
+  "affordable web app development agency",
+  "custom web application development",
+  "Shopify and WordPress development agency",
+  "mobile app development agency",
+  "GIS web application development",
+  "hire GIS expert",
+  // Infrastructure
+  "server and NAS solutions",
+  "IT infrastructure services",
+  "computer lab setup",
+  // Intent / conversion
+  "get free project estimate",
+  "AI development agency worldwide",
 ];
 
 /** Organization + LocalBusiness JSON-LD for the site root. */
@@ -106,7 +115,19 @@ export function organizationJsonLd() {
       addressCountry: "PK",
     },
     geo: { "@type": "GeoCoordinates", latitude: c.geo.lat, longitude: c.geo.lng },
-    areaServed: ["Pakistan", "Worldwide"],
+    areaServed: { "@type": "Place", name: "Worldwide" },
+    knowsAbout: [
+      "AI Agents",
+      "AI Automation",
+      "AI Chatbots",
+      "Voice AI Agents",
+      "Workflow Automation",
+      "Web Development",
+      "Mobile App Development",
+      "GIS Solutions",
+      "IT Infrastructure",
+      "Server and NAS Solutions",
+    ],
     sameAs: [
       siteConfig.social.linkedinCompany,
       siteConfig.social.linkedinFounder,

@@ -9,10 +9,11 @@ import { projectCategories } from "@/lib/data/projects";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Projects",
+  title: "Projects & Case Studies",
   path: "/projects",
   description:
-    "Selected projects by The Mahir Tech across AI & automation, web, marketplaces, software, GIS, and IT infrastructure for government and private-sector clients.",
+    "See our work: AI agents and automation, web and marketplace platforms, enterprise software, GIS and IT infrastructure for global, government and private-sector clients.",
+  keywords: ["AI automation case studies", "AI agency portfolio", "automation projects", "The Mahir Tech projects"],
 });
 
 export default async function ProjectsPage() {

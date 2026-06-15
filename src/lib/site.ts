@@ -10,7 +10,7 @@ export const siteConfig = {
   legalName: "The Mahir Tech",
   tagline: "Technology That Delivers",
   description:
-    "The Mahir Tech is a Rawalpindi-based technology partner delivering AI automation, AI agents, GIS solutions, enterprise software, web & mobile apps, and IT infrastructure for government and private-sector organizations.",
+    "The Mahir Tech is a worldwide AI, automation and web development agency. We build AI agents, chatbots, voice agents, custom automations, web and mobile apps, GIS and IT solutions for startups, SMEs and enterprises. Get a free project estimate within 24 hours.",
   // Used for canonical URLs, sitemap, OG. Override with NEXT_PUBLIC_SITE_URL in production.
   url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://themahirtech.com",
   domain: "themahirtech.com",

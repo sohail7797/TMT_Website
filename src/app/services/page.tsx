@@ -11,10 +11,10 @@ import { services, getService } from "@/lib/data/services";
 import { buildMetadata, baseKeywords } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Services",
+  title: "AI, Automation, Web, GIS & IT Services",
   path: "/services",
   description:
-    "AI solutions, AI automation, GIS, enterprise software, web & mobile development, IT infrastructure and hardware supply, delivered end-to-end by The Mahir Tech.",
+    "Explore our services: AI agents, chatbots, voice agents, workflow automation, web and mobile apps, GIS and IT infrastructure. Worldwide delivery. Get a free quote.",
   keywords: baseKeywords,
 });
 
