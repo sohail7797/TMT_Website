@@ -269,16 +269,25 @@ export async function Testimonials() {
               <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-bone-200">
                 “{t.quote}”
               </blockquote>
-              <figcaption className="mt-6 border-t border-white/10 pt-4">
-                <p className="text-sm font-medium text-bone-100">{t.name}</p>
-                <p className="text-xs text-bone-400">
-                  {t.role} · {t.company}
-                </p>
+              <figcaption className="mt-6 flex items-center gap-3 border-t border-white/10 pt-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gold-400/25 bg-gold-400/[0.08] font-display text-sm font-semibold text-gold-300">
+                  {t.name.slice(0, 1)}
+                </span>
+                <span>
+                  <p className="text-sm font-semibold text-bone-100">{t.name}</p>
+                  <p className="text-xs text-gold-300">{t.role}</p>
+                </span>
               </figcaption>
             </figure>
           </RevealItem>
         ))}
       </RevealGroup>
+      <div className="mt-10 flex justify-center">
+        <Button href="/testimonials" variant="outline" size="md">
+          Read more reviews
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+      </div>
       <Reveal delay={0.1} className="mt-10">
         <div className="mx-auto flex max-w-2xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-bone-400">
           {["Registered business", "Government-sector experience", "Enterprise delivery", "End-to-end support"].map(

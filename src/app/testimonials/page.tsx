@@ -65,11 +65,14 @@ export default async function TestimonialsPage() {
                 <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-bone-200">
                   “{t.quote}”
                 </blockquote>
-                <figcaption className="mt-6 border-t border-white/10 pt-4">
-                  <p className="text-sm font-medium text-bone-100">{t.name}</p>
-                  <p className="text-xs text-bone-400">
-                    {t.role} · {t.company}
-                  </p>
+                <figcaption className="mt-6 flex items-center gap-3 border-t border-white/10 pt-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gold-400/25 bg-gold-400/[0.08] font-display text-sm font-semibold text-gold-300">
+                    {t.name.slice(0, 1)}
+                  </span>
+                  <span>
+                    <p className="text-sm font-semibold text-bone-100">{t.name}</p>
+                    <p className="text-xs text-gold-300">{t.role}</p>
+                  </span>
                 </figcaption>
               </figure>
             </RevealItem>

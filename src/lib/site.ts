@@ -23,8 +23,8 @@ export const siteConfig = {
     whatsappDisplay: "0332-0006282",
     phone: "+92517066702",
     phoneDisplay: "051-7066702",
-    email: "info@themahirtech.com",
-    salesEmail: "sales@themahirtech.com",
+    email: "mahirtechofficial@gmail.com",
+    salesEmail: "mahirtechofficial@gmail.com",
     addressLine1: "3rd Floor, Abbas Plaza, Computer Market",
     addressLine2: "Street #1, Saddar, Rawalpindi",
     city: "Rawalpindi",
@@ -32,7 +32,7 @@ export const siteConfig = {
     country: "Pakistan",
     postalCode: "46000",
     geo: { lat: 33.5973, lng: 73.0479 },
-    hours: "Mon, Sat · 10:00 AM, 8:00 PM (PKT)",
+    hours: "Mon to Sat · 10:00 AM to 8:00 PM (PKT)",
   },
 
   social: {
@@ -42,6 +42,11 @@ export const siteConfig = {
   },
 
   team: {
+    ceo: "M. Sohail",
+    ceoRole: "Founder, CEO & CTO",
+    coo: "Muhammad Adnan Zia",
+    cooRole: "COO & GIS Expert",
+    // kept for existing references (e.g. founder note)
     projectManager: "M. Sohail",
   },
 } as const;

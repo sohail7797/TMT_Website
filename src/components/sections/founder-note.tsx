@@ -36,8 +36,8 @@ export function FounderNote() {
               <span className="text-gradient-gold">works in the real world</span>.&rdquo;
             </blockquote>
             <div className="mt-6">
-              <p className="text-base font-semibold text-bone-50">{siteConfig.team.projectManager}</p>
-              <p className="text-sm text-gold-300">Project Manager, {siteConfig.name}</p>
+              <p className="text-base font-semibold text-bone-50">{siteConfig.team.ceo}</p>
+              <p className="text-sm text-gold-300">{siteConfig.team.ceoRole}, {siteConfig.name}</p>
             </div>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button

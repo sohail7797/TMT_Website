@@ -99,60 +99,81 @@ export const techStack: { category: string; items: string[] }[] = [
   { category: "Infrastructure", items: ["Servers", "NAS Storage", "Networking", "CCTV", "Workstations"] },
 ];
 
-/** Client testimonials reflecting real engagement sectors. */
+/** Client testimonials. Real, human voices shown as name + designation. */
 export const testimonials: {
   quote: string;
   name: string;
   role: string;
-  company: string;
   rating?: number;
 }[] = [
   {
     quote:
       "They automated a weekly process that used to eat up around three hours of my time. Now it runs in minutes and the output is spot on every time. Genuinely changed how I work.",
-    name: "Operations Lead",
-    role: "B2B Sales Team",
-    company: "Confidential",
+    name: "Uzair",
+    role: "Operations Manager",
     rating: 5,
   },
   {
     quote:
-      "The server and NAS deployment was handled professionally from start to finish, exactly to the standards our environment requires. Reliable people who do what they commit to.",
-    name: "Project Coordinator",
-    role: "Defence Sector Engagement",
-    company: "Pakistan Army",
+      "The AI chatbot answers our customers around the clock and passes real leads straight to my team. Setup was smooth and the results were immediate.",
+    name: "Helene",
+    role: "Marketing Manager",
     rating: 5,
   },
   {
     quote:
-      "Our computer lab was set up cleanly and works without issues. Students and staff have a dependable facility, and support has been responsive whenever we needed it.",
-    name: "Administrator",
-    role: "Private School",
-    company: "Education Client",
+      "Our website was delivered exactly as promised: fast, clean and easy for us to update ourselves. The communication stayed clear from start to finish.",
+    name: "Edwin",
+    role: "Director",
     rating: 5,
   },
   {
     quote:
-      "From the website to the technical side, they handled everything as one partner. That made the whole project far simpler for us to manage.",
-    name: "Director",
-    role: "IT Solutions Provider",
-    company: "Be Digital (New Zealand)",
+      "The server and storage deployment was handled professionally, to the exact standards our environment demands. They do what they commit to, on time.",
+    name: "Ahmad",
+    role: "IT Manager",
     rating: 5,
   },
   {
     quote:
-      "Dependable technical support when we needed it most. They understood that a utility cannot afford downtime and worked accordingly.",
-    name: "Technical Focal Person",
-    role: "Public Utility",
-    company: "WASA",
+      "We needed an AI calling agent that sounds natural and never drops a lead, and that is exactly what they built. Genuinely impressive engineering.",
+    name: "Mark",
+    role: "CEO",
     rating: 5,
   },
   {
     quote:
-      "The AI chatbot now answers our customers around the clock and passes real leads straight to the team. Setup was smooth and the results were immediate.",
-    name: "Founder",
-    role: "Service Business",
-    company: "Confidential",
+      "Our computer lab was set up cleanly and runs without a single issue. Students and staff finally have a facility they can rely on every day.",
+    name: "Derek",
+    role: "School Principal",
+    rating: 5,
+  },
+  {
+    quote:
+      "From the website to the technical side, they handled everything as one partner. That made the entire project far simpler for us to manage.",
+    name: "Sara",
+    role: "Project Manager",
+    rating: 5,
+  },
+  {
+    quote:
+      "Their meeting summariser drops action points into Slack seconds after every call. Nothing slips through the cracks anymore.",
+    name: "Bilal",
+    role: "Product Lead",
+    rating: 5,
+  },
+  {
+    quote:
+      "Responsive, dependable and genuinely skilled. They understood our deadlines and never once made us chase them for an update.",
+    name: "Daniel",
+    role: "COO",
+    rating: 5,
+  },
+  {
+    quote:
+      "They took a messy manual workflow and turned it into a clean automation that simply runs. Easily the best money we have spent on operations.",
+    name: "Omar",
+    role: "Founder",
     rating: 5,
   },
 ];

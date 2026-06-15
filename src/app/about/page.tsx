@@ -38,18 +38,18 @@ const team: {
   bio: string;
 }[] = [
   {
-    name: siteConfig.team.projectManager,
-    role: "Project Manager",
+    name: siteConfig.team.ceo,
+    role: siteConfig.team.ceoRole,
     photo: "/team/founder-portrait.png",
     link: siteConfig.social.linkedinFounder,
-    bio: "Leads delivery end to end, from first conversation to deployed, supported solution.",
+    bio: "Leads strategy and delivery end to end, from the first conversation to a deployed, supported solution.",
   },
   {
-    name: "Muhammad Adnan Zia",
-    role: "Technology Partner",
+    name: siteConfig.team.coo,
+    role: siteConfig.team.cooRole,
     photo: null,
     link: siteConfig.social.linkedinPartner,
-    bio: "Drives technical direction across software, AI and infrastructure engagements.",
+    bio: "Drives operations and technical direction across GIS, software, AI and infrastructure engagements.",
   },
 ];
 
