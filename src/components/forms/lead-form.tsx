@@ -113,7 +113,7 @@ export function LeadForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Phone (optional)">
-          <input className={inputBase} placeholder="03xx-xxxxxxx" {...register("phone")} />
+          <input className={inputBase} placeholder="+92 300 1234567" {...register("phone")} />
         </Field>
         <Field label="Company (optional)">
           <input className={inputBase} placeholder="Organisation" {...register("company")} />

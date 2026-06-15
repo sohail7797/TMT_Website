@@ -26,11 +26,13 @@ const wordmark = Chakra_Petch({
   weight: ["500", "600", "700"],
 });
 
+const HOME_TITLE = `${siteConfig.name} | AI Agents, Automation, GIS & IT Solutions in Rawalpindi`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name}, ${siteConfig.tagline}`,
-    template: `%s · ${siteConfig.name}`,
+    default: HOME_TITLE,
+    template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
   keywords: baseKeywords,
@@ -39,21 +41,29 @@ export const metadata: Metadata = {
   creator: siteConfig.name,
   publisher: siteConfig.name,
   alternates: { canonical: "/" },
-  robots: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  robots: {
+    index: true,
+    follow: true,
+    "max-image-preview": "large",
+    "max-snippet": -1,
+    "max-video-preview": -1,
+  },
   openGraph: {
     type: "website",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    title: `${siteConfig.name}, ${siteConfig.tagline}`,
+    title: HOME_TITLE,
     description: siteConfig.description,
     locale: siteConfig.locale,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name}, ${siteConfig.tagline}`,
+    title: HOME_TITLE,
     description: siteConfig.description,
   },
   category: "technology",
+  // Add your Google Search Console code here once you verify ownership:
+  // verification: { google: "your-google-site-verification-code" },
 };
 
 export const viewport: Viewport = {

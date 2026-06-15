@@ -60,17 +60,36 @@ export async function POST(req: Request) {
     d.message,
   ].join("\n");
 
+  const FALLBACK_FROM = "The Mahir Tech <onboarding@resend.dev>";
+  const subject = `New project inquiry from ${d.name}${d.company ? ` (${d.company})` : ""}`;
+
   if (apiKey) {
     try {
       const resend = new Resend(apiKey);
-      const { error } = await resend.emails.send({
+      let { error } = await resend.emails.send({
         from: fromEmail,
         to: [toEmail],
         ...(ccEmail ? { cc: [ccEmail] } : {}),
         replyTo: d.email,
-        subject: `New project inquiry from ${d.name}${d.company ? ` (${d.company})` : ""}`,
+        subject,
         text: summary,
       });
+
+      // Self-heal: if a custom from-domain or CC isn't verified in Resend yet,
+      // retry with the always-available sender so the lead still reaches the
+      // owner inbox. (Verify themahirtech.com to enable branded sender + CC.)
+      if (error && fromEmail !== FALLBACK_FROM) {
+        console.warn("Primary Resend send failed, retrying with default sender:", error);
+        const retry = await resend.emails.send({
+          from: FALLBACK_FROM,
+          to: [toEmail],
+          replyTo: d.email,
+          subject,
+          text: summary,
+        });
+        error = retry.error;
+      }
+
       if (error) {
         console.error("Resend error:", error);
         return NextResponse.json(

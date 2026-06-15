@@ -50,21 +50,33 @@ export function buildMetadata({
 
 /** Default keyword set used on the home page and as a base. */
 export const baseKeywords = [
+  // Brand (rank #1 for name searches)
+  "The Mahir Tech",
+  "Mahir Tech",
+  "Mahir Tech Rawalpindi",
+  "Mahir Tech Pakistan",
+  "Mahir Tech AI",
+  "themahirtech",
+  "themahirtech.com",
+  "TMT technology",
+  // Services
   "AI agents Pakistan",
   "AI automation company Rawalpindi",
   "AI automation Pakistan",
+  "AI agency Pakistan",
+  "AI chatbot development",
+  "voice AI agents",
+  "AI calling agent",
+  "workflow automation n8n",
   "GIS solutions Pakistan",
   "enterprise software development Rawalpindi",
   "web development company Pakistan",
   "mobile app development Rawalpindi",
   "IT infrastructure Pakistan",
   "hardware supply Rawalpindi",
+  "servers and NAS Pakistan",
+  "computer lab setup Pakistan",
   "government IT projects Pakistan",
-  "AI chatbot development",
-  "voice AI agents",
-  "workflow automation n8n",
-  "The Mahir Tech",
-  "themahirtech",
 ];
 
 /** Organization + LocalBusiness JSON-LD for the site root. */
@@ -76,6 +88,7 @@ export function organizationJsonLd() {
     "@id": `${siteConfig.url}/#organization`,
     name: siteConfig.name,
     legalName: siteConfig.legalName,
+    alternateName: ["Mahir Tech", "TMT", "The Mahir Tech Rawalpindi"],
     url: siteConfig.url,
     slogan: siteConfig.tagline,
     description: siteConfig.description,
