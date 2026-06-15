@@ -62,8 +62,9 @@ export const metadata: Metadata = {
     description: siteConfig.description,
   },
   category: "technology",
-  // Add your Google Search Console code here once you verify ownership:
-  // verification: { google: "your-google-site-verification-code" },
+  verification: {
+    other: { "msvalidate.01": "C38B8B10E1B18FB9EF5989259FE62BC7" },
+  },
 };
 
 export const viewport: Viewport = {
