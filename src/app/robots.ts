@@ -7,7 +7,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/studio", "/studio/"],
+        // /quotes/ holds client-specific proposal decks: shareable by link, never indexed.
+        disallow: ["/api/", "/studio", "/studio/", "/quotes/"],
       },
     ],
     sitemap: `${siteConfig.url}/sitemap.xml`,

@@ -1,0 +1,1797 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<title>Faisalabad Public Transport - Technical Proposal | The Mahir Tech</title>
+<meta name="description" content="GIS-based transport management and smart mobility platform: technical proposal and solution architecture prepared by The Mahir Tech.">
+<meta property="og:title" content="Faisalabad Public Transport - Technical Proposal">
+<meta property="og:description" content="GIS-based transport management and smart mobility platform, by The Mahir Tech.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#050505">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23050505'/%3E%3Ctext x='16' y='23' font-family='system-ui' font-size='18' font-weight='700' fill='%23d4a017' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<style>*{box-sizing:border-box}html,body{margin:0;padding:0}img{max-width:100%}</style>
+</head>
+<body>
+<style>
+/* ============================================================
+   THE MAHIR TECH — Faisalabad Public Transport Proposal
+   Visual-first deck. Single dark world by design: the brand is a
+   premium dark system, so every colour is painted explicitly.
+   ============================================================ */
+
+:root{
+  --ground:#050505; --panel:#0a0a0b; --panel-2:#101012; --raised:#16161a;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.15);
+  --gold:#d4a017; --gold-bright:#e6b43c; --gold-soft:#edc14f;
+  --ink:#fafaf8; --body:#b4b4ad; --mute:#8a8a82;
+  --live:#2fa36b; --data:#2f6fed; --warn:#c9762f;
+  --font-display:"Space Grotesk","Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-body:"Inter","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-mono:ui-monospace,"Cascadia Mono","Cascadia Code",Consolas,"SF Mono","Roboto Mono",monospace;
+  --rail:60px; --pad:clamp(22px,3.6vw,66px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--body);font-family:var(--font-body);
+     font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+
+/* ---------- console chrome ---------- */
+.chrome{position:fixed;inset:0;pointer-events:none;z-index:40}
+.chrome-top{position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 18px 0 calc(var(--rail) + 6px);border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(5,5,5,.95),rgba(5,5,5,.72));backdrop-filter:blur(8px)}
+.lockup{display:flex;align-items:center;gap:10px}
+.mark{width:22px;height:22px;border:1px solid rgba(212,160,23,.45);border-radius:6px;display:grid;
+  place-items:center;background:linear-gradient(160deg,rgba(212,160,23,.2),transparent);
+  font-family:var(--font-display);font-size:11px;font-weight:700;color:var(--gold-soft)}
+.lockup b{font-family:var(--font-display);font-size:12.5px;font-weight:600;color:var(--ink)}
+.lockup span{font-family:var(--font-mono);font-size:10px;color:var(--mute);letter-spacing:.08em;text-transform:uppercase}
+.status{display:flex;align-items:center;gap:16px;font-family:var(--font-mono);font-size:10.5px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.status .dot{width:6px;height:6px;border-radius:50%;background:var(--live);display:inline-block;
+  margin-right:7px;box-shadow:0 0 0 3px rgba(47,163,107,.16)}
+.status .frame{color:var(--gold-soft)}
+.rail{position:absolute;top:44px;bottom:0;left:0;width:var(--rail);border-right:1px solid var(--line);
+  background:rgba(10,10,11,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;pointer-events:auto}
+.tick{width:18px;height:3px;border-radius:2px;border:0;padding:0;cursor:pointer;
+  background:rgba(255,255,255,.14);transition:background .25s,width .25s}
+.tick:hover{background:rgba(212,160,23,.55);width:24px}
+.tick[aria-current="true"]{background:var(--gold);width:28px}
+.tick:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px}
+
+/* ---------- deck ---------- */
+.deck{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none}
+.deck::-webkit-scrollbar{display:none}
+.slide{min-height:100vh;scroll-snap-align:start;scroll-snap-stop:always;
+  padding:calc(44px + clamp(18px,3vh,44px)) var(--pad) clamp(26px,4vh,52px) calc(var(--rail) + var(--pad));
+  display:flex;flex-direction:column;justify-content:center;position:relative;
+  border-bottom:1px solid rgba(255,255,255,.05)}
+.slide::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 40%,#000 30%,transparent 100%)}
+.slide > *{position:relative;z-index:1}
+
+/* ---------- type ---------- */
+.eyebrow{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.eyebrow::before{content:"";width:16px;height:1px;background:var(--gold);opacity:.7}
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--ink);margin:0;text-wrap:balance;letter-spacing:-.02em}
+h2{font-size:clamp(26px,3.1vw,42px);font-weight:700;line-height:1.05}
+h3{font-size:clamp(15px,1.15vw,17px);font-weight:600;line-height:1.25}
+.lede{font-size:clamp(13.5px,1vw,15.5px);color:var(--body);max-width:58ch;margin:12px 0 0;line-height:1.55}
+.hl{color:var(--gold-soft)}
+.slide-head{margin-bottom:clamp(16px,2.4vh,30px)}
+
+/* ---------- icons ---------- */
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;
+    stroke-linecap:round;stroke-linejoin:round;display:block}
+.ic-badge{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;
+  border:1px solid rgba(212,160,23,.22);background:linear-gradient(160deg,rgba(212,160,23,.14),transparent);
+  color:var(--gold-soft)}
+
+/* ---------- primitives ---------- */
+.grid{display:grid;gap:13px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:clamp(22px,3vw,48px);align-items:center}
+.split-r{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(22px,3vw,48px);align-items:center}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px 17px;
+  transition:border-color .25s,transform .25s}
+.card:hover{border-color:rgba(212,160,23,.28);transform:translateY(-2px)}
+.card p{margin:6px 0 0;font-size:12.5px;line-height:1.45;color:var(--body)}
+.card .idx{font-family:var(--font-mono);font-size:10px;color:var(--gold);letter-spacing:.12em}
+
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 16px;
+  display:flex;flex-direction:column;gap:10px;transition:border-color .25s,transform .25s}
+.tile:hover{border-color:rgba(212,160,23,.3);transform:translateY(-2px)}
+.tile h3{font-size:14px}
+.tile p{margin:0;font-size:12px;line-height:1.42;color:var(--mute)}
+.tile-row{display:flex;align-items:center;gap:11px}
+
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;
+  letter-spacing:.09em;text-transform:uppercase;border:1px solid var(--line-2);border-radius:999px;
+  padding:5px 11px;color:var(--body);background:rgba(255,255,255,.02)}
+.chip.gold{border-color:rgba(212,160,23,.35);color:var(--gold-soft);background:rgba(212,160,23,.06)}
+.chip .ic{width:13px;height:13px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+
+.stat{font-family:var(--font-display);font-size:clamp(26px,3vw,40px);font-weight:700;color:var(--gold-soft);
+  line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat-l{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--mute);margin-top:7px;display:block}
+
+.note{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;line-height:1.65;color:var(--mute);
+  border-left:2px solid rgba(212,160,23,.4);padding-left:13px;margin-top:16px;max-width:78ch}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(12px);transition:opacity .55s cubic-bezier(.2,.7,.3,1),transform .55s cubic-bezier(.2,.7,.3,1)}
+.slide.on .rv{opacity:1;transform:none}
+.slide.on .rv:nth-child(2){transition-delay:.05s}
+.slide.on .rv:nth-child(3){transition-delay:.1s}
+.grid.on > *{animation:pop .45s cubic-bezier(.2,.7,.3,1) backwards}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}}
+
+/* ---------- animated map bits ---------- */
+.veh{offset-rotate:0deg;animation:run linear infinite}
+@keyframes run{from{offset-distance:0%}to{offset-distance:100%}}
+.pulse{animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3;r:3}50%{opacity:.95;r:5.5}}
+.ping{animation:ping 2.4s ease-out infinite;transform-origin:center}
+@keyframes ping{0%{opacity:.5;transform:scale(.5)}100%{opacity:0;transform:scale(1.9)}}
+
+/* ---------- cover ---------- */
+.cover{justify-content:center}
+.cover-map{position:absolute;inset:0;z-index:0;opacity:.66}
+.cover-map svg{width:100%;height:100%}
+.cover-wrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:clamp(20px,3vw,50px);align-items:center}
+.cover h1{font-size:clamp(34px,5.6vw,74px);font-weight:700;line-height:.97;letter-spacing:-.035em;margin:0}
+.cover .sub{font-family:var(--font-display);font-size:clamp(14px,1.5vw,21px);color:var(--gold-soft);
+  font-weight:500;margin-top:12px}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:24px}
+.pillar{border:1px solid var(--line);border-radius:11px;padding:12px 11px;background:rgba(10,10,11,.6);
+  backdrop-filter:blur(3px)}
+.pillar .ic{width:19px;height:19px;color:var(--gold-soft);margin-bottom:8px}
+.pillar b{display:block;font-family:var(--font-display);font-size:12px;color:var(--ink);font-weight:600}
+.pillar span{font-size:10.5px;color:var(--mute);line-height:1.35;display:block;margin-top:2px}
+.cover-meta{display:flex;flex-wrap:wrap;gap:24px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
+.cover-meta .k{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--mute);display:block;margin-bottom:4px}
+.cover-meta .v{font-size:13px;color:var(--ink)}
+
+/* ---------- device mockups ---------- */
+.stage{perspective:1700px;display:flex;gap:clamp(10px,1.4vw,22px);align-items:center;justify-content:center;flex-wrap:wrap}
+.phone{width:var(--pw,180px);aspect-ratio:9/19.2;border-radius:26px;padding:6px;
+  background:linear-gradient(165deg,#22222a,#0a0a0b);border:1px solid var(--line-2);
+  box-shadow:0 26px 58px rgba(0,0,0,.7),0 0 0 1px rgba(212,160,23,.06);
+  transform:rotateY(var(--ry,0deg)) rotateX(3deg);transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.2,.7,.3,1),box-shadow .55s}
+.stage:hover .phone{transform:rotateY(0deg) rotateX(0deg);box-shadow:0 30px 66px rgba(0,0,0,.75),0 0 0 1px rgba(212,160,23,.24)}
+.phone svg{width:100%;height:100%;display:block;border-radius:21px}
+.dev-cap{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--mute);text-align:center;margin-top:11px}
+
+.dash{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);
+  box-shadow:0 22px 54px rgba(0,0,0,.5)}
+.dash svg{width:100%;height:auto;display:block}
+
+/* ---------- expandable project cards ---------- */
+.proj{background:var(--panel);border:1px solid var(--line);border-radius:13px;overflow:hidden;text-align:left;
+  width:100%;font:inherit;color:inherit;cursor:pointer;padding:0;transition:border-color .25s}
+.proj:hover{border-color:rgba(212,160,23,.3)}
+.proj:focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px}
+.proj-thumb{height:74px;border-bottom:1px solid var(--line);background:#08080a;position:relative;overflow:hidden}
+.proj-thumb svg{position:absolute;inset:0;width:100%;height:100%}
+.proj-head{padding:12px 14px;display:flex;align-items:flex-start;gap:10px}
+.proj-head .no{font-family:var(--font-mono);font-size:9.5px;color:var(--gold);letter-spacing:.1em;padding-top:2px}
+.proj-head h3{font-size:13px;line-height:1.28;flex:1}
+.proj-head .plus{font-family:var(--font-mono);color:var(--mute);font-size:14px;line-height:1;
+  transition:transform .3s,color .3s;flex-shrink:0}
+.proj[aria-expanded="true"] .plus{transform:rotate(45deg);color:var(--gold)}
+.proj-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.2,.7,.3,1)}
+.proj[aria-expanded="true"] .proj-body{max-height:230px}
+.proj-body div{padding:0 14px 14px 36px}
+.proj-body p{margin:0 0 8px;font-size:12px;line-height:1.5;color:var(--body)}
+.proj-meta{font-family:var(--font-mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+
+/* ---------- diagrams ---------- */
+figure{margin:0}
+figcaption{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.07em;color:var(--mute);
+  margin-top:10px;text-transform:uppercase}
+.diagram{width:100%;height:auto;color:var(--body)}
+.node{cursor:pointer}
+.node rect{fill:var(--panel-2);stroke:var(--line-2);stroke-width:1;transition:fill .25s,stroke .25s}
+.node text.t{font-family:var(--font-display);font-size:12px;font-weight:600;fill:var(--ink)}
+.node text.s{font-family:var(--font-mono);font-size:8.5px;fill:var(--mute);letter-spacing:.05em}
+.node:hover rect,.node.sel rect{fill:var(--raised);stroke:var(--gold)}
+.node:hover text.s,.node.sel text.s{fill:var(--gold-soft)}
+.flow{stroke:rgba(255,255,255,.22);stroke-width:1.3;fill:none}
+.flow.accent{stroke:var(--gold);stroke-width:1.5}
+.flow.live{stroke:var(--live);stroke-dasharray:5 4;animation:dash 1.4s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-18}}
+.flow-l{font-family:var(--font-mono);font-size:8.5px;fill:var(--mute);letter-spacing:.04em}
+.detail{border:1px solid var(--line);border-left:2px solid var(--gold);border-radius:0 12px 12px 0;
+  background:var(--panel);padding:14px 16px;min-height:88px}
+.detail h4{font-family:var(--font-display);color:var(--gold-soft);margin:0 0 5px;font-size:13.5px}
+.detail p{margin:0;font-size:12.5px;line-height:1.5}
+
+/* ---------- map layer toggles ---------- */
+.layers{display:grid;gap:7px}
+.layer-btn{display:flex;align-items:center;gap:11px;width:100%;text-align:left;cursor:pointer;
+  background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:10px 13px;font:inherit;
+  color:var(--body);transition:border-color .22s}
+.layer-btn:hover{border-color:rgba(212,160,23,.3)}
+.layer-btn:focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px}
+.layer-btn .sw{width:26px;height:15px;border-radius:999px;background:rgba(255,255,255,.13);position:relative;
+  flex-shrink:0;transition:background .22s}
+.layer-btn .sw::after{content:"";position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;
+  background:var(--mute);transition:transform .22s,background .22s}
+.layer-btn[aria-pressed="true"] .sw{background:rgba(212,160,23,.3)}
+.layer-btn[aria-pressed="true"] .sw::after{transform:translateX(11px);background:var(--gold)}
+.layer-btn .tx b{font-family:var(--font-display);font-size:12.5px;color:var(--ink);font-weight:600;display:block}
+.layer-btn .tx span{font-family:var(--font-mono);font-size:9px;letter-spacing:.06em;color:var(--mute);text-transform:uppercase}
+.maplayer{transition:opacity .35s}
+.maplayer[data-off="true"]{opacity:.05}
+
+/* ---------- roadmap ---------- */
+.road{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.stage-b{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 12px;
+  text-align:left;cursor:pointer;font:inherit;color:inherit;transition:border-color .25s,transform .25s}
+.stage-b:hover{border-color:rgba(212,160,23,.3);transform:translateY(-2px)}
+.stage-b[aria-pressed="true"]{border-color:var(--gold);background:var(--panel-2)}
+.stage-b:focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px}
+.stage-b .mo{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.11em;color:var(--gold);text-transform:uppercase}
+.stage-b .nm{font-family:var(--font-display);font-size:13px;font-weight:600;color:var(--ink);margin-top:6px;line-height:1.22;display:block}
+.gantt{margin:16px 0 6px}
+.gantt-row{display:grid;grid-template-columns:120px 1fr;align-items:center;gap:12px;margin-bottom:6px}
+.gantt-row .gl{font-family:var(--font-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);text-align:right}
+.gantt-track{height:16px;background:rgba(255,255,255,.04);border-radius:4px;position:relative;overflow:hidden}
+.gantt-bar{position:absolute;top:0;bottom:0;border-radius:4px;background:linear-gradient(90deg,rgba(212,160,23,.5),rgba(230,180,60,.85))}
+.gantt-bar.warr{background:linear-gradient(90deg,rgba(47,163,107,.35),rgba(47,163,107,.6))}
+.gantt-axis{display:grid;grid-template-columns:120px 1fr;gap:12px;margin-top:8px}
+.gantt-months{display:grid;grid-template-columns:repeat(12,1fr);font-family:var(--font-mono);font-size:8.5px;color:var(--mute);text-align:center}
+.mvp-flag{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--gold-bright);left:29.16%}
+
+/* ---------- phase toggle / tabs ---------- */
+.toggle{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;padding:3px;background:var(--panel);gap:3px}
+.toggle button,.tab{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  border:0;background:transparent;color:var(--mute);padding:8px 16px;border-radius:999px;cursor:pointer;transition:all .25s}
+.toggle button[aria-pressed="true"]{background:rgba(212,160,23,.14);color:var(--gold-soft)}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.tab{border:1px solid var(--line-2);background:var(--panel)}
+.tab[aria-selected="true"]{border-color:var(--gold);color:var(--gold-soft);background:rgba(212,160,23,.08)}
+.toggle button:focus-visible,.tab:focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px}
+.pane{display:none}
+.pane.on{display:block;animation:pop .38s cubic-bezier(.2,.7,.3,1)}
+
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);
+  text-align:left;padding:0 12px 8px;border-bottom:1px solid var(--line-2);font-weight:400}
+td{padding:9px 12px;border-bottom:1px solid var(--line);color:var(--body);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td strong{color:var(--ink);font-weight:600}
+.tbd{font-family:var(--font-mono);font-size:10.5px;color:var(--gold-soft);white-space:nowrap}
+.scroll-x{overflow-x:auto}
+.matrix td:last-child{text-align:right;font-family:var(--font-mono);font-size:10px;letter-spacing:.06em}
+.yes{color:var(--live)} .later{color:var(--mute)}
+
+/* ---------- isometric stack ---------- */
+.iso-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(8px,1.6vw,28px);align-items:center}
+.iso-lab{display:grid;gap:clamp(10px,2.2vh,26px)}
+.iso-lab .l{padding:8px 0;border-right:2px solid transparent;transition:border-color .3s,transform .3s}
+.iso-lab.right .l{border-right:0;border-left:2px solid transparent;padding-left:14px}
+.iso-lab .l.on{border-color:var(--gold)}
+.iso-lab .l h3{font-size:clamp(13px,1.15vw,16px);color:var(--gold-soft)}
+.iso-lab .l p{margin:4px 0 0;font-size:11.5px;line-height:1.45;color:var(--body)}
+.iso-lab:not(.right) .l{text-align:right;padding-right:14px}
+.iso svg{width:100%;height:auto;display:block;overflow:visible}
+.plate{cursor:pointer;transition:transform .35s cubic-bezier(.2,.7,.3,1)}
+.plate:hover,.plate.on{transform:translateY(-9px)}
+.plate .top{transition:fill .3s,stroke .3s}
+.plate:hover .top,.plate.on .top{stroke:var(--gold-bright)}
+
+/* glowing icons inside diagrams */
+.nic{stroke:#edc14f;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.stage-ic{stroke:#edc14f;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.pipe-cell{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 13px;
+  text-align:center;position:relative;transition:border-color .28s,transform .28s}
+.pipe-cell:hover{border-color:rgba(212,160,23,.35);transform:translateY(-3px)}
+.pipe-cell svg.big{width:34px;height:34px;margin:0 auto 9px;display:block;
+  filter:drop-shadow(0 0 7px rgba(212,160,23,.45))}
+.pipe-cell .n{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;color:var(--gold);display:block;margin-bottom:5px}
+.pipe-cell h3{font-size:12.5px}
+.pipe-cell p{margin:5px 0 0;font-size:10.5px;line-height:1.4;color:var(--mute)}
+.pipe-cell::after{content:"";position:absolute;top:50%;right:-11px;width:12px;height:1px;
+  background:linear-gradient(90deg,rgba(212,160,23,.7),transparent);z-index:2}
+.pipe-cell:last-child::after{display:none}
+
+/* ---------- fleet dots ---------- */
+.fleet{display:flex;flex-wrap:wrap;gap:3px;max-width:100%}
+.fleet i{width:5px;height:5px;border-radius:1px;background:var(--gold);opacity:.85;display:block}
+.fleet i.b{background:var(--data);opacity:.7}
+.fleet i.g{background:rgba(255,255,255,.14)}
+
+/* ---------- closing ---------- */
+.contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:26px;
+  padding-top:22px;border-top:1px solid var(--line)}
+.contact .k{font-family:var(--font-mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--mute);display:block;margin-bottom:5px}
+.contact .v{font-size:13px;color:var(--ink);word-break:break-word}
+.contact a{color:var(--gold-soft);text-decoration:none;border-bottom:1px solid rgba(212,160,23,.3)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1180px){.g4{grid-template-columns:repeat(2,1fr)}.road{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:900px){
+  :root{--rail:38px}
+  .split,.split-r,.cover-wrap{grid-template-columns:1fr}
+  .g3,.g2{grid-template-columns:1fr}
+  .pillars{grid-template-columns:repeat(2,1fr)}
+  .slide{min-height:auto;padding-top:calc(44px + 34px);padding-bottom:44px}
+  .deck{scroll-snap-type:none}
+  .rail{display:none}
+  .stack-row{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .rv{opacity:1;transform:none}
+}
+@media print{
+  .chrome{display:none}
+  .deck{height:auto;overflow:visible}
+  .slide{page-break-after:always;min-height:auto;padding:22px 26px;border:0}
+  .rv{opacity:1;transform:none}
+  .proj-body{max-height:none!important}
+  .pane{display:block!important}
+}
+</style>
+
+<!-- ============ icon sprite ============ -->
+<svg class="sprite" aria-hidden="true"><defs>
+<g id="i-bus"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 12h16M8 17v3M16 17v3"/><circle cx="8" cy="14.5" r=".8"/><circle cx="16" cy="14.5" r=".8"/></g>
+<g id="i-route"><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="5" r="2.2"/><path d="M7 18c6 0 5-6 10-6"/><path d="M17 5h-4"/></g>
+<g id="i-clock"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></g>
+<g id="i-chart"><path d="M4 19h16"/><path d="M7 16V9M12 16V5M17 16v-4"/></g>
+<g id="i-pin"><path d="M12 21s6.5-6 6.5-10.5A6.5 6.5 0 0 0 5.5 10.5C5.5 15 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.4"/></g>
+<g id="i-bell"><path d="M18 15V10a6 6 0 1 0-12 0v5l-1.6 2.4h15.2z"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></g>
+<g id="i-shield"><path d="M12 3l7 3v6c0 4.4-3 7.7-7 9-4-1.3-7-4.6-7-9V6z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></g>
+<g id="i-key"><circle cx="8" cy="12" r="3.5"/><path d="M11.5 12H20l-1.8 2.2M16.5 12v2.6"/></g>
+<g id="i-users"><circle cx="9" cy="9" r="3.2"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16 7.2a3 3 0 0 1 0 5.6M17.5 19c0-2.2-.9-3.7-2-4.6"/></g>
+<g id="i-layers"><path d="M12 3l8.5 4.5L12 12 3.5 7.5z"/><path d="M4.5 12.5L12 16.5l7.5-4"/><path d="M4.5 16.5L12 20.5l7.5-4"/></g>
+<g id="i-db"><ellipse cx="12" cy="6" rx="7.5" ry="3"/><path d="M4.5 6v12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V6"/><path d="M4.5 12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3"/></g>
+<g id="i-cloud"><path d="M7 18a4 4 0 0 1-.4-8 5.5 5.5 0 0 1 10.6 1.2A3.6 3.6 0 0 1 17 18z"/></g>
+<g id="i-phone"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M10.5 5.5h3"/><path d="M11 18.6h2"/></g>
+<g id="i-monitor"><rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M9 20h6M12 16.5V20"/></g>
+<g id="i-satellite"><path d="M6 10L10 6l3 3-4 4z"/><path d="M13 9l3-3 3 3-3 3z" opacity=".55"/><path d="M9.5 13.5L6 17l1.5 1.5 3.5-3.5"/><path d="M15 15a4.5 4.5 0 0 1-4.5 4.5"/></g>
+<g id="i-terrain"><path d="M3 18l5.5-8 3.5 5 3-4.2L21 18z"/><path d="M8.5 10l2 3"/></g>
+<g id="i-sun"><circle cx="12" cy="12" r="4"/><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6"/></g>
+<g id="i-river"><path d="M3 8c3-2 5 2 8 0s5-2 8 0M3 13c3-2 5 2 8 0s5-2 8 0M3 18c3-2 5 2 8 0s5-2 8 0"/></g>
+<g id="i-leaf"><path d="M20 4C10 4 4 9 4 16c0 2 1 4 1 4s3-8 15-10"/><path d="M5 20c0-6 5-10 12-11"/></g>
+<g id="i-grid"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></g>
+<g id="i-check"><circle cx="12" cy="12" r="8.5"/><path d="M8.2 12.2l2.6 2.6 5-5.2"/></g>
+<g id="i-search"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></g>
+<g id="i-lock"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/></g>
+<g id="i-gear"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7"/></g>
+<g id="i-signal"><path d="M12 20v-4"/><path d="M8.5 16.5a5 5 0 0 1 7 0M5.5 13.5a9 9 0 0 1 13 0M2.8 10.5a13 13 0 0 1 18.4 0"/></g>
+<g id="i-code"><path d="M8.5 8L4 12l4.5 4M15.5 8L20 12l-4.5 4"/></g>
+<g id="i-server"><rect x="3.5" y="4" width="17" height="6" rx="2"/><rect x="3.5" y="14" width="17" height="6" rx="2"/><path d="M7 7h.01M7 17h.01"/></g>
+<g id="i-map"><path d="M9 4L3.5 6.2v13.6L9 17.6l6 2.2 5.5-2.2V4L15 6.2z"/><path d="M9 4v13.6M15 6.2V19.8"/></g>
+<g id="i-target"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2.6v3M12 18.4v3M2.6 12h3M18.4 12h3"/></g>
+<g id="i-bolt"><path d="M13.5 3L6 13.5h5L10.5 21 18 10.5h-5z"/></g>
+<g id="i-doc"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M8.5 13h7M8.5 16.5h5"/></g>
+<g id="i-download"><path d="M12 4v10"/><path d="M8 10.5l4 4 4-4"/><path d="M4.5 18.5h15"/></g>
+<g id="i-wheel"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.6"/><path d="M12 3.5v6M4.8 16.2l5.2-3M19.2 16.2l-5.2-3"/></g>
+</defs></svg>
+
+<div class="chrome">
+  <div class="chrome-top">
+    <div class="lockup"><div class="mark">M</div><b>THE MAHIR TECH</b><span>Technology That Delivers</span></div>
+    <div class="status">
+      <span><i class="dot"></i>Proposal · Discovery Stage</span>
+      <span class="frame">FRAME <b id="frameNo">01</b> / 23</span>
+    </div>
+  </div>
+  <nav class="rail" id="rail" aria-label="Slide navigation"></nav>
+</div>
+
+<main class="deck" id="deck">
+
+<!-- 01 ───────── COVER ───────── -->
+<section class="slide cover" data-t="Cover">
+  <div class="cover-map" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <defs><radialGradient id="glow"><stop offset="0" stop-color="#d4a017" stop-opacity=".22"/><stop offset="1" stop-color="#d4a017" stop-opacity="0"/></radialGradient></defs>
+      <circle cx="900" cy="450" r="440" fill="url(#glow)"/>
+      <g stroke="rgba(255,255,255,.05)" stroke-width="1">
+        <path d="M0 150H1600M0 330H1600M0 510H1600M0 690H1600"/>
+        <path d="M260 0V900M520 0V900M780 0V900M1040 0V900M1300 0V900"/>
+      </g>
+      <g fill="rgba(255,255,255,.018)">
+        <rect x="300" y="180" width="150" height="96" rx="3"/><rect x="600" y="380" width="170" height="110" rx="3"/>
+        <rect x="900" y="200" width="140" height="90" rx="3"/><rect x="1150" y="560" width="180" height="112" rx="3"/>
+        <rect x="380" y="600" width="160" height="100" rx="3"/>
+      </g>
+      <g fill="none" stroke-linecap="round" stroke-width="2.4">
+        <path d="M120 760 L360 660 L560 470 L820 400 L1080 290 L1420 220" stroke="rgba(212,160,23,.32)"/>
+        <path d="M60 300 L340 340 L580 500 L860 560 L1160 650 L1500 620" stroke="rgba(47,111,237,.3)"/>
+        <path d="M440 880 L560 620 L740 470 L800 250 L960 110" stroke="rgba(47,163,107,.28)"/>
+      </g>
+      <g fill="#edc14f">
+        <circle class="pulse" cx="560" cy="470" r="3"/><circle class="pulse" cx="860" cy="560" r="3" style="animation-delay:.8s"/>
+        <circle class="pulse" cx="800" cy="250" r="3" style="animation-delay:1.6s"/><circle class="pulse" cx="1080" cy="290" r="3" style="animation-delay:2.3s"/>
+      </g>
+      <g stroke="#d4a017" fill="none" stroke-width="1.5"><circle class="ping" cx="740" cy="470" r="16"/></g>
+      <circle cx="740" cy="470" r="6" fill="#d4a017"/>
+      <rect class="veh" width="14" height="8" rx="2" fill="#e6b43c" style="offset-path:path('M120 760 L360 660 L560 470 L820 400 L1080 290 L1420 220');animation-duration:20s"/>
+      <rect class="veh" width="14" height="8" rx="2" fill="#e6b43c" style="offset-path:path('M120 760 L360 660 L560 470 L820 400 L1080 290 L1420 220');animation-duration:20s;animation-delay:-10s"/>
+      <rect class="veh" width="14" height="8" rx="2" fill="#4f86f0" style="offset-path:path('M60 300 L340 340 L580 500 L860 560 L1160 650 L1500 620');animation-duration:25s"/>
+      <rect class="veh" width="12" height="7" rx="2" fill="#3fbe84" style="offset-path:path('M440 880 L560 620 L740 470 L800 250 L960 110');animation-duration:18s;animation-delay:-6s"/>
+    </svg>
+  </div>
+
+  <div class="cover-wrap">
+    <div>
+      <p class="eyebrow rv">Technical Proposal &amp; Solution Architecture</p>
+      <h1 class="rv">Faisalabad<br>Public Transport</h1>
+      <p class="sub rv">GIS-Based Transport Management &amp; Smart Mobility Platform</p>
+      <div class="pillars rv">
+        <div class="pillar"><svg class="ic"><use href="#i-signal"/></svg><b>Live Tracking</b><span>Real-time vehicle position</span></div>
+        <div class="pillar"><svg class="ic"><use href="#i-route"/></svg><b>Smart Routes</b><span>Intelligent journey planning</span></div>
+        <div class="pillar"><svg class="ic"><use href="#i-clock"/></svg><b>Real-Time Info</b><span>Accurate arrival estimates</span></div>
+        <div class="pillar"><svg class="ic"><use href="#i-chart"/></svg><b>Data Insights</b><span>Analytics for better decisions</span></div>
+      </div>
+      <div class="cover-meta rv">
+        <div><span class="k">Prepared for</span><span class="v">The Worthy Commissioner, Faisalabad</span></div>
+        <div><span class="k">Prepared by</span><span class="v">The Mahir Tech</span></div>
+        <div><span class="k">Date</span><span class="v">[ ____________ ]</span></div>
+      </div>
+    </div>
+
+    <div class="rv">
+      <div class="stage">
+        <div class="phone" style="--pw:clamp(190px,17vw,258px)">
+          <svg viewBox="0 0 200 427" aria-label="Passenger app live tracking screen">
+            <rect width="200" height="427" rx="21" fill="#08080a"/>
+            <!-- status bar -->
+            <text x="14" y="20" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="8">9:41</text>
+            <g fill="#8a8a82"><rect x="164" y="13" width="14" height="7" rx="2"/><circle cx="155" cy="16.5" r="2"/></g>
+            <!-- header -->
+            <path d="M0 30h200" stroke="rgba(255,255,255,.08)"/>
+            <g stroke="#edc14f" stroke-width="1.4" stroke-linecap="round"><path d="M13 42h11M13 46h11M13 50h11"/></g>
+            <text x="100" y="49" fill="#fafaf8" font-family="system-ui" font-size="11" font-weight="600" text-anchor="middle">Live Tracking</text>
+            <g stroke="#8a8a82" stroke-width="1.2" fill="none"><path d="M180 50v-4a4 4 0 0 1 8 0v4l1.4 2h-10.8z"/></g>
+            <path d="M0 58h200" stroke="rgba(255,255,255,.08)"/>
+            <!-- map -->
+            <rect y="58" width="200" height="286" fill="#0b0b0d"/>
+            <g stroke="rgba(255,255,255,.05)" stroke-width="1">
+              <path d="M0 110h200M0 170h200M0 230h200M0 290h200"/><path d="M50 58v286M105 58v286M155 58v286"/>
+            </g>
+            <g stroke="rgba(255,255,255,.1)" stroke-width="2.5" fill="none"><path d="M0 200h200"/><path d="M105 58v286"/></g>
+            <text x="112" y="196" fill="#5e5e58" font-family="system-ui" font-size="8">Clock Tower</text>
+            <text x="14" y="126" fill="#5e5e58" font-family="system-ui" font-size="7.5">Madina Town</text>
+            <text x="140" y="272" fill="#5e5e58" font-family="system-ui" font-size="7.5">Samanabad</text>
+            <!-- routes -->
+            <path id="pr1" d="M18 320 L52 268 L84 232 L105 200 L138 150 L176 96" fill="none" stroke="#d4a017" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+            <path d="M6 96 L46 126 L84 168 L105 200 L150 244 L192 262" fill="none" stroke="#2f6fed" stroke-width="2.6" stroke-linecap="round" opacity=".7"/>
+            <!-- stops -->
+            <g fill="#08080a" stroke="#edc14f" stroke-width="1.6">
+              <circle cx="84" cy="232" r="3.4"/><circle cx="138" cy="150" r="3.4"/><circle cx="52" cy="268" r="3.4"/>
+            </g>
+            <circle cx="105" cy="200" r="5" fill="#d4a017"/>
+            <!-- vehicles -->
+            <rect class="veh" width="11" height="6.5" rx="2" fill="#3fbe84" style="offset-path:path('M18 320 L52 268 L84 232 L105 200 L138 150 L176 96');animation-duration:10s"/>
+            <rect class="veh" width="11" height="6.5" rx="2" fill="#e6b43c" style="offset-path:path('M6 96 L46 126 L84 168 L105 200 L150 244 L192 262');animation-duration:13s;animation-delay:-4s"/>
+            <!-- user location -->
+            <g><circle class="ping" cx="70" cy="292" r="11" fill="#2f6fed" opacity=".3"/><circle cx="70" cy="292" r="4" fill="#4f86f0" stroke="#0b0b0d" stroke-width="1.5"/></g>
+            <!-- floating vehicle card -->
+            <g>
+              <rect x="12" y="70" width="176" height="42" rx="9" fill="#101012" stroke="rgba(212,160,23,.3)"/>
+              <rect x="20" y="79" width="24" height="24" rx="7" fill="rgba(47,163,107,.16)"/>
+              <g transform="translate(26,85) scale(.5)" stroke="#3fbe84" stroke-width="3" fill="none" stroke-linecap="round"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 12h16M8 17v2M16 17v2"/></g>
+              <text x="52" y="86" fill="#fafaf8" font-family="system-ui" font-size="9" font-weight="600">Government Bus G-5</text>
+              <text x="52" y="96" fill="#8a8a82" font-family="system-ui" font-size="7.5">City Center – Jinnah Colony</text>
+              <text x="52" y="106" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="7.5">ETA <tspan fill="#3fbe84">6 min</tspan></text>
+            </g>
+            <!-- locate button -->
+            <circle cx="176" cy="322" r="12" fill="#101012" stroke="rgba(255,255,255,.12)"/>
+            <g transform="translate(170,316) scale(.5)" stroke="#edc14f" stroke-width="3" fill="none"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></g>
+            <!-- nearby list -->
+            <path d="M0 344h200" stroke="rgba(255,255,255,.08)"/>
+            <text x="14" y="360" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="7" letter-spacing="1">NEARBY</text>
+            <g font-family="ui-monospace,monospace" font-size="8">
+              <text x="14" y="376" fill="#edc14f">G-5 BUS</text><text x="186" y="376" fill="#3fbe84" text-anchor="end">6 MIN</text>
+              <text x="14" y="392" fill="#edc14f">H-12 HIACE</text><text x="186" y="392" fill="#3fbe84" text-anchor="end">3 MIN</text>
+            </g>
+            <path d="M0 402h200" stroke="rgba(255,255,255,.08)"/>
+            <g font-family="system-ui" font-size="6.5" fill="#5e5e58" text-anchor="middle">
+              <text x="30" y="418">Home</text><text x="77" y="418">Routes</text>
+              <text x="123" y="418" fill="#edc14f">Live</text><text x="170" y="418">Alerts</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <p class="dev-cap">Passenger application · indicative</p>
+    </div>
+  </div>
+</section>
+
+<!-- 02 ───────── ABOUT ───────── -->
+<section class="slide" data-t="About us">
+  <div class="slide-head">
+    <p class="eyebrow rv">About us</p>
+    <h2 class="rv">One accountable partner, not <span class="hl">five vendors</span></h2>
+    <p class="lede rv">Operating since 2019. Grown through referrals and private contracts, then formalised into a registered business.</p>
+  </div>
+  <div class="grid g4 rv" style="margin-bottom:13px">
+    <div class="card" style="text-align:center"><div class="stat" data-count="2019">2019</div><span class="stat-l">Operating since</span></div>
+    <div class="card" style="text-align:center"><div class="stat" data-count="8">0</div><span class="stat-l">Technical disciplines</span></div>
+    <div class="card" style="text-align:center"><div class="stat" data-count="20">0</div><span class="stat-l">Projects delivered</span></div>
+    <div class="card" style="text-align:center"><div class="stat">GOV</div><span class="stat-l">Defence &amp; public sector</span></div>
+  </div>
+  <div class="grid g4">
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-shield"/></svg></span><h3>Registered &amp; compliant</h3></div><p>Compliance documentation institutional procurement requires.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-users"/></svg></span><h3>Senior, hands-on team</h3></div><p>Close to every project, not handed down a chain.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-map"/></svg></span><h3>GIS as a core practice</h3></div><p>Not a subcontract — our own specialist discipline.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-server"/></svg></span><h3>Software to hardware</h3></div><p>One partner from strategy through to deployment.</p></div>
+  </div>
+</section>
+
+<!-- 03 ───────── VISION / MISSION ───────── -->
+<section class="slide" data-t="Vision &amp; mission">
+  <div class="slide-head">
+    <p class="eyebrow rv">What drives us</p>
+    <h2 class="rv">Mission, vision and the <span class="hl">values</span> we work to</h2>
+  </div>
+  <div class="grid g3">
+    <div class="card"><span class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-target"/></svg></span><span class="idx">MISSION</span><h3 style="margin-top:8px">The execution partner</h3><p>To design, build, deploy and support complete technology ecosystems — not just the part that is easy to quote.</p></div>
+    <div class="card"><span class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-chart"/></svg></span><span class="idx">VISION</span><h3 style="margin-top:8px">Measurable public value</h3><p>Technology that delivers measurable value for government, enterprise and the teams building what comes next.</p></div>
+    <div class="card"><span class="ic-badge" style="margin-bottom:14px"><svg class="ic"><use href="#i-check"/></svg></span><span class="idx">VALUES</span><h3 style="margin-top:8px">How we operate</h3><p>Outcomes over output. One accountable partner. Trust by default — disciplined on government and institutional work.</p></div>
+  </div>
+</section>
+
+<!-- 04 ───────── SERVICES ───────── -->
+<section class="slide" data-t="What we do">
+  <div class="slide-head">
+    <p class="eyebrow rv">Capability</p>
+    <h2 class="rv">Eight disciplines under <span class="hl">one roof</span></h2>
+  </div>
+  <div class="grid g4">
+    <div class="tile"><span class="ic-badge"><svg class="ic"><use href="#i-bolt"/></svg></span><h3>AI Solutions</h3><p>Agents, chatbots and voice systems.</p></div>
+    <div class="tile"><span class="ic-badge"><svg class="ic"><use href="#i-gear"/></svg></span><h3>AI Automation</h3><p>Manual workflows replaced with owned automations.</p></div>
+    <div class="tile"><span class="ic-badge"><svg class="ic"><use href="#i-map"/></svg></span><h3>GIS Solutions</h3><p>Spatial analysis, web GIS and remote sensing.</p></div>
+    <div class="tile"><span class="ic-badge"><svg class="ic"><use href="#i-code"/></svg></span><h3>Software Development</h3><p>Enterprise applications built to operate.</p></div>
+    <div class="tile"><span class="ic-badge"><svg class="ic"><use href="#i-monitor"/></svg></span><h3>Web Development</h3><p>Platforms, marketplaces and managed sites.</p></div>
+    <div class="tile"><span class="ic-badge"><svg class="ic"><use href="#i-phone"/></svg></span><h3>Mobile Applications</h3><p>Android and iOS from one codebase.</p></div>
+    <div class="tile"><span class="ic-badge"><svg class="ic"><use href="#i-server"/></svg></span><h3>IT Infrastructure</h3><p>Servers, networks, storage, deployment.</p></div>
+    <div class="tile"><span class="ic-badge"><svg class="ic"><use href="#i-grid"/></svg></span><h3>Hardware Supply</h3><p>Specification, procurement, configuration.</p></div>
+  </div>
+</section>
+
+<!-- 05 ───────── GIS WORK ───────── -->
+<section class="slide" data-t="GIS work">
+  <div class="slide-head">
+    <p class="eyebrow rv">Selected work · most relevant to this programme</p>
+    <h2 class="rv">GIS &amp; geospatial delivery, led by <span class="hl">M. A Zia</span></h2>
+  </div>
+  <div class="grid g3">
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true">
+        <rect width="300" height="74" fill="#0b0b0d"/>
+        <g fill="none" stroke="rgba(212,160,23,.5)" stroke-width="1.2">
+          <path d="M20 12h58v26H20zM78 12h64v26H78zM20 38h44v26H20zM64 38h78v26H64z"/>
+          <path d="M150 12h52v22h-52zM202 12h60v22h-60zM150 34h72v30h-72zM222 34h52v30h-52z"/>
+        </g>
+        <g fill="rgba(212,160,23,.09)"><rect x="78" y="12" width="64" height="26"/><rect x="150" y="34" width="72" height="30"/></g>
+        <g fill="#8a8a82" font-family="ui-monospace,monospace" font-size="5"><text x="24" y="24">KH-114</text><text x="82" y="24">KH-115</text><text x="154" y="48">KH-207</text></g>
+      </svg></span>
+      <span class="proj-head"><span class="no">G1</span><h3>Land Management &amp; Records Digitisation</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>Georeferenced legacy cadastral maps, digitised parcel geometry, then indexed the paper archive from the oldest surviving record forward — every document linked to its parcel.</p><p class="proj-meta">PostGIS · Geodatabase design · Client confidential</p></div></span>
+    </button>
+
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true">
+        <rect width="300" height="74" fill="#0b0b0d"/>
+        <g>
+          <rect x="12" y="10" width="52" height="54" rx="2" fill="#1d3a1e"/><rect x="68" y="10" width="52" height="54" rx="2" fill="#3d5a1c"/>
+          <rect x="124" y="10" width="52" height="54" rx="2" fill="#6e7a18"/><rect x="180" y="10" width="52" height="54" rx="2" fill="#a08a14"/>
+          <rect x="236" y="10" width="52" height="54" rx="2" fill="#d4a017"/>
+        </g>
+        <g font-family="ui-monospace,monospace" font-size="5" fill="rgba(0,0,0,.55)" text-anchor="middle">
+          <text x="38" y="40">LOW</text><text x="262" y="40">READY</text>
+        </g>
+        <path d="M12 64h276" stroke="rgba(255,255,255,.15)"/>
+      </svg></span>
+      <span class="proj-head"><span class="no">G2</span><h3>Sugarcane Harvest Monitoring</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>Sentinel-2 time series and vegetation indices per field block, producing harvest-readiness maps that replaced field-by-field scouting.</p><p class="proj-meta">Jan–Apr 2022 · Sentinel-2 · NDVI/NDMI</p></div></span>
+    </button>
+
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true">
+        <rect width="300" height="74" fill="#0b0b0d"/>
+        <path d="M14 60 L50 44 L86 50 L122 28 L158 34 L194 18 L230 24 L286 12" fill="none" stroke="#3fbe84" stroke-width="1.8"/>
+        <path d="M14 66 L50 56 L86 60 L122 46 L158 52 L194 40 L230 46 L286 34" fill="none" stroke="#d4a017" stroke-width="1.8"/>
+        <g fill="#4f86f0"><circle cx="122" cy="28" r="2.5"/><circle cx="194" cy="18" r="2.5"/></g>
+        <g stroke="rgba(255,255,255,.06)"><path d="M14 20h272M14 40h272M14 60h272"/></g>
+        <text x="14" y="14" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="5">NDVI · SEASON</text>
+      </svg></span>
+      <span class="proj-head"><span class="no">G3</span><h3>Crop Health, Change Detection &amp; Yield</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>Multi-temporal satellite stack for early stress detection, season-to-season cropped-area change, and pre-harvest yield estimates calibrated on field samples.</p><p class="proj-meta">Supervised classification · Change detection</p></div></span>
+    </button>
+
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true">
+        <rect width="300" height="74" fill="#0b0b0d"/>
+        <g fill="none" stroke-width=".8">
+          <path d="M16 54 L60 34 L104 44 L148 20 L192 32 L236 14 L284 26" stroke="#2f6fed" stroke-opacity=".7"/>
+          <path d="M16 60 L60 41 L104 51 L148 28 L192 39 L236 22 L284 33" stroke="#3fbe84" stroke-opacity=".75"/>
+          <path d="M16 66 L60 48 L104 58 L148 36 L192 46 L236 30 L284 40" stroke="#8ec96b" stroke-opacity=".7"/>
+          <path d="M16 72 L60 55 L104 65 L148 44 L192 53 L236 38 L284 47" stroke="#e6b43c" stroke-opacity=".8"/>
+          <g stroke="rgba(212,160,23,.3)">
+            <path d="M16 54v18M60 34v21M104 44v21M148 20v24M192 32v21M236 14v24M284 26v21"/>
+          </g>
+        </g>
+        <text x="228" y="12" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="5">DEM · InSAR MESH</text>
+      </svg></span>
+      <span class="proj-head"><span class="no">G4</span><h3>DEM Generation from SAR (Sentinel-1)</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>Full InSAR workflow — coregistration, interferogram, phase filtering, unwrapping and geocoding — building a site-specific elevation model without a ground survey.</p><p class="proj-meta">Jul 2020 · Sentinel-1 · SNAP · SNAPHU</p></div></span>
+    </button>
+
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true">
+        <rect width="300" height="74" fill="#0b0b0d"/>
+        <g fill="none" stroke="rgba(255,255,255,.1)"><path d="M100 8v58M180 8v58M20 37h260"/></g>
+        <g fill="rgba(212,160,23,.14)" stroke="rgba(212,160,23,.5)">
+          <rect x="24" y="14" width="68" height="20" rx="3"/><rect x="24" y="40" width="68" height="20" rx="3"/>
+          <rect x="106" y="14" width="68" height="20" rx="3"/><rect x="106" y="40" width="68" height="20" rx="3"/>
+          <rect x="188" y="14" width="68" height="20" rx="3"/><rect x="188" y="40" width="68" height="20" rx="3"/>
+        </g>
+        <g font-family="ui-monospace,monospace" font-size="4.5" fill="#edc14f"><text x="30" y="27">TILE Z12</text><text x="112" y="27">TILE Z13</text><text x="194" y="27">TILE Z14</text></g>
+        <g stroke="#d4a017" stroke-width="1.2" fill="none"><path d="M262 24l8 8 8-8"/></g>
+      </svg></span>
+      <span class="proj-head"><span class="no">G5</span><h3>Automatic Raster Publishing &amp; Caching</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>ArcPy automation that validates rasters, mosaics, publishes the map service and generates cache tiles — with a run log so failures are visible, not silent.</p><p class="proj-meta">Jun 2020 · ArcPy · ArcGIS Server</p></div></span>
+    </button>
+
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true">
+        <rect width="300" height="74" fill="#0b0b0d"/>
+        <path d="M8 14q40 10 70 4t60 14 70 6 84-8" fill="none" stroke="#2f6fed" stroke-width="2.2" opacity=".8"/>
+        <path d="M8 30q40 10 70 4t60 14 70 6 84-8" fill="none" stroke="#2f6fed" stroke-width="1.4" opacity=".4"/>
+        <g fill="none" stroke="rgba(212,160,23,.55)" stroke-width="1.2"><path d="M40 70V44M40 44l-14-8M40 44l16-10M150 70V50M150 50l-18-10M240 70V46M240 46l16-8"/></g>
+        <g fill="#d4a017"><circle cx="26" cy="36" r="2"/><circle cx="56" cy="34" r="2"/><circle cx="132" cy="40" r="2"/><circle cx="256" cy="38" r="2"/></g>
+        <text x="8" y="68" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="5">CATCHMENT · DISCHARGE</text>
+      </svg></span>
+      <span class="proj-head"><span class="no">G6</span><h3>River Flow Prediction on Earth Engine</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>Catchment delineated from elevation data, then decades of precipitation, temperature and snow-cover records regressed against sparse gauge discharge.</p><p class="proj-meta">Dec 2019–Jan 2020 · GEE · CHIRPS · MODIS</p></div></span>
+    </button>
+  </div>
+</section>
+
+<!-- 06 ───────── OTHER WORK ───────── -->
+<section class="slide" data-t="Software &amp; AI work">
+  <div class="slide-head">
+    <p class="eyebrow rv">Selected work</p>
+    <h2 class="rv">Automation, platforms and <span class="hl">production software</span></h2>
+  </div>
+  <div class="grid g3">
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true"><rect width="300" height="74" fill="#0b0b0d"/>
+        <g fill="none" stroke="rgba(212,160,23,.45)" stroke-width="1.1"><path d="M150 37m-26 0a26 26 0 1 0 52 0a26 26 0 1 0-52 0"/></g>
+        <g stroke="#d4a017" stroke-width="1.6" fill="none"><path d="M150 11v-4M150 67v4M124 37h-4M180 37h4M131 18l-3-3M169 56l3 3M169 18l3-3M131 56l-3 3"/></g>
+        <circle cx="150" cy="37" r="9" fill="rgba(212,160,23,.25)"/>
+        <text x="12" y="16" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="5">SOLAR IRRADIANCE</text></svg></span>
+      <span class="proj-head"><span class="no">S1</span><h3>Solar Power Potential Estimation</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>Terrain-driven radiation modelling with slope, aspect, shading and land-use exclusions, packaged as a reusable toolbox the client re-runs themselves.</p><p class="proj-meta">Dec 2019 · Suitability analysis</p></div></span>
+    </button>
+
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true"><rect width="300" height="74" fill="#0b0b0d"/>
+        <g fill="none" stroke="#3fbe84" stroke-width="1.6" stroke-linecap="round">
+          <path d="M20 42q6-16 12 0t12 0 12-14 12 14 12-8 12 8"/></g>
+        <g fill="rgba(212,160,23,.12)" stroke="rgba(212,160,23,.4)"><rect x="150" y="14" width="134" height="18" rx="4"/><rect x="150" y="38" width="110" height="18" rx="4"/></g>
+        <g font-family="ui-monospace,monospace" font-size="5" fill="#edc14f"><text x="156" y="26">ACTION · FOLLOW UP CLIENT</text><text x="156" y="50">ACTION · SEND QUOTE</text></g></svg></span>
+      <span class="proj-head"><span class="no">S2</span><h3>Meeting Summariser &amp; Live Call Agent</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>Summaries and action points posted to Slack seconds after a call ends, plus a live agent that transcribes in real time and saves a searchable record.</p><p class="proj-meta">n8n · Fathom · Speech-to-text</p></div></span>
+    </button>
+
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true"><rect width="300" height="74" fill="#0b0b0d"/>
+        <g fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.12)"><rect x="14" y="12" width="96" height="50" rx="3"/></g>
+        <g stroke="rgba(255,255,255,.1)"><path d="M14 24h96M14 34h96M14 44h96M14 54h96M46 12v50M78 12v50"/></g>
+        <g fill="rgba(212,160,23,.12)" stroke="rgba(212,160,23,.5)"><rect x="190" y="12" width="96" height="50" rx="3"/></g>
+        <g stroke="rgba(212,160,23,.3)"><path d="M190 24h96M190 34h96M190 44h96M190 54h96M222 12v50M254 12v50"/></g>
+        <g stroke="#d4a017" stroke-width="1.6" fill="none"><path d="M132 37h34M158 30l8 7-8 7"/></g>
+        <text x="126" y="20" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="5">CLEAN</text></svg></span>
+      <span class="proj-head"><span class="no">S3</span><h3>Leads Processing Automation</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>A Python application that replaced a three-hour weekly manual data-cleaning routine with a run that finishes in minutes, identical every time.</p><p class="proj-meta">Python · Pandas · Data normalisation</p></div></span>
+    </button>
+
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true"><rect width="300" height="74" fill="#0b0b0d"/>
+        <g fill="none" stroke="rgba(212,160,23,.5)" stroke-width="1.3"><circle cx="150" cy="37" r="10"/><circle cx="150" cy="37" r="19" opacity=".6"/><circle cx="150" cy="37" r="28" opacity=".3"/></g>
+        <g fill="#d4a017"><circle cx="150" cy="37" r="4"/></g>
+        <g fill="none" stroke="#3fbe84" stroke-width="1.5" stroke-linecap="round"><path d="M40 37q6-12 12 0t12 0 12-9 12 9"/><path d="M212 37q6-12 12 0t12 0 12-9 12 9"/></g></svg></span>
+      <span class="proj-head"><span class="no">S4</span><h3>AI Voice &amp; Calling Agents</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>Website voice agents and inbound/outbound calling agents with scripted flows, guardrails and clean escalation to a human.</p><p class="proj-meta">Bland · Retell · Telephony · LLMs</p></div></span>
+    </button>
+
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true"><rect width="300" height="74" fill="#0b0b0d"/>
+        <rect x="14" y="10" width="272" height="54" rx="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.1)"/>
+        <path d="M14 22h272" stroke="rgba(255,255,255,.1)"/>
+        <g fill="#3a3a42"><circle cx="24" cy="16" r="2.4"/><circle cx="33" cy="16" r="2.4"/><circle cx="42" cy="16" r="2.4"/></g>
+        <g fill="rgba(212,160,23,.16)" stroke="rgba(212,160,23,.4)"><rect x="26" y="32" width="60" height="24" rx="3"/><rect x="94" y="32" width="60" height="24" rx="3"/><rect x="162" y="32" width="60" height="24" rx="3"/><rect x="230" y="32" width="44" height="24" rx="3"/></g></svg></span>
+      <span class="proj-head"><span class="no">S5</span><h3>Be Digital &amp; Be Connect, New Zealand</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>Web platform work for a multi-division IT provider operating across New Zealand, Australia and India — web, cloud, security, telecom and AI divisions.</p><p class="proj-meta">bdigital.co.nz · Multi-region</p></div></span>
+    </button>
+
+    <button class="proj" aria-expanded="false">
+      <span class="proj-thumb"><svg viewBox="0 0 300 74" aria-hidden="true"><rect width="300" height="74" fill="#0b0b0d"/>
+        <g fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.1)"><rect x="14" y="14" width="80" height="46" rx="4"/><rect x="110" y="14" width="80" height="46" rx="4"/><rect x="206" y="14" width="80" height="46" rx="4"/></g>
+        <g fill="rgba(212,160,23,.3)"><circle cx="34" cy="30" r="7"/><circle cx="130" cy="30" r="7"/><circle cx="226" cy="30" r="7"/></g>
+        <g fill="rgba(255,255,255,.12)"><rect x="24" y="44" width="52" height="4" rx="2"/><rect x="120" y="44" width="52" height="4" rx="2"/><rect x="216" y="44" width="52" height="4" rx="2"/>
+          <rect x="24" y="52" width="34" height="3" rx="1.5"/><rect x="120" y="52" width="34" height="3" rx="1.5"/><rect x="216" y="52" width="34" height="3" rx="1.5"/></g></svg></span>
+      <span class="proj-head"><span class="no">S6</span><h3>WorkScout Marketplace</h3><span class="plus">+</span></span>
+      <span class="proj-body"><div><p>A two-sided services marketplace with provider profiles, categorised listings, search and filtering, structured to grow as categories are added.</p><p class="proj-meta">Marketplace · Search &amp; filtering</p></div></span>
+    </button>
+  </div>
+</section>
+
+<!-- 07 ───────── PUBLIC SECTOR + TEAM ───────── -->
+<section class="slide" data-t="Public sector &amp; team">
+  <div class="slide-head">
+    <p class="eyebrow rv">Institutional track record</p>
+    <h2 class="rv">We have delivered inside <span class="hl">government environments</span></h2>
+  </div>
+  <div class="split-r">
+    <div class="grid g2 rv">
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-server"/></svg></span><h3>Pakistan Army — Servers &amp; NAS</h3></div><p>Specification, procurement, configuration and on-site deployment to defence-sector standards.</p></div>
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-monitor"/></svg></span><h3>Pakistan Army — Computer Lab</h3></div><p>Complete lab: workstations, networking, software, handover with documentation.</p></div>
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-river"/></svg></span><h3>WASA — Technical Support</h3></div><p>Hands-on IT and infrastructure support for a public utility with time-sensitive operations.</p></div>
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-grid"/></svg></span><h3>Enterprise &amp; Education</h3></div><p>Server installs, networks, workstation rollouts and school labs with minimal downtime.</p></div>
+    </div>
+    <div class="card rv" style="padding:22px">
+      <svg viewBox="0 0 240 190" style="width:100%;height:auto;display:block;margin-bottom:6px" aria-label="Isometric enterprise server rack.">
+        <defs>
+          <linearGradient id="rkF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26262c"/><stop offset="1" stop-color="#101014"/></linearGradient>
+          <linearGradient id="rkS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#17171c"/><stop offset="1" stop-color="#0a0a0c"/></linearGradient>
+          <radialGradient id="rkG"><stop offset="0" stop-color="#d4a017" stop-opacity=".16"/><stop offset="1" stop-color="#d4a017" stop-opacity="0"/></radialGradient>
+        </defs>
+        <ellipse cx="120" cy="150" rx="104" ry="34" fill="url(#rkG)"/>
+        <polygon points="60,44 120,20 180,44 120,68" fill="#2c2c33" stroke="rgba(212,160,23,.28)"/>
+        <polygon points="60,44 120,68 120,158 60,134" fill="url(#rkF)" stroke="rgba(212,160,23,.22)"/>
+        <polygon points="180,44 120,68 120,158 180,134" fill="url(#rkS)" stroke="rgba(212,160,23,.16)"/>
+        <g stroke="rgba(212,160,23,.3)" stroke-width=".7">
+          <path d="M62 58 L118 80M62 72 L118 94M62 86 L118 108M62 100 L118 122M62 114 L118 136"/>
+        </g>
+        <g fill="#e6b43c">
+          <circle cx="70" cy="66" r="1.7"/><circle cx="76" cy="69" r="1.7"/>
+          <circle cx="70" cy="80" r="1.7" opacity=".55"/><circle cx="76" cy="83" r="1.7"/>
+          <circle cx="70" cy="94" r="1.7"/><circle cx="76" cy="97" r="1.7" opacity=".5"/>
+          <circle cx="70" cy="108" r="1.7" opacity=".7"/><circle cx="76" cy="111" r="1.7"/>
+          <circle cx="70" cy="122" r="1.7"/><circle cx="76" cy="125" r="1.7" opacity=".6"/>
+        </g>
+        <g fill="#3fbe84"><circle cx="108" cy="76" r="1.6"/><circle cx="108" cy="104" r="1.6"/><circle cx="108" cy="132" r="1.6"/></g>
+        <g stroke="rgba(212,160,23,.2)" stroke-width=".6" fill="none">
+          <path d="M180 60 L212 76M180 88 L212 104M180 116 L212 132"/>
+        </g>
+      </svg>
+      <span class="idx">LEADERSHIP</span>
+      <div style="display:flex;gap:13px;align-items:center;margin-top:16px">
+        <span style="width:46px;height:46px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;background:linear-gradient(160deg,rgba(212,160,23,.2),transparent);border:1px solid rgba(212,160,23,.25);font-family:var(--font-display);font-weight:700;color:var(--gold-soft)">MS</span>
+        <div><h3 style="font-size:16px">M. Sohail</h3><p class="proj-meta" style="margin-top:3px">Founder, CEO &amp; CTO</p></div>
+      </div>
+      <p>Leads strategy and delivery end to end — first conversation to deployed, supported solution.</p>
+      <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+      <div style="display:flex;gap:13px;align-items:center">
+        <span style="width:46px;height:46px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;background:linear-gradient(160deg,rgba(212,160,23,.2),transparent);border:1px solid rgba(212,160,23,.25);font-family:var(--font-display);font-weight:700;color:var(--gold-soft)">MZ</span>
+        <div><h3 style="font-size:16px">M. A Zia</h3><p class="proj-meta" style="margin-top:3px">COO &amp; GIS Expert</p></div>
+      </div>
+      <p>Leads our GIS practice — satellite and terrain analysis, SAR/DEM work, custom GIS tooling and land-management systems. Heads ZMap, our GIS product.</p>
+      <div class="chips" style="margin-top:14px"><span class="chip gold"><svg class="ic"><use href="#i-map"/></svg>GIS lead for this programme</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 ───────── REQUIREMENT ───────── -->
+<section class="slide" data-t="Requirement">
+  <div class="slide-head">
+    <p class="eyebrow rv">Your requirement, as received</p>
+    <h2 class="rv">What you have asked us to <span class="hl">build and price</span></h2>
+  </div>
+  <div class="grid g4">
+    <div class="card"><div class="tile-row" style="margin-bottom:12px"><span class="ic-badge"><svg class="ic"><use href="#i-phone"/></svg></span><h3>Passenger</h3></div>
+      <div class="chips"><span class="chip">Android + iOS</span><span class="chip">GIS map</span><span class="chip">Route &amp; ETA</span><span class="chip">Seat booking</span><span class="chip">Guide map</span><span class="chip">Alerts</span></div></div>
+    <div class="card"><div class="tile-row" style="margin-bottom:12px"><span class="ic-badge"><svg class="ic"><use href="#i-wheel"/></svg></span><h3>Driver</h3></div>
+      <div class="chips"><span class="chip">Driver app</span><span class="chip">Live location</span><span class="chip">Vehicle &amp; route</span><span class="chip">Trip operation</span></div></div>
+    <div class="card"><div class="tile-row" style="margin-bottom:12px"><span class="ic-badge"><svg class="ic"><use href="#i-monitor"/></svg></span><h3>Department</h3></div>
+      <div class="chips"><span class="chip">Admin dashboard</span><span class="chip">Real-time location</span><span class="chip">Routes &amp; stops</span><span class="chip">Oversight</span></div></div>
+    <div class="card"><div class="tile-row" style="margin-bottom:12px"><span class="ic-badge"><svg class="ic"><use href="#i-cloud"/></svg></span><h3>Platform</h3></div>
+      <div class="chips"><span class="chip gold">~600 vehicles</span><span class="chip">GPS tracking</span><span class="chip">Scalability</span><span class="chip">Phase-1 + full quote</span></div></div>
+  </div>
+  <p class="note rv">Your ten commercial questions are each mapped to an answer on the Commercial Framework slides.</p>
+</section>
+
+<!-- 09 ───────── UNDERSTANDING ───────── -->
+<section class="slide" data-t="Our understanding">
+  <div class="slide-head">
+    <p class="eyebrow rv">Our understanding</p>
+    <h2 class="rv">Six problems — and what each one <span class="hl">costs the city</span></h2>
+  </div>
+  <div class="grid g3">
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-signal"/></svg></span><h3>No live vehicle tracking</h3></div><p>Every journey begins with a guess, and the authority has no independent record of where its fleet went.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-route"/></svg></span><h3>Route choice is local knowledge</h3></div><p>Usable only by people who already know the network — which suppresses ridership among everyone else.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-clock"/></svg></span><h3>Waiting time is uncertainty</h3></div><p>Not knowing the headway pushes riders onto private transport and adds to road congestion.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-bell"/></svg></span><h3>No real-time information</h3></div><p>Diversions and breakdowns cannot reach passengers, so one disruption strands people with no warning.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-map"/></svg></span><h3>Poor network visibility</h3></div><p>Coverage gaps stay invisible because nobody holds routes and stops as analysable spatial data.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-chart"/></svg></span><h3>Limited operational oversight</h3></div><p>Planning rests on assumption rather than demand data — you cannot measure what you cannot see.</p></div>
+  </div>
+</section>
+
+<!-- 10 ───────── SOLUTION OVERVIEW ───────── -->
+<section class="slide" data-t="Solution overview">
+  <div class="slide-head">
+    <p class="eyebrow rv">Proposed solution</p>
+    <h2 class="rv">Four connected products, <span class="hl">one platform</span></h2>
+  </div>
+  <div class="split-r">
+    <div class="rv">
+      <div class="stage">
+        <div class="phone" style="--pw:clamp(140px,11.5vw,172px);--ry:14deg">
+          <svg viewBox="0 0 200 427" aria-label="Passenger journey planning screen">
+            <rect width="200" height="427" rx="21" fill="#08080a"/>
+            <path d="M0 34h200" stroke="rgba(255,255,255,.08)"/>
+            <text x="100" y="24" fill="#fafaf8" font-family="system-ui" font-size="10.5" font-weight="600" text-anchor="middle">Journey Details</text>
+            <g fill="#101012" stroke="rgba(255,255,255,.08)"><rect x="12" y="46" width="176" height="34" rx="8"/></g>
+            <text x="22" y="62" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="6.5">FROM</text>
+            <text x="22" y="73" fill="#fafaf8" font-family="system-ui" font-size="8.5">City Center</text>
+            <text x="112" y="62" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="6.5">TO</text>
+            <text x="112" y="73" fill="#fafaf8" font-family="system-ui" font-size="8.5">Clock Tower</text>
+            <!-- itinerary -->
+            <g stroke="rgba(212,160,23,.4)" stroke-width="1.5" stroke-dasharray="3 3"><path d="M28 104v170"/></g>
+            <g>
+              <circle cx="28" cy="104" r="5" fill="#08080a" stroke="#3fbe84" stroke-width="2"/>
+              <text x="44" y="101" fill="#fafaf8" font-family="system-ui" font-size="8.5" font-weight="600">Urban Hiace</text>
+              <text x="44" y="112" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="7">15 MIN</text>
+            </g>
+            <g>
+              <circle cx="28" cy="160" r="5" fill="#08080a" stroke="#c9762f" stroke-width="2"/>
+              <text x="44" y="157" fill="#fafaf8" font-family="system-ui" font-size="8.5" font-weight="600">Transfer point</text>
+              <text x="44" y="168" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="7">JINNAH COLONY</text>
+            </g>
+            <g>
+              <circle cx="28" cy="216" r="5" fill="#08080a" stroke="#3fbe84" stroke-width="2"/>
+              <text x="44" y="213" fill="#fafaf8" font-family="system-ui" font-size="8.5" font-weight="600">Government Bus</text>
+              <text x="44" y="224" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="7">20 MIN</text>
+            </g>
+            <g>
+              <circle cx="28" cy="274" r="5" fill="#d4a017"/>
+              <text x="44" y="271" fill="#fafaf8" font-family="system-ui" font-size="8.5" font-weight="600">Destination</text>
+              <text x="44" y="282" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="7">CLOCK TOWER</text>
+            </g>
+            <g fill="#101012" stroke="rgba(212,160,23,.28)"><rect x="12" y="304" width="176" height="30" rx="8"/><rect x="12" y="340" width="176" height="30" rx="8"/></g>
+            <text x="24" y="323" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="7">TOTAL TIME</text>
+            <text x="176" y="323" fill="#edc14f" font-family="ui-monospace,monospace" font-size="8.5" text-anchor="end">35 MIN</text>
+            <text x="24" y="359" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="7">EST. FARE</text>
+            <text x="176" y="359" fill="#edc14f" font-family="ui-monospace,monospace" font-size="8.5" text-anchor="end">[ TBD ]</text>
+            <rect x="12" y="382" width="176" height="28" rx="8" fill="rgba(212,160,23,.16)" stroke="rgba(212,160,23,.5)"/>
+            <text x="100" y="400" fill="#edc14f" font-family="system-ui" font-size="9" font-weight="600" text-anchor="middle">Start Journey</text>
+          </svg>
+        </div>
+        <div class="phone" style="--pw:clamp(140px,11.5vw,172px);--ry:-14deg">
+          <svg viewBox="0 0 200 427" aria-label="Driver application screen">
+            <rect width="200" height="427" rx="21" fill="#08080a"/>
+            <path d="M0 34h200" stroke="rgba(255,255,255,.08)"/>
+            <text x="14" y="24" fill="#fafaf8" font-family="system-ui" font-size="10.5" font-weight="600">Driver</text>
+            <g><circle cx="172" cy="20" r="4" fill="#3fbe84"/><text x="182" y="23" fill="#3fbe84" font-family="ui-monospace,monospace" font-size="6.5" text-anchor="end">ON</text></g>
+            <rect y="34" width="200" height="230" fill="#0b0b0d"/>
+            <g stroke="rgba(255,255,255,.05)"><path d="M0 90h200M0 150h200M0 210h200M70 34v230M140 34v230"/></g>
+            <path d="M34 250 L70 190 L70 130 L140 70" fill="none" stroke="#3fbe84" stroke-width="3.4" stroke-linecap="round"/>
+            <g fill="#08080a" stroke="#3fbe84" stroke-width="1.8"><circle cx="70" cy="190" r="3.6"/><circle cx="70" cy="130" r="3.6"/></g>
+            <circle class="ping" cx="34" cy="250" r="12" fill="#d4a017" opacity=".3"/>
+            <polygon points="34,242 28,254 40,254" fill="#e6b43c"/>
+            <g fill="#101012" stroke="rgba(255,255,255,.1)"><rect x="12" y="44" width="176" height="26" rx="7"/></g>
+            <text x="22" y="61" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="6.5">NEXT STOP</text>
+            <text x="178" y="61" fill="#fafaf8" font-family="ui-monospace,monospace" font-size="8" text-anchor="end">1.2 KM</text>
+            <path d="M0 264h200" stroke="rgba(255,255,255,.08)"/>
+            <g font-family="ui-monospace,monospace" font-size="7">
+              <text x="14" y="284" fill="#8a8a82">ROUTE</text><text x="186" y="284" fill="#edc14f" text-anchor="end">G-5</text>
+              <text x="14" y="304" fill="#8a8a82">VEHICLE</text><text x="186" y="304" fill="#fafaf8" text-anchor="end">FDA-1147</text>
+              <text x="14" y="324" fill="#8a8a82">GPS</text><text x="186" y="324" fill="#3fbe84" text-anchor="end">LOCKED</text>
+              <text x="14" y="344" fill="#8a8a82">LAST SENT</text><text x="186" y="344" fill="#3fbe84" text-anchor="end">4 S AGO</text>
+            </g>
+            <rect x="12" y="362" width="176" height="30" rx="8" fill="rgba(47,163,107,.14)" stroke="rgba(47,163,107,.45)"/>
+            <text x="100" y="381" fill="#3fbe84" font-family="system-ui" font-size="9" font-weight="600" text-anchor="middle">Trip in progress</text>
+          </svg>
+        </div>
+      </div>
+      <p class="dev-cap">Passenger &amp; Driver applications · hover to straighten</p>
+    </div>
+    <div class="grid g2 rv">
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-phone"/></svg></span><h3>Passenger App</h3></div><p>Routes, nearby stops, live vehicles, ETA and journey planning.</p></div>
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-wheel"/></svg></span><h3>Driver App</h3></div><p>Assignment, trip operation and live location transmission.</p></div>
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-monitor"/></svg></span><h3>Department Dashboard</h3></div><p>Live fleet monitoring, routes, alerts and analytics.</p></div>
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-cloud"/></svg></span><h3>Realtime Platform</h3></div><p>Ingest, process and distribute positions in seconds.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 ───────── DASHBOARD ───────── -->
+<section class="slide" data-t="Department dashboard">
+  <div class="slide-head">
+    <p class="eyebrow rv">Department / Authority interface</p>
+    <h2 class="rv">One screen for the <span class="hl">whole network</span></h2>
+  </div>
+  <div class="dash rv">
+    <svg viewBox="0 0 1400 620" aria-label="Department GIS dashboard: live city map, fleet counters, vehicle mix, trips trend and active alerts.">
+      <rect width="1400" height="620" fill="#0a0a0b"/>
+      <!-- sidebar -->
+      <rect width="176" height="620" fill="#0d0d0f"/>
+      <path d="M176 0v620" stroke="rgba(255,255,255,.08)"/>
+      <g transform="translate(22,26)">
+        <rect width="26" height="26" rx="7" fill="rgba(212,160,23,.16)" stroke="rgba(212,160,23,.4)"/>
+        <text x="13" y="18" fill="#edc14f" font-family="system-ui" font-size="12" font-weight="700" text-anchor="middle">M</text>
+        <text x="38" y="12" fill="#fafaf8" font-family="system-ui" font-size="9" font-weight="600">Transport</text>
+        <text x="38" y="23" fill="#8a8a82" font-family="system-ui" font-size="9">Management</text>
+      </g>
+      <g font-family="system-ui" font-size="10.5">
+        <rect x="12" y="78" width="152" height="28" rx="7" fill="rgba(212,160,23,.1)"/>
+        <text x="34" y="96" fill="#edc14f">Dashboard</text>
+        <text x="34" y="128" fill="#8a8a82">Live Map</text>
+        <text x="34" y="158" fill="#8a8a82">Vehicles</text>
+        <text x="34" y="188" fill="#8a8a82">Drivers</text>
+        <text x="34" y="218" fill="#8a8a82">Routes</text>
+        <text x="34" y="248" fill="#8a8a82">Trips</text>
+        <text x="34" y="278" fill="#8a8a82">Alerts</text>
+        <text x="34" y="308" fill="#8a8a82">Reports</text>
+        <text x="34" y="338" fill="#8a8a82">Analytics</text>
+      </g>
+      <g fill="none" stroke="#8a8a82" stroke-width="1.3" transform="translate(20,0)">
+        <g transform="translate(0,84) scale(.5)"><use href="#i-grid"/></g>
+        <g transform="translate(0,116) scale(.5)"><use href="#i-map"/></g>
+        <g transform="translate(0,146) scale(.5)"><use href="#i-bus"/></g>
+        <g transform="translate(0,176) scale(.5)"><use href="#i-users"/></g>
+        <g transform="translate(0,206) scale(.5)"><use href="#i-route"/></g>
+        <g transform="translate(0,236) scale(.5)"><use href="#i-clock"/></g>
+        <g transform="translate(0,266) scale(.5)"><use href="#i-bell"/></g>
+        <g transform="translate(0,296) scale(.5)"><use href="#i-doc"/></g>
+        <g transform="translate(0,326) scale(.5)"><use href="#i-chart"/></g>
+      </g>
+      <g transform="translate(20,84) scale(.5)" stroke="#edc14f" fill="none" stroke-width="1.3"><use href="#i-grid"/></g>
+
+      <!-- top bar -->
+      <path d="M176 56h1224" stroke="rgba(255,255,255,.08)"/>
+      <text x="200" y="35" fill="#fafaf8" font-family="system-ui" font-size="14" font-weight="600">Administrator Dashboard</text>
+      <circle cx="392" cy="30" r="4" fill="#3fbe84"/>
+      <text x="404" y="34" fill="#3fbe84" font-family="ui-monospace,monospace" font-size="9">LIVE</text>
+      <g fill="#101012" stroke="rgba(255,255,255,.1)"><rect x="1132" y="17" width="112" height="26" rx="7"/><rect x="1256" y="17" width="120" height="26" rx="7"/></g>
+      <text x="1146" y="34" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="9">TODAY</text>
+      <text x="1270" y="34" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="9">10:42 AM</text>
+
+      <!-- live map -->
+      <rect x="200" y="76" width="770" height="292" rx="10" fill="#0b0b0d" stroke="rgba(255,255,255,.08)"/>
+      <g stroke="rgba(255,255,255,.045)">
+        <path d="M200 140h770M200 200h770M200 260h770M200 320h770"/>
+        <path d="M310 76v292M420 76v292M530 76v292M640 76v292M750 76v292M860 76v292"/>
+      </g>
+      <g stroke="rgba(255,255,255,.09)" stroke-width="2.4" fill="none"><path d="M200 232h770"/><path d="M585 76v292"/></g>
+      <text x="600" y="226" fill="#5e5e58" font-family="system-ui" font-size="11">Faisalabad</text>
+      <text x="250" y="120" fill="#4a4a45" font-family="system-ui" font-size="9">Madina Town</text>
+      <text x="820" y="300" fill="#4a4a45" font-family="system-ui" font-size="9">Samanabad</text>
+      <text x="700" y="140" fill="#4a4a45" font-family="system-ui" font-size="9">Jinnah Colony</text>
+      <g fill="none" stroke-linecap="round" stroke-width="2.6">
+        <path id="dr1" d="M232 336 L330 292 L430 250 L585 232 L700 176 L830 120 L946 96" stroke="#d4a017" opacity=".85"/>
+        <path id="dr2" d="M214 118 L340 152 L470 202 L585 232 L720 280 L880 318 L950 344" stroke="#2f6fed" opacity=".7"/>
+        <path id="dr3" d="M400 362 L470 290 L520 250 L585 232 L640 160 L690 96" stroke="#3fbe84" opacity=".65"/>
+      </g>
+      <g fill="#0b0b0d" stroke="#edc14f" stroke-width="1.8">
+        <circle cx="430" cy="250" r="4.5"/><circle cx="700" cy="176" r="4.5"/><circle cx="330" cy="292" r="4.5"/>
+        <circle cx="720" cy="280" r="4.5"/><circle cx="640" cy="160" r="4.5"/>
+      </g>
+      <circle cx="585" cy="232" r="7" fill="#d4a017"/>
+      <rect class="veh" width="15" height="9" rx="2.5" fill="#e6b43c" style="offset-path:path('M232 336 L330 292 L430 250 L585 232 L700 176 L830 120 L946 96');animation-duration:16s"/>
+      <rect class="veh" width="15" height="9" rx="2.5" fill="#e6b43c" style="offset-path:path('M232 336 L330 292 L430 250 L585 232 L700 176 L830 120 L946 96');animation-duration:16s;animation-delay:-8s"/>
+      <rect class="veh" width="15" height="9" rx="2.5" fill="#4f86f0" style="offset-path:path('M214 118 L340 152 L470 202 L585 232 L720 280 L880 318 L950 344');animation-duration:19s"/>
+      <rect class="veh" width="15" height="9" rx="2.5" fill="#4f86f0" style="offset-path:path('M214 118 L340 152 L470 202 L585 232 L720 280 L880 318 L950 344');animation-duration:19s;animation-delay:-9s"/>
+      <rect class="veh" width="13" height="8" rx="2.5" fill="#3fbe84" style="offset-path:path('M400 362 L470 290 L520 250 L585 232 L640 160 L690 96');animation-duration:14s;animation-delay:-5s"/>
+      <g fill="#101012" stroke="rgba(255,255,255,.1)"><rect x="216" y="90" width="132" height="30" rx="7"/></g>
+      <text x="228" y="102" fill="#fafaf8" font-family="system-ui" font-size="9" font-weight="600">Live City Map</text>
+      <text x="228" y="114" fill="#8a8a82" font-family="system-ui" font-size="8">Real-time vehicle tracking</text>
+      <g fill="#101012" stroke="rgba(255,255,255,.1)"><rect x="836" y="90" width="120" height="52" rx="7"/></g>
+      <g font-family="system-ui" font-size="8.5">
+        <rect x="846" y="100" width="9" height="6" rx="1.5" fill="#e6b43c"/><text x="862" y="106" fill="#8a8a82">Government Bus</text>
+        <rect x="846" y="114" width="9" height="6" rx="1.5" fill="#4f86f0"/><text x="862" y="120" fill="#8a8a82">Urban Hiace</text>
+        <rect x="846" y="128" width="9" height="6" rx="1.5" fill="#3fbe84"/><text x="862" y="134" fill="#8a8a82">Metro Bus</text>
+      </g>
+
+      <!-- live feed -->
+      <rect x="990" y="76" width="386" height="292" rx="10" fill="#0d0d0f" stroke="rgba(255,255,255,.08)"/>
+      <text x="1010" y="102" fill="#fafaf8" font-family="system-ui" font-size="11" font-weight="600">Live Feed</text>
+      <text x="1356" y="102" fill="#edc14f" font-family="ui-monospace,monospace" font-size="8.5" text-anchor="end">VIEW ALL</text>
+      <path d="M1006 114h354" stroke="rgba(255,255,255,.07)"/>
+      <g font-family="system-ui" font-size="9.5">
+        <g><rect x="1010" y="126" width="20" height="20" rx="6" fill="rgba(230,180,60,.14)"/><text x="1042" y="136" fill="#edc14f" font-family="ui-monospace,monospace" font-size="8.5">G-5</text><text x="1080" y="136" fill="#fafaf8">Government Bus</text><text x="1042" y="148" fill="#8a8a82" font-size="8.5">Clock Tower Road</text><text x="1356" y="136" fill="#8a8a82" font-size="8.5" text-anchor="end">2 min</text><circle cx="1348" cy="146" r="3" fill="#3fbe84"/></g>
+        <g><rect x="1010" y="164" width="20" height="20" rx="6" fill="rgba(79,134,240,.14)"/><text x="1042" y="174" fill="#4f86f0" font-family="ui-monospace,monospace" font-size="8.5">H-12</text><text x="1080" y="174" fill="#fafaf8">Urban Hiace</text><text x="1042" y="186" fill="#8a8a82" font-size="8.5">D-Ground to Millat Town</text><text x="1356" y="174" fill="#8a8a82" font-size="8.5" text-anchor="end">3 min</text><circle cx="1348" cy="184" r="3" fill="#3fbe84"/></g>
+        <g><rect x="1010" y="202" width="20" height="20" rx="6" fill="rgba(230,180,60,.14)"/><text x="1042" y="212" fill="#edc14f" font-family="ui-monospace,monospace" font-size="8.5">G-7</text><text x="1080" y="212" fill="#fafaf8">Government Bus</text><text x="1042" y="224" fill="#8a8a82" font-size="8.5">Samanabad to City Center</text><text x="1356" y="212" fill="#8a8a82" font-size="8.5" text-anchor="end">4 min</text><circle cx="1348" cy="222" r="3" fill="#3fbe84"/></g>
+        <g><rect x="1010" y="240" width="20" height="20" rx="6" fill="rgba(63,190,132,.14)"/><text x="1042" y="250" fill="#3fbe84" font-family="ui-monospace,monospace" font-size="8.5">M-1</text><text x="1080" y="250" fill="#fafaf8">Metro Bus</text><text x="1042" y="262" fill="#8a8a82" font-size="8.5">Jinnah Colony to D-Type</text><text x="1356" y="250" fill="#8a8a82" font-size="8.5" text-anchor="end">5 min</text><circle cx="1348" cy="260" r="3" fill="#c9762f"/></g>
+        <g><rect x="1010" y="278" width="20" height="20" rx="6" fill="rgba(230,180,60,.14)"/><text x="1042" y="288" fill="#edc14f" font-family="ui-monospace,monospace" font-size="8.5">G-3</text><text x="1080" y="288" fill="#fafaf8">Government Bus</text><text x="1042" y="300" fill="#8a8a82" font-size="8.5">Madina Town to City Center</text><text x="1356" y="288" fill="#8a8a82" font-size="8.5" text-anchor="end">6 min</text><circle cx="1348" cy="298" r="3" fill="#3fbe84"/></g>
+        <g><rect x="1010" y="316" width="20" height="20" rx="6" fill="rgba(79,134,240,.14)"/><text x="1042" y="326" fill="#4f86f0" font-family="ui-monospace,monospace" font-size="8.5">H-4</text><text x="1080" y="326" fill="#fafaf8">Urban Hiace</text><text x="1042" y="338" fill="#8a8a82" font-size="8.5">Jhang Road</text><text x="1356" y="326" fill="#8a8a82" font-size="8.5" text-anchor="end">8 min</text><circle cx="1348" cy="336" r="3" fill="#3fbe84"/></g>
+      </g>
+
+      <!-- KPI row -->
+      <g>
+        <rect x="200" y="384" width="185" height="76" rx="10" fill="#0d0d0f" stroke="rgba(255,255,255,.08)"/>
+        <text x="218" y="408" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="8.5">VEHICLES TRACKED</text>
+        <text x="218" y="440" fill="#fafaf8" font-family="system-ui" font-size="26" font-weight="700">600</text>
+        <text x="368" y="440" fill="#8a8a82" font-family="system-ui" font-size="9" text-anchor="end">initial fleet</text>
+
+        <rect x="397" y="384" width="185" height="76" rx="10" fill="#0d0d0f" stroke="rgba(255,255,255,.08)"/>
+        <text x="415" y="408" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="8.5">ONLINE NOW</text>
+        <text x="415" y="440" fill="#3fbe84" font-family="system-ui" font-size="26" font-weight="700">—</text>
+        <text x="565" y="440" fill="#8a8a82" font-family="system-ui" font-size="9" text-anchor="end">live count</text>
+
+        <rect x="594" y="384" width="185" height="76" rx="10" fill="#0d0d0f" stroke="rgba(255,255,255,.08)"/>
+        <text x="612" y="408" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="8.5">ACTIVE ROUTES</text>
+        <text x="612" y="440" fill="#fafaf8" font-family="system-ui" font-size="26" font-weight="700">—</text>
+        <text x="762" y="440" fill="#8a8a82" font-family="system-ui" font-size="9" text-anchor="end">from survey</text>
+
+        <rect x="791" y="384" width="179" height="76" rx="10" fill="#0d0d0f" stroke="rgba(255,255,255,.08)"/>
+        <text x="809" y="408" fill="#8a8a82" font-family="ui-monospace,monospace" font-size="8.5">ACTIVE ALERTS</text>
+        <text x="809" y="440" fill="#c9762f" font-family="system-ui" font-size="26" font-weight="700">—</text>
+        <text x="953" y="440" fill="#8a8a82" font-family="system-ui" font-size="9" text-anchor="end">needs action</text>
+      </g>
+
+      <!-- vehicle mix -->
+      <rect x="200" y="474" width="290" height="128" rx="10" fill="#0d0d0f" stroke="rgba(255,255,255,.08)"/>
+      <text x="218" y="498" fill="#fafaf8" font-family="system-ui" font-size="10.5" font-weight="600">Vehicles by Type</text>
+      <g transform="translate(270,552)">
+        <circle r="34" fill="none" stroke="#e6b43c" stroke-width="14" stroke-dasharray="128 214" transform="rotate(-90)"/>
+        <circle r="34" fill="none" stroke="#4f86f0" stroke-width="14" stroke-dasharray="60 214" stroke-dashoffset="-128" transform="rotate(-90)"/>
+        <circle r="34" fill="none" stroke="#3fbe84" stroke-width="14" stroke-dasharray="26 214" stroke-dashoffset="-188" transform="rotate(-90)"/>
+      </g>
+      <g font-family="system-ui" font-size="9">
+        <rect x="326" y="518" width="9" height="6" rx="1.5" fill="#e6b43c"/><text x="342" y="524" fill="#8a8a82">Government Bus</text>
+        <rect x="326" y="540" width="9" height="6" rx="1.5" fill="#4f86f0"/><text x="342" y="546" fill="#8a8a82">Urban Hiace</text>
+        <rect x="326" y="562" width="9" height="6" rx="1.5" fill="#3fbe84"/><text x="342" y="568" fill="#8a8a82">Metro Bus</text>
+        <text x="342" y="586" fill="#5e5e58" font-size="8.5">Mix confirmed in Discovery</text>
+      </g>
+
+      <!-- fleet activity -->
+      <rect x="502" y="474" width="290" height="128" rx="10" fill="#0d0d0f" stroke="rgba(255,255,255,.08)"/>
+      <text x="520" y="498" fill="#fafaf8" font-family="system-ui" font-size="10.5" font-weight="600">Fleet Activity (Today)</text>
+      <g stroke="rgba(255,255,255,.05)"><path d="M520 520h256M520 550h256M520 580h256"/></g>
+      <path d="M520 574 L552 562 L584 540 L616 546 L648 522 L680 530 L712 514 L744 524 L776 512" fill="none" stroke="#3fbe84" stroke-width="2"/>
+      <path d="M520 584 L552 578 L584 566 L616 570 L648 554 L680 560 L712 548 L744 556 L776 546" fill="none" stroke="#4f86f0" stroke-width="1.6" opacity=".7"/>
+      <g font-family="ui-monospace,monospace" font-size="7.5" fill="#5e5e58"><text x="520" y="596">6AM</text><text x="640" y="596" text-anchor="middle">2PM</text><text x="776" y="596" text-anchor="end">10PM</text></g>
+
+      <!-- alerts -->
+      <rect x="804" y="474" width="572" height="128" rx="10" fill="#0d0d0f" stroke="rgba(255,255,255,.08)"/>
+      <text x="822" y="498" fill="#fafaf8" font-family="system-ui" font-size="10.5" font-weight="600">Recent Alerts</text>
+      <path d="M820 510h540" stroke="rgba(255,255,255,.07)"/>
+      <g font-family="system-ui" font-size="9">
+        <text x="822" y="530" fill="#c9762f">Delay</text><text x="890" y="530" fill="#b4b4ad">Bus G-7 running behind schedule</text><text x="1180" y="530" fill="#8a8a82">Samanabad</text><text x="1360" y="530" fill="#8a8a82" text-anchor="end">10:40 AM</text>
+        <text x="822" y="554" fill="#c9762f">Breakdown</text><text x="890" y="554" fill="#b4b4ad">Hiace H-12 reported engine issue</text><text x="1180" y="554" fill="#8a8a82">Jhang Road</text><text x="1360" y="554" fill="#8a8a82" text-anchor="end">10:32 AM</text>
+        <text x="822" y="578" fill="#edc14f">Traffic</text><text x="890" y="578" fill="#b4b4ad">Heavy traffic reported on Canal Road</text><text x="1180" y="578" fill="#8a8a82">Canal Road</text><text x="1360" y="578" fill="#8a8a82" text-anchor="end">10:28 AM</text>
+      </g>
+    </svg>
+  </div>
+  <p class="note rv">Counters shown as placeholders — real values populate from your fleet once Discovery confirms vehicle and route data.</p>
+</section>
+
+<!-- 12 ───────── LOCATION STRATEGY ───────── -->
+<section class="slide" data-t="Location strategy">
+  <div class="slide-head">
+    <p class="eyebrow rv">Technical feasibility</p>
+    <h2 class="rv">Three ways to get a position — only the <span class="hl">first hop differs</span></h2>
+  </div>
+  <div class="split-r">
+    <figure class="rv">
+      <svg class="diagram" viewBox="0 0 620 330" role="img" aria-label="Three location-source options — driver phone GNSS, phone with BLE vehicle beacon, and a dedicated 4G tracker — all converging on the same cloud platform, so only the first hop changes.">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" opacity=".55"/></marker>
+          <marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#d4a017"/></marker>
+        </defs>
+        <g class="node"><rect x="10" y="18" width="180" height="56" rx="10" stroke="#d4a017"/><text class="t" x="26" y="42">Driver phone GNSS</text><text class="s" x="26" y="60" fill="#edc14f">BASELINE · NO HARDWARE</text></g>
+        <path class="flow accent" d="M190 46 H360" marker-end="url(#ahg)"/><text class="flow-l" x="214" y="38">position every ~20s</text>
+        <g class="node"><rect x="10" y="130" width="180" height="56" rx="10"/><text class="t" x="26" y="154">Phone + BLE beacon</text><text class="s" x="26" y="172">OPTIONAL · VERIFIES VEHICLE</text></g>
+        <path class="flow" d="M190 158 H360" marker-end="url(#ah)"/><text class="flow-l" x="208" y="150">position + vehicle ID</text>
+        <g class="node"><rect x="10" y="242" width="180" height="56" rx="10"/><text class="t" x="26" y="266">Dedicated 4G tracker</text><text class="s" x="26" y="284">ADD-ON · TAMPER-RESISTANT</text></g>
+        <path class="flow" d="M190 270 H360" marker-end="url(#ah)"/><text class="flow-l" x="216" y="262">M2M SIM, no phone</text>
+        <path class="flow" d="M360 46 H386 Q400 46 400 60 V150" stroke-opacity=".3"/>
+        <path class="flow" d="M360 158 H400" stroke-opacity=".3"/>
+        <path class="flow" d="M360 270 H386 Q400 270 400 256 V166" stroke-opacity=".3"/>
+        <g class="node"><rect x="400" y="130" width="200" height="56" rx="10" stroke="#d4a017"/><text class="t" x="418" y="154">Cloud platform</text><text class="s" x="418" y="172" fill="#edc14f">IDENTICAL FOR ALL THREE</text></g>
+      </svg>
+      <figcaption>The tracking source is a commercial decision, not an architectural one.</figcaption>
+    </figure>
+    <div>
+      <div class="card rv" style="border-left:2px solid var(--gold)"><h3>A · Driver phone GNSS <span class="chip gold" style="margin-left:6px">Baseline</span></h3><p>No per-vehicle hardware or SIM. Live as fast as drivers are onboarded. Depends on the driver's device being on and in the vehicle.</p></div>
+      <div class="card rv" style="margin-top:11px"><h3>B · Bluetooth / BLE proximity</h3><p>Optional beacon that ties a driver's device to a specific vehicle. Not required for core live tracking.</p></div>
+      <div class="card rv" style="margin-top:11px"><h3>C · Dedicated 4G tracker</h3><p>For permanent, tamper-resistant tracking. Priced separately, so you can instrument part of the fleet rather than all of it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 ───────── GIS & MAPPING ───────── -->
+<section class="slide" data-t="GIS &amp; mapping">
+  <div class="slide-head">
+    <p class="eyebrow rv">GIS &amp; mapping approach</p>
+    <h2 class="rv">Open map infrastructure we <span class="hl">control and cache</span></h2>
+  </div>
+  <div class="split">
+    <div>
+      <p class="lede rv">Commercial map APIs bill per request forever. We self-host OSM-derived raster tiles and keep transport data as vector on top. Toggle the layers.</p>
+      <div class="layers rv" style="margin-top:18px" id="layerBox">
+        <button class="layer-btn" data-layer="base" aria-pressed="true"><span class="sw"></span><span class="tx"><b>OSM raster base map</b><span>Cost-controlled · self-hosted</span></span></button>
+        <button class="layer-btn" data-layer="sat" aria-pressed="false"><span class="sw"></span><span class="tx"><b>Satellite imagery</b><span>Where licensing permits</span></span></button>
+        <button class="layer-btn" data-layer="routes" aria-pressed="true"><span class="sw"></span><span class="tx"><b>Routes &amp; stops (PostGIS)</b><span>Vector · spatially queryable</span></span></button>
+        <button class="layer-btn" data-layer="veh" aria-pressed="true"><span class="sw"></span><span class="tx"><b>Live vehicles</b><span>Realtime · WebSocket</span></span></button>
+      </div>
+      <div class="chips rv" style="margin-top:16px">
+        <span class="chip gold"><svg class="ic"><use href="#i-download"/></svg>Offline map packages</span>
+        <span class="chip"><svg class="ic"><use href="#i-layers"/></svg>Open-source components</span>
+      </div>
+    </div>
+    <div class="rv">
+      <div class="dash">
+        <svg viewBox="0 0 640 400" aria-label="Map layer composition: satellite imagery, OSM raster base, PostGIS routes and stops, and live vehicle positions.">
+          <g class="maplayer" data-l="sat" data-off="true">
+            <rect width="640" height="400" fill="#101a12"/>
+            <g fill="#16261a"><rect x="34" y="46" width="172" height="126" rx="4"/><rect x="378" y="206" width="218" height="138" rx="4"/><rect x="252" y="34" width="138" height="104" rx="4"/></g>
+            <g fill="#1c2b20"><circle cx="504" cy="92" r="48"/><circle cx="126" cy="292" r="41"/></g>
+          </g>
+          <g class="maplayer" data-l="base">
+            <rect width="640" height="400" fill="#0c0c0e"/>
+            <g stroke="rgba(255,255,255,.07)"><path d="M0 80h640M0 172h640M0 264h640M0 344h640"/><path d="M104 0v400M230 0v400M356 0v400M482 0v400M572 0v400"/></g>
+            <g stroke="rgba(255,255,255,.13)" stroke-width="2.6" fill="none"><path d="M0 172h640"/><path d="M356 0v400"/></g>
+            <g fill="rgba(255,255,255,.035)">
+              <rect x="122" y="98" width="90" height="56" rx="2"/><rect x="248" y="190" width="90" height="56" rx="2"/>
+              <rect x="374" y="282" width="90" height="48" rx="2"/><rect x="500" y="98" width="62" height="56" rx="2"/>
+            </g>
+            <text x="368" y="164" fill="#4a4a45" font-family="system-ui" font-size="11">Faisalabad</text>
+          </g>
+          <g class="maplayer" data-l="routes">
+            <path d="M46 344 L172 264 L230 172 L356 138 L494 80" fill="none" stroke="#d4a017" stroke-width="3.2" stroke-linecap="round" opacity=".88"/>
+            <path d="M22 104 L138 126 L230 172 L378 230 L596 276" fill="none" stroke="#2f6fed" stroke-width="3.2" stroke-linecap="round" opacity=".75"/>
+            <path d="M196 386 L230 276 L322 196 L356 68" fill="none" stroke="#3fbe84" stroke-width="2.8" stroke-linecap="round" opacity=".7"/>
+            <g fill="#0c0c0e" stroke="#edc14f" stroke-width="2">
+              <circle cx="230" cy="172" r="5.5"/><circle cx="356" cy="138" r="5.5"/><circle cx="172" cy="264" r="5.5"/><circle cx="378" cy="230" r="5.5"/><circle cx="494" cy="80" r="5.5"/>
+            </g>
+          </g>
+          <g class="maplayer" data-l="veh">
+            <rect class="veh" width="16" height="9" rx="2.5" fill="#e6b43c" style="offset-path:path('M46 344 L172 264 L230 172 L356 138 L494 80');animation-duration:12s"/>
+            <rect class="veh" width="16" height="9" rx="2.5" fill="#e6b43c" style="offset-path:path('M46 344 L172 264 L230 172 L356 138 L494 80');animation-duration:12s;animation-delay:-6s"/>
+            <rect class="veh" width="16" height="9" rx="2.5" fill="#4f86f0" style="offset-path:path('M22 104 L138 126 L230 172 L378 230 L596 276');animation-duration:15s"/>
+            <rect class="veh" width="14" height="8" rx="2.5" fill="#3fbe84" style="offset-path:path('M196 386 L230 276 L322 196 L356 68');animation-duration:13s;animation-delay:-4s"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 14 ───────── STACK ───────── -->
+<section class="slide" data-t="Technology stack">
+  <div class="slide-head">
+    <p class="eyebrow rv">Proposed technology stack</p>
+    <h2 class="rv">Open-source where it matters, <span class="hl">proven everywhere else</span></h2>
+  </div>
+  <div class="iso-wrap rv" id="isoStack">
+    <div class="iso-lab" id="isoLeft">
+      <div class="l" data-i="0"><h3>Interfaces</h3><p>Flutter — passenger &amp; driver mobile<br>React + TypeScript — web admin GIS</p></div>
+      <div class="l" data-i="1"><h3>Realtime Backend</h3><p>Python + FastAPI<br>Redis / Valkey + WebSocket</p></div>
+      <div class="l" data-i="2"><h3>Spatial Data Core</h3><p>PostgreSQL + PostGIS<br>OSRM / GraphHopper routing</p></div>
+      <div class="l" data-i="3"><h3>Mapping Infrastructure</h3><p>MapLibre-class renderer<br>OSM raster tiles &amp; offline packs</p></div>
+    </div>
+
+    <div class="iso">
+      <svg viewBox="0 0 380 420" role="img" aria-label="Four-layer platform stack: interfaces on top, then the realtime backend, the spatial data core, and the mapping infrastructure at the base.">
+        <defs>
+          <linearGradient id="pl" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f4d77e" stop-opacity=".30"/>
+            <stop offset=".5" stop-color="#d4a017" stop-opacity=".16"/>
+            <stop offset="1" stop-color="#8a6508" stop-opacity=".10"/>
+          </linearGradient>
+          <linearGradient id="pe" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#d4a017" stop-opacity=".55"/>
+            <stop offset="1" stop-color="#8a6508" stop-opacity=".12"/>
+          </linearGradient>
+          <radialGradient id="halo"><stop offset="0" stop-color="#d4a017" stop-opacity=".22"/><stop offset="1" stop-color="#d4a017" stop-opacity="0"/></radialGradient>
+        </defs>
+        <ellipse cx="190" cy="250" rx="185" ry="150" fill="url(#halo)"/>
+
+        <!-- base to top so upper plates overlap correctly -->
+        <g class="plate" data-i="3" tabindex="0" role="button" aria-label="Mapping infrastructure layer">
+          <polygon points="190,352 330,392 190,432 50,392" fill="url(#pe)" opacity=".5"/>
+          <polygon class="top" points="190,336 330,376 190,416 50,376" fill="url(#pl)" stroke="#d4a017" stroke-opacity=".7" stroke-width="1.4"/>
+          <polygon points="190,352 300,384 190,416 80,384" fill="none" stroke="#edc14f" stroke-opacity=".28"/>
+          <circle cx="330" cy="376" r="3.4" fill="#edc14f"/><circle cx="50" cy="376" r="3.4" fill="#edc14f"/>
+        </g>
+        <g class="plate" data-i="2" tabindex="0" role="button" aria-label="Spatial data core layer">
+          <polygon points="190,258 330,298 190,338 50,298" fill="url(#pe)" opacity=".5"/>
+          <polygon class="top" points="190,242 330,282 190,322 50,282" fill="url(#pl)" stroke="#d4a017" stroke-opacity=".7" stroke-width="1.4"/>
+          <polygon points="190,258 300,290 190,322 80,290" fill="none" stroke="#edc14f" stroke-opacity=".28"/>
+          <circle cx="330" cy="282" r="3.4" fill="#edc14f"/><circle cx="50" cy="282" r="3.4" fill="#edc14f"/>
+        </g>
+        <g class="plate" data-i="1" tabindex="0" role="button" aria-label="Realtime backend layer">
+          <polygon points="190,164 330,204 190,244 50,204" fill="url(#pe)" opacity=".5"/>
+          <polygon class="top" points="190,148 330,188 190,228 50,188" fill="url(#pl)" stroke="#d4a017" stroke-opacity=".7" stroke-width="1.4"/>
+          <polygon points="190,164 300,196 190,228 80,196" fill="none" stroke="#edc14f" stroke-opacity=".28"/>
+          <circle cx="330" cy="188" r="3.4" fill="#edc14f"/><circle cx="50" cy="188" r="3.4" fill="#edc14f"/>
+        </g>
+        <g class="plate" data-i="0" tabindex="0" role="button" aria-label="Interfaces layer">
+          <polygon points="190,70 330,110 190,150 50,110" fill="url(#pe)" opacity=".5"/>
+          <polygon class="top" points="190,54 330,94 190,134 50,94" fill="url(#pl)" stroke="#e6b43c" stroke-opacity=".85" stroke-width="1.6"/>
+          <polygon points="190,70 300,102 190,134 80,102" fill="none" stroke="#edc14f" stroke-opacity=".32"/>
+          <circle cx="330" cy="94" r="3.4" fill="#edc14f"/><circle cx="50" cy="94" r="3.4" fill="#edc14f"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="iso-lab right" id="isoRight">
+      <div class="l" data-i="0"><h3>Android · iOS · Web</h3><p>One codebase for both stores; the dashboard shares the same API contract.</p></div>
+      <div class="l" data-i="1"><h3>Live position pipeline</h3><p>Async ingest, then push to clients instead of the apps polling.</p></div>
+      <div class="l" data-i="2"><h3>True spatial geometry</h3><p>Routes and stops queryable in the database, with self-hosted routing.</p></div>
+      <div class="l" data-i="3"><h3>No per-map-load billing</h3><p>Docker on DigitalOcean; AWS retained as the enterprise alternative.</p></div>
+    </div>
+  </div>
+  <p class="note rv">Open-source rendering and routing remove per-request licensing from the city's daily operating cost.</p>
+</section>
+
+<!-- 15 ───────── ARCHITECTURE ───────── -->
+<section class="slide" data-t="Architecture">
+  <div class="slide-head">
+    <p class="eyebrow rv">System architecture</p>
+    <h2 class="rv">How a position becomes an <span class="hl">arrival time</span></h2>
+  </div>
+  <div class="pipe rv">
+    <div class="pipe-cell"><svg class="big stage-ic" viewBox="0 0 24 24"><use href="#i-satellite"/></svg><span class="n">01</span><h3>Edge Generation</h3><p>Driver device captures GNSS coordinates</p></div>
+    <div class="pipe-cell"><svg class="big stage-ic" viewBox="0 0 24 24"><use href="#i-signal"/></svg><span class="n">02</span><h3>Transmission</h3><p>Pushed over the mobile network</p></div>
+    <div class="pipe-cell"><svg class="big stage-ic" viewBox="0 0 24 24"><use href="#i-cloud"/></svg><span class="n">03</span><h3>Ingestion</h3><p>Cloud API receives and validates payload</p></div>
+    <div class="pipe-cell"><svg class="big stage-ic" viewBox="0 0 24 24"><use href="#i-gear"/></svg><span class="n">04</span><h3>Processing</h3><p>Realtime engine + PostGIS calculate ETA</p></div>
+    <div class="pipe-cell"><svg class="big stage-ic" viewBox="0 0 24 24"><use href="#i-monitor"/></svg><span class="n">05</span><h3>Consumption</h3><p>Broadcast to apps and dashboard</p></div>
+  </div>
+  <div class="split-r">
+    <figure class="rv">
+      <svg class="diagram" id="arch" viewBox="0 0 1020 440" role="img" aria-label="Driver device sends GPS over the mobile network to the cloud API, which publishes to the realtime engine and persists to PostGIS; the realtime engine pushes live positions to the passenger app and authority dashboard, while a separate tile server supplies the base map.">
+        <defs>
+          <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" opacity=".5"/></marker>
+          <marker id="a2g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2fa36b"/></marker>
+        </defs>
+        <path class="flow" d="M172 186 H196" marker-end="url(#a2)"/><text class="flow-l" x="148" y="176">~20s</text>
+        <path class="flow" d="M322 186 H358" marker-end="url(#a2)"/><text class="flow-l" x="322" y="176">HTTPS</text>
+        <path class="flow accent" d="M512 170 H540 Q556 170 556 152 V96" marker-end="url(#a2)"/><text class="flow-l" x="520" y="128">publish</text>
+        <path class="flow" d="M512 202 H540 Q556 202 556 222 V276" marker-end="url(#a2)"/><text class="flow-l" x="520" y="248">persist</text>
+        <path class="flow live" d="M742 80 H802" marker-end="url(#a2g)"/><text class="flow-l" x="738" y="70">WebSocket push</text>
+        <path class="flow live" d="M742 104 Q790 104 800 200 T806 288" marker-end="url(#a2g)"/><text class="flow-l" x="754" y="200">live fleet</text>
+        <path class="flow" d="M654 300 H802" marker-end="url(#a2)"/><text class="flow-l" x="670" y="290">spatial queries</text>
+        <path class="flow" d="M560 400 Q700 400 830 400 Q900 400 900 358" marker-end="url(#a2)"/><text class="flow-l" x="674" y="418">raster base tiles</text>
+        <g class="node" data-k="driver"><rect x="16" y="156" width="156" height="60" rx="10"/><text class="t" x="34" y="182">Driver device</text><text class="s" x="34" y="200">GNSS + DRIVER APP</text></g>
+        <g class="node" data-k="net"><rect x="196" y="156" width="126" height="60" rx="10"/><text class="t" x="214" y="182">Mobile network</text><text class="s" x="214" y="200">4G / LTE</text></g>
+        <g class="node" data-k="api"><rect x="358" y="156" width="154" height="60" rx="10" stroke="#d4a017"/><text class="t" x="376" y="182">Cloud API</text><text class="s" x="376" y="200" fill="#edc14f">FASTAPI · DOCKER</text></g>
+        <g class="node" data-k="rt"><rect x="556" y="50" width="186" height="60" rx="10"/><text class="t" x="574" y="76">Realtime engine</text><text class="s" x="574" y="94">REDIS · WEBSOCKET</text></g>
+        <g class="node" data-k="db"><rect x="556" y="270" width="186" height="60" rx="10"/><text class="t" x="574" y="296">PostgreSQL + PostGIS</text><text class="s" x="574" y="314">ROUTES · STOPS · TRACES</text></g>
+        <g class="node" data-k="pass"><rect x="806" y="50" width="196" height="60" rx="10"/><text class="t" x="824" y="76">Passenger app</text><text class="s" x="824" y="94">ANDROID · IOS</text></g>
+        <g class="node" data-k="dash"><rect x="806" y="270" width="196" height="60" rx="10"/><text class="t" x="824" y="296">Authority dashboard</text><text class="s" x="824" y="314">WEB GIS</text></g>
+        <g class="node" data-k="tile"><rect x="380" y="372" width="180" height="56" rx="10"/><text class="t" x="398" y="396">Tile infrastructure</text><text class="s" x="398" y="414">OSM RASTER · CACHED</text></g>
+      </svg>
+      <figcaption>Select a component to read what it is responsible for.</figcaption>
+    </figure>
+    <div class="detail rv" id="archDetail" aria-live="polite">
+      <h4>Select a component</h4>
+      <p>Hover or tap any box in the diagram to read what that layer does and why it sits where it does.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 16 ───────── SCALE ───────── -->
+<section class="slide" data-t="Scale &amp; ownership">
+  <div class="slide-head">
+    <p class="eyebrow rv">Scale, security and ownership</p>
+    <h2 class="rv">Built for 600 today, <span class="hl">architected past 2,000</span></h2>
+  </div>
+  <div class="card rv" style="padding:20px 22px;margin-bottom:13px">
+    <div class="fleet" id="fleetDots" aria-hidden="true"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:14px;flex-wrap:wrap;gap:12px">
+      <div><div class="stat" data-count="600">0</div><span class="stat-l">Your initial requirement</span></div>
+      <div><div class="stat" data-count="1000">0</div><span class="stat-l">Commercial benchmark fleet</span></div>
+      <div><div class="stat">2,000<span style="font-size:.6em">+</span></div><span class="stat-l">Architected headroom</span></div>
+    </div>
+  </div>
+  <div class="grid g3">
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-lock"/></svg></span><h3>Security posture</h3></div><p>Role-based access, authenticated APIs, encrypted transport, separated production with backups.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-db"/></svg></span><h3>Data ownership</h3></div><p>Route, stop, vehicle and tracking data belongs to the department. Written into the contract.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-key"/></svg></span><h3>Source-code ownership</h3></div><p>Transfer, licence or escrow — <span class="tbd">[confirm in Discovery]</span></p></div>
+  </div>
+</section>
+
+<!-- 17 ───────── ROADMAP ───────── -->
+<section class="slide" data-t="Delivery roadmap">
+  <div class="slide-head">
+    <p class="eyebrow rv">Delivery roadmap</p>
+    <h2 class="rv">Twelve months from signing — with a <span class="hl">gate at month four</span></h2>
+  </div>
+  <div class="rv">
+    <div class="gantt">
+      <div class="gantt-row"><span class="gl">Discovery &amp; Design</span><span class="gantt-track"><i class="gantt-bar" style="left:0;width:16.6%"></i></span></div>
+      <div class="gantt-row"><span class="gl">Core Development</span><span class="gantt-track"><i class="gantt-bar" style="left:16.6%;width:25%"></i><i class="mvp-flag"></i></span></div>
+      <div class="gantt-row"><span class="gl">Integration &amp; MVP+</span><span class="gantt-track"><i class="gantt-bar" style="left:41.6%;width:16.6%"></i></span></div>
+      <div class="gantt-row"><span class="gl">Pilot &amp; Production</span><span class="gantt-track"><i class="gantt-bar" style="left:58.3%;width:16.6%"></i></span></div>
+      <div class="gantt-row"><span class="gl">Warranty</span><span class="gantt-track"><i class="gantt-bar warr" style="left:75%;width:25%"></i></span></div>
+      <div class="gantt-axis"><span></span><span class="gantt-months"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></span></div>
+    </div>
+    <div class="road" id="road" style="margin-top:18px">
+      <button class="stage-b" aria-pressed="true" data-d="Detailed requirements, workflows, GIS and data model, architecture and implementation plan — signed off before code is written."><span class="mo">Months 1–2</span><span class="nm">Discovery &amp; Design</span></button>
+      <button class="stage-b" aria-pressed="false" data-d="Core platform, mobile apps, backend, GIS and realtime services. The Month-4 MVP validation gate falls inside this stage."><span class="mo">Months 3–5</span><span class="nm">Core Development</span></button>
+      <button class="stage-b" aria-pressed="false" data-d="Integrated feature set completed and put in front of the department for validation before production hardening."><span class="mo">Months 6–7</span><span class="nm">Integration &amp; Expansion</span></button>
+      <button class="stage-b" aria-pressed="false" data-d="Field testing with real vehicles on real routes, stabilisation, then production deployment."><span class="mo">Months 8–9</span><span class="nm">Pilot &amp; Production</span></button>
+      <button class="stage-b" aria-pressed="false" data-d="Defect correction, stabilisation and agreed post-production support. Long-term AMC and SLA are separate services."><span class="mo">Months 10–12</span><span class="nm">Warranty</span></button>
+    </div>
+    <div class="detail" id="roadDetail" style="margin-top:14px" aria-live="polite">
+      <h4>Months 1–2 · Discovery &amp; Design</h4>
+      <p>Detailed requirements, workflows, GIS and data model, architecture and implementation plan — signed off before code is written.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 18 ───────── MVP GATE ───────── -->
+<section class="slide" data-t="Month-4 MVP">
+  <div class="split">
+    <div>
+      <p class="eyebrow rv">Validation gate</p>
+      <h2 class="rv">An operational system in your hands at <span class="hl">month four</span></h2>
+      <p class="lede rv">The most expensive failure in a programme this size is discovering at month nine that the workflow does not match how the city actually runs.</p>
+      <div class="stat rv" style="margin-top:24px;font-size:clamp(52px,6vw,88px)">04</div>
+      <span class="stat-l rv">Month of the MVP validation gate</span>
+      <p class="note rv">Acceptance criteria are agreed during Discovery, so the gate is passed against a written standard rather than an opinion.</p>
+    </div>
+    <div class="grid g2 rv">
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-wheel"/></svg></span><h3>Driver</h3></div><p>Login, vehicle assignment and live GPS transmission.</p></div>
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-map"/></svg></span><h3>Passenger map</h3></div><p>Routes, stops, live vehicles and basic ETA.</p></div>
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-monitor"/></svg></span><h3>Web GIS dashboard</h3></div><p>Live fleet monitoring for the department.</p></div>
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-db"/></svg></span><h3>Core database</h3></div><p>Vehicles, drivers, routes and stops.</p></div>
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-cloud"/></svg></span><h3>Core APIs</h3></div><p>Authentication and realtime location processing.</p></div>
+      <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-bell"/></svg></span><h3>Notifications</h3></div><p>Initial operational alerts and reporting.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 19 ───────── PHASE 1 vs COMPLETE ───────── -->
+<section class="slide" data-t="Phase-1 vs complete">
+  <div class="slide-head">
+    <p class="eyebrow rv">Scope options</p>
+    <h2 class="rv">Separate quotations, as <span class="hl">requested</span></h2>
+    <div class="toggle rv" id="phaseToggle" style="margin-top:16px" role="group" aria-label="Scope selection">
+      <button aria-pressed="true" data-p="1">Phase 1</button>
+      <button aria-pressed="false" data-p="2">Complete project</button>
+    </div>
+  </div>
+  <div class="split-r rv">
+    <div class="scroll-x">
+      <table class="matrix">
+        <thead><tr><th>Capability</th><th style="text-align:right" id="phaseCol">Phase 1</th></tr></thead>
+        <tbody id="matrixBody"></tbody>
+      </table>
+    </div>
+    <div class="detail" id="phaseNote">
+      <h4>Phase 1 — prove the network</h4>
+      <p>Everything needed to put live vehicles on a map and get passengers to the right stop. It establishes the data foundation the rest of the programme depends on, and it is the scope the Month-4 gate validates.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 20 ───────── COMMERCIAL ───────── -->
+<section class="slide" data-t="Commercial framework">
+  <div class="slide-head">
+    <p class="eyebrow rv">Commercial framework</p>
+    <h2 class="rv">Three independent <span class="hl">cost blocks</span></h2>
+  </div>
+  <div class="tabs rv" role="tablist" id="costTabs">
+    <button class="tab" role="tab" aria-selected="true" data-pane="A">Block A · Software</button>
+    <button class="tab" role="tab" aria-selected="false" data-pane="B">Block B · Recurring</button>
+    <button class="tab" role="tab" aria-selected="false" data-pane="C">Block C · Fleet hardware</button>
+    <button class="tab" role="tab" aria-selected="false" data-pane="Q">Your 10 questions</button>
+  </div>
+  <div class="pane on" data-pane="A"><div class="grid g2">
+    <div class="card"><div class="tile-row" style="margin-bottom:10px"><span class="ic-badge"><svg class="ic"><use href="#i-code"/></svg></span><h3>Block A · Software &amp; platform</h3></div><p>Mobile apps, web GIS, backend, spatial database, realtime services, map and tile architecture, integration, testing, deployment and the three-month warranty. One-time project cost.</p><p style="margin-top:12px"><span class="tbd">[ PKR ______ ] — separate commercial annexure</span></p></div>
+    <div class="card"><h3>Why it is separated</h3><p>You can approve the platform without being locked into a hardware programme, and compare each block against alternatives on its own merits.</p></div>
+  </div></div>
+  <div class="pane" data-pane="B"><div class="grid g2">
+    <div class="card"><div class="tile-row" style="margin-bottom:10px"><span class="ic-badge"><svg class="ic"><use href="#i-cloud"/></svg></span><h3>Block B · Recurring operations</h3></div><p>Cloud compute and storage, backups, tile serving and traffic, SMS/OTP, connectivity and third-party services. Billed against actual usage.</p><p style="margin-top:12px"><span class="tbd">[ PKR ______ / month ]</span></p></div>
+    <div class="card"><h3>Kept deliberately low</h3><p>Open-source GIS and routing, self-hosted OSM tiles instead of commercial map APIs, and tiered tracking-data retention all exist to hold this number down.</p></div>
+  </div></div>
+  <div class="pane" data-pane="C"><div class="grid g2">
+    <div class="card"><div class="tile-row" style="margin-bottom:10px"><span class="ic-badge"><svg class="ic"><use href="#i-signal"/></svg></span><h3>Block C · Fleet hardware <span class="chip" style="margin-left:6px">Optional</span></h3></div><p>Dedicated 4G GPS/GNSS trackers, SIM/M2M connectivity and installation, where independent or tamper-resistant tracking is required. Excluded from the software cost.</p><p style="margin-top:12px"><span class="tbd">[ PKR ______ per vehicle ] — subject to vendor quotation</span></p></div>
+    <div class="card"><h3>Instrument only what needs it</h3><p>Because the baseline uses driver-phone GPS, trackers can be fitted to priority routes or high-value vehicles rather than all 600 at once.</p></div>
+  </div></div>
+  <div class="pane" data-pane="Q">
+    <div class="scroll-x"><table>
+      <thead><tr><th style="width:50%">Your question</th><th style="width:10%">Block</th><th>Answer</th></tr></thead>
+      <tbody>
+        <tr><td>1 · Total development cost</td><td>A</td><td><span class="tbd">[PKR ______]</span></td></tr>
+        <tr><td>2 · Development timeline</td><td>A</td><td><strong>12 months</strong>, MVP at month 4</td></tr>
+        <tr><td>3 · Server / cloud monthly cost</td><td>B</td><td><span class="tbd">[PKR ______ /mo]</span></td></tr>
+        <tr><td>4 · GPS / SIM monthly cost per vehicle</td><td>C</td><td><strong>Nil</strong> on phone-GPS baseline; <span class="tbd">[PKR ______]</span> with trackers</td></tr>
+        <tr><td>5 · Google Maps / GIS API charges</td><td>B</td><td><strong>Avoided by design</strong> — self-hosted OSM tiles and routing</td></tr>
+        <tr><td>6 · Monthly maintenance / support</td><td>B</td><td><span class="tbd">[PKR ______ /mo]</span> after warranty</td></tr>
+        <tr><td>7 · Android &amp; iOS publishing charges</td><td>B</td><td>Google Play one-time, Apple Developer annual, at store rates</td></tr>
+        <tr><td>8 · Monthly cost, tracking 600 vehicles</td><td>B</td><td><span class="tbd">[PKR ______ /mo]</span> — sized after Discovery</td></tr>
+        <tr><td>9 · Source-code ownership</td><td>A</td><td>Transfer, licence or escrow — <span class="tbd">[Discovery]</span></td></tr>
+        <tr><td>10 · One-year maintenance / support</td><td>B</td><td><span class="tbd">[PKR ______ /year]</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">We would rather leave a field blank than put a number in front of the department that we would later have to revise.</p>
+  </div>
+</section>
+
+<!-- 21 ───────── COST ENGINEERING ───────── -->
+<section class="slide" data-t="Cost engineering">
+  <div class="split">
+    <div>
+      <p class="eyebrow rv">Cost engineering</p>
+      <h2 class="rv">The running cost is a <span class="hl">design decision</span></h2>
+      <p class="lede rv">A transport platform is paid for once and operated for years. Most of the lifetime cost is decided before the first line of code.</p>
+      <div class="chips rv" style="margin-top:20px">
+        <span class="chip gold"><svg class="ic"><use href="#i-layers"/></svg>Open-source GIS &amp; routing</span>
+        <span class="chip gold"><svg class="ic"><use href="#i-map"/></svg>OSM instead of paid map APIs</span>
+        <span class="chip gold"><svg class="ic"><use href="#i-phone"/></svg>Phone GPS as baseline</span>
+        <span class="chip gold"><svg class="ic"><use href="#i-db"/></svg>Tiered data retention</span>
+        <span class="chip gold"><svg class="ic"><use href="#i-cloud"/></svg>Third-party costs separated</span>
+      </div>
+    </div>
+    <div class="rv">
+      <figure>
+        <svg class="diagram" viewBox="0 0 560 250" role="img" aria-label="Per-second transmission writes a row every second regardless of movement; a twenty-second interval with a movement gate writes only when the vehicle has actually moved.">
+          <text class="flow-l" x="0" y="16" fill="#8a8a82" style="font-size:10px">PER-SECOND TRANSMISSION — ALWAYS</text>
+          <g fill="#4f86f0" opacity=".5">
+            <rect x="0" y="30" width="5" height="22" rx="1.5"/><rect x="14" y="30" width="5" height="22" rx="1.5"/><rect x="28" y="30" width="5" height="22" rx="1.5"/><rect x="42" y="30" width="5" height="22" rx="1.5"/><rect x="56" y="30" width="5" height="22" rx="1.5"/><rect x="70" y="30" width="5" height="22" rx="1.5"/><rect x="84" y="30" width="5" height="22" rx="1.5"/><rect x="98" y="30" width="5" height="22" rx="1.5"/><rect x="112" y="30" width="5" height="22" rx="1.5"/><rect x="126" y="30" width="5" height="22" rx="1.5"/><rect x="140" y="30" width="5" height="22" rx="1.5"/><rect x="154" y="30" width="5" height="22" rx="1.5"/><rect x="168" y="30" width="5" height="22" rx="1.5"/><rect x="182" y="30" width="5" height="22" rx="1.5"/><rect x="196" y="30" width="5" height="22" rx="1.5"/><rect x="210" y="30" width="5" height="22" rx="1.5"/><rect x="224" y="30" width="5" height="22" rx="1.5"/><rect x="238" y="30" width="5" height="22" rx="1.5"/><rect x="252" y="30" width="5" height="22" rx="1.5"/><rect x="266" y="30" width="5" height="22" rx="1.5"/><rect x="280" y="30" width="5" height="22" rx="1.5"/><rect x="294" y="30" width="5" height="22" rx="1.5"/><rect x="308" y="30" width="5" height="22" rx="1.5"/><rect x="322" y="30" width="5" height="22" rx="1.5"/><rect x="336" y="30" width="5" height="22" rx="1.5"/><rect x="350" y="30" width="5" height="22" rx="1.5"/><rect x="364" y="30" width="5" height="22" rx="1.5"/><rect x="378" y="30" width="5" height="22" rx="1.5"/><rect x="392" y="30" width="5" height="22" rx="1.5"/><rect x="406" y="30" width="5" height="22" rx="1.5"/><rect x="420" y="30" width="5" height="22" rx="1.5"/><rect x="434" y="30" width="5" height="22" rx="1.5"/><rect x="448" y="30" width="5" height="22" rx="1.5"/><rect x="462" y="30" width="5" height="22" rx="1.5"/><rect x="476" y="30" width="5" height="22" rx="1.5"/><rect x="490" y="30" width="5" height="22" rx="1.5"/><rect x="504" y="30" width="5" height="22" rx="1.5"/><rect x="518" y="30" width="5" height="22" rx="1.5"/><rect x="532" y="30" width="5" height="22" rx="1.5"/><rect x="546" y="30" width="5" height="22" rx="1.5"/>
+          </g>
+          <text class="flow-l" x="0" y="72" fill="#8a8a82">writes rows while the vehicle is parked at a terminal</text>
+          <line x1="0" y1="100" x2="560" y2="100" stroke="rgba(255,255,255,.1)"/>
+          <text class="flow-l" x="0" y="132" fill="#edc14f" style="font-size:10px">~20s INTERVAL WITH MOVEMENT GATE — OUR APPROACH</text>
+          <g fill="#d4a017"><rect x="0" y="146" width="5" height="22" rx="1.5"/><rect x="70" y="146" width="5" height="22" rx="1.5"/><rect x="140" y="146" width="5" height="22" rx="1.5"/><rect x="210" y="146" width="5" height="22" rx="1.5"/><rect x="350" y="146" width="5" height="22" rx="1.5"/><rect x="420" y="146" width="5" height="22" rx="1.5"/><rect x="490" y="146" width="5" height="22" rx="1.5"/></g>
+          <g fill="rgba(212,160,23,.18)"><rect x="280" y="146" width="5" height="22" rx="1.5"/></g>
+          <path d="M262 180 H304" stroke="#8a8a82" stroke-width="1" fill="none"/>
+          <text class="flow-l" x="246" y="196" fill="#8a8a82">stationary — suppressed</text>
+          <text class="flow-l" x="0" y="226" fill="#8a8a82">passengers still see movement within seconds; storage and bandwidth fall sharply</text>
+        </svg>
+        <figcaption>Same passenger experience, a fraction of the write volume you pay to store.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 22 ───────── SUPPORT ───────── -->
+<section class="slide" data-t="Support model">
+  <div class="slide-head">
+    <p class="eyebrow rv">After delivery</p>
+    <h2 class="rv">Warranty is included. <span class="hl">Long-term support is a service.</span></h2>
+  </div>
+  <div class="grid g3">
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-shield"/></svg></span><div><span class="idx">MONTHS 10–12</span><h3>Warranty — included</h3></div></div><p>Defect correction, stabilisation and agreed post-production support. Part of the 12-month lifecycle, not an extra.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-gear"/></svg></span><div><span class="idx">YEAR 2 ONWARD</span><h3>AMC — separate</h3></div></div><p>Application, database, cloud and operational maintenance, plus security and framework upkeep. <span class="tbd">[PKR ______ /year]</span></p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-clock"/></svg></span><div><span class="idx">OPTIONAL</span><h3>SLA — separate</h3></div></div><p>Response and resolution targets, availability commitments, escalation paths and 24/7 managed operations.</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:13px">
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-bolt"/></svg></span><h3>New development</h3></div><p>Fare collection, e-ticketing, digital passes and deeper analytics are estimated separately, so the base contract stays clean.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-doc"/></svg></span><h3>Third-party services</h3></div><p>Cloud, SIM, SMS and store fees billed at provider pricing against actual usage. We do not mark them up.</p></div>
+  </div>
+</section>
+
+<!-- 23 ───────── DISCOVERY + CLOSING ───────── -->
+<section class="slide" data-t="Discovery &amp; next step">
+  <div class="cover-map" aria-hidden="true" style="opacity:.32">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <g stroke="rgba(255,255,255,.04)"><path d="M0 220H1600M0 460H1600M0 700H1600"/><path d="M300 0V900M700 0V900M1100 0V900"/></g>
+      <path d="M100 700 L400 560 L760 480 L1080 340 L1500 260" fill="none" stroke="rgba(212,160,23,.18)" stroke-width="2"/>
+      <rect class="veh" width="13" height="7" rx="2" fill="#d4a017" style="offset-path:path('M100 700 L400 560 L760 480 L1080 340 L1500 260');animation-duration:24s"/>
+    </svg>
+  </div>
+  <div class="slide-head">
+    <p class="eyebrow rv">What we need from you</p>
+    <h2 class="rv">Eight decisions that set the <span class="hl">final quotation</span></h2>
+  </div>
+  <div class="grid g4 rv" style="margin-bottom:18px">
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-bus"/></svg></span><h3>Fleet definition</h3></div><p>Modes, categories, initial count and target scale.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-signal"/></svg></span><h3>Tracking mechanism</h3></div><p>Phone GPS acceptable? Where are trackers mandatory?</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-route"/></svg></span><h3>Route &amp; stop data</h3></div><p>Does it exist, who owns it, how is it released?</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-satellite"/></svg></span><h3>Map requirements</h3></div><p>Base map and satellite imagery expectations.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-doc"/></svg></span><h3>Booking &amp; fare scope</h3></div><p>In Phase 1, later, or out of scope?</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-users"/></svg></span><h3>Roles &amp; permissions</h3></div><p>Which roles exist and what each may see or change.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-bell"/></svg></span><h3>Notification channels</h3></div><p>Push, SMS, email or WhatsApp — each costs differently.</p></div>
+    <div class="tile"><div class="tile-row"><span class="ic-badge"><svg class="ic"><use href="#i-lock"/></svg></span><h3>Hosting &amp; governance</h3></div><p>Region, data ownership, security, SLA, MVP criteria.</p></div>
+  </div>
+  <div class="card rv" style="padding:22px 24px">
+    <h2 style="font-size:clamp(20px,2vw,28px)">We are ready to begin <span class="hl">Discovery</span></h2>
+    <div class="contact" style="margin-top:18px;padding-top:16px">
+      <div><span class="k">Company</span><span class="v">The Mahir Tech</span></div>
+      <div><span class="k">Email</span><span class="v"><a href="mailto:mahirtechofficial@gmail.com">mahirtechofficial@gmail.com</a></span></div>
+      <div><span class="k">Phone</span><span class="v">051-7066702</span></div>
+      <div><span class="k">WhatsApp</span><span class="v">0332-0006282</span></div>
+      <div><span class="k">Website</span><span class="v"><a href="https://themahirtech.com">themahirtech.com</a></span></div>
+      <div><span class="k">Office</span><span class="v">Abbas Plaza, Computer Market, Saddar, Rawalpindi</span></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var deck=document.getElementById('deck');
+  var slides=Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+  var rail=document.getElementById('rail'), frameNo=document.getElementById('frameNo'), current=0;
+
+  slides.forEach(function(s,i){
+    var b=document.createElement('button');
+    b.className='tick'; b.type='button';
+    b.setAttribute('aria-label','Slide '+(i+1)+': '+(s.dataset.t||''));
+    b.setAttribute('aria-current', i===0?'true':'false');
+    b.addEventListener('click',function(){go(i);});
+    rail.appendChild(b);
+  });
+  var ticks=Array.prototype.slice.call(rail.querySelectorAll('.tick'));
+  document.querySelectorAll('.status .frame').forEach(function(f){
+    f.innerHTML='FRAME <b id="frameNo">01</b> / '+slides.length;
+  });
+  frameNo=document.getElementById('frameNo');
+
+  function go(i){
+    i=Math.max(0,Math.min(slides.length-1,i));
+    slides[i].scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  function setCurrent(i){
+    if(i===current)return;
+    current=i;
+    ticks.forEach(function(t,n){t.setAttribute('aria-current',n===i?'true':'false');});
+    if(frameNo) frameNo.textContent=String(i+1).padStart(2,'0');
+  }
+
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('on');
+        var grids=e.target.querySelectorAll('.grid');
+        Array.prototype.forEach.call(grids,function(g,gi){
+          if(g.classList.contains('on'))return;
+          g.classList.add('on');
+          Array.prototype.forEach.call(g.children,function(c,ci){
+            c.style.animationDelay=(gi*0.04+ci*0.05)+'s';
+          });
+        });
+        countUp(e.target);
+        if(e.intersectionRatio>0.5) setCurrent(slides.indexOf(e.target));
+      }
+    });
+  },{threshold:[0.2,0.55],root:deck});
+  slides.forEach(function(s){io.observe(s);});
+
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function countUp(scope){
+    var els=scope.querySelectorAll('[data-count]');
+    Array.prototype.forEach.call(els,function(el){
+      if(el.dataset.done)return;
+      el.dataset.done='1';
+      var target=parseInt(el.dataset.count,10);
+      if(reduce){el.textContent=target.toLocaleString('en-GB');return;}
+      var start=performance.now(),dur=1100;
+      function tick(now){
+        var p=Math.min(1,(now-start)/dur), eased=1-Math.pow(1-p,3);
+        el.textContent=Math.round(target*eased).toLocaleString('en-GB');
+        if(p<1)requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  /* fleet dots: 600 gold, up to 1000 blue, rest ghosted to 2000 */
+  var fd=document.getElementById('fleetDots');
+  if(fd){
+    var frag=document.createDocumentFragment();
+    for(var i=0;i<400;i++){
+      var d=document.createElement('i');
+      if(i>=120&&i<200) d.className='b';
+      else if(i>=200) d.className='g';
+      frag.appendChild(d);
+    }
+    fd.appendChild(frag);
+  }
+
+  document.addEventListener('keydown',function(e){
+    var tag=(e.target.tagName||'').toLowerCase();
+    if(tag==='input'||tag==='textarea')return;
+    if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(current+1);}
+    else if(e.key==='ArrowUp'||e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(current-1);}
+    else if(e.key==='Home'){e.preventDefault();go(0);}
+    else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  });
+
+  document.addEventListener('click',function(e){
+    var p=e.target.closest?e.target.closest('.proj'):null;
+    if(!p)return;
+    p.setAttribute('aria-expanded', p.getAttribute('aria-expanded')==='true'?'false':'true');
+  });
+
+  var ARCH={
+    driver:['Driver device','The Android driver application reads the phone GNSS receiver and transmits position on an interval with a movement gate. The baseline location source — no per-vehicle hardware required.'],
+    net:['Mobile network','Standard 4G/LTE carries the position payload. Payloads are small and interval-based, which is why running cost stays low across a large fleet.'],
+    api:['Cloud API','FastAPI services in Docker containers authenticate the device, validate the payload, then fan it out: publish to the realtime engine for live delivery, and persist to PostGIS for history.'],
+    rt:['Realtime engine','Redis/Valkey holds current vehicle state and pushes it to connected clients over WebSocket. Passengers see movement without the apps polling the database.'],
+    db:['PostgreSQL + PostGIS','Routes, stops, service areas and vehicle traces stored as true spatial geometry, so "which stops are within 500 m" is a database query rather than application code.'],
+    pass:['Passenger app','Flutter on Android and iOS. Renders the cached base map, draws routes and stops from PostGIS, and overlays live vehicles from the realtime stream to produce an arrival time.'],
+    dash:['Authority dashboard','React and TypeScript web GIS for the department: live fleet monitoring, route and stop management, alerts, analytics and reporting.'],
+    tile:['Tile infrastructure','Self-hosted OSM-derived raster tiles with caching, serving both clients and generating downloadable offline packages. This is what removes per-map-load API billing.']
+  };
+  var arch=document.getElementById('arch'), archDetail=document.getElementById('archDetail');
+  if(arch&&archDetail){
+    var nodes=Array.prototype.slice.call(arch.querySelectorAll('.node[data-k]'));
+    nodes.forEach(function(n){
+      n.setAttribute('tabindex','0'); n.setAttribute('role','button');
+      var d=ARCH[n.dataset.k];
+      if(d) n.setAttribute('aria-label',d[0]);
+      function show(){
+        nodes.forEach(function(o){o.classList.remove('sel');});
+        n.classList.add('sel');
+        if(!d)return;
+        archDetail.innerHTML='<h4></h4><p></p>';
+        archDetail.querySelector('h4').textContent=d[0];
+        archDetail.querySelector('p').textContent=d[1];
+      }
+      n.addEventListener('mouseenter',show); n.addEventListener('focus',show); n.addEventListener('click',show);
+      n.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();show();}});
+    });
+  }
+
+  var layerBox=document.getElementById('layerBox');
+  if(layerBox){
+    layerBox.addEventListener('click',function(e){
+      var b=e.target.closest('.layer-btn'); if(!b)return;
+      var on=b.getAttribute('aria-pressed')==='true';
+      b.setAttribute('aria-pressed',on?'false':'true');
+      var g=document.querySelector('.maplayer[data-l="'+b.dataset.layer+'"]');
+      if(g)g.setAttribute('data-off',on?'true':'false');
+    });
+  }
+
+  var road=document.getElementById('road');
+  if(road){
+    var rd=document.getElementById('roadDetail');
+    road.addEventListener('click',function(e){
+      var b=e.target.closest('.stage-b'); if(!b)return;
+      Array.prototype.forEach.call(road.children,function(c){c.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true');
+      rd.innerHTML='<h4></h4><p></p>';
+      rd.querySelector('h4').textContent=b.querySelector('.mo').textContent+' · '+b.querySelector('.nm').textContent;
+      rd.querySelector('p').textContent=b.dataset.d;
+    });
+  }
+
+  var MATRIX=[['Live vehicle tracking on a GIS map',1,1],['Driver app with GPS transmission',1,1],
+    ['Passenger app — Android',1,1],['Passenger app — iOS',0,1],
+    ['Routes, stops and network as spatial data',1,1],['Basic arrival estimates (ETA)',1,1],
+    ['Department GIS dashboard — live monitoring',1,1],['Full journey planning with transfers',0,1],
+    ['Notifications and service alerts',1,1],['Analytics, reporting and demand insight',0,1],
+    ['Offline downloadable map packages',0,1],['Seat booking and fare scope',0,2],
+    ['Production deployment and warranty',0,1]];
+  var body=document.getElementById('matrixBody'), phaseCol=document.getElementById('phaseCol'), phaseNote=document.getElementById('phaseNote');
+  var NOTES={'1':['Phase 1 — prove the network','Everything needed to put live vehicles on a map and get passengers to the right stop. It establishes the data foundation the rest of the programme depends on, and it is the scope the Month-4 gate validates.'],
+             '2':['Complete project — the full ecosystem','Both mobile platforms, full journey planning, offline maps, analytics and reporting, production deployment and the three-month warranty. Seat booking and fare scope are confirmed during Discovery before they are priced.']};
+  function renderMatrix(phase){
+    body.innerHTML='';
+    MATRIX.forEach(function(row){
+      var tr=document.createElement('tr');
+      var td1=document.createElement('td'); td1.textContent=row[0];
+      var td2=document.createElement('td');
+      var v=phase===1?row[1]:row[2];
+      if(v===1){td2.className='yes';td2.textContent='INCLUDED';}
+      else if(v===2){td2.className='later';td2.textContent='DISCOVERY';}
+      else{td2.className='later';td2.textContent=phase===1?'PHASE 2':'—';}
+      tr.appendChild(td1);tr.appendChild(td2);body.appendChild(tr);
+    });
+  }
+  renderMatrix(1);
+  var pt=document.getElementById('phaseToggle');
+  if(pt){
+    pt.addEventListener('click',function(e){
+      var b=e.target.closest('button'); if(!b)return;
+      Array.prototype.forEach.call(pt.children,function(c){c.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true');
+      var p=parseInt(b.dataset.p,10);
+      renderMatrix(p);
+      phaseCol.textContent=p===1?'Phase 1':'Complete project';
+      var n=NOTES[String(p)];
+      phaseNote.innerHTML='<h4></h4><p></p>';
+      phaseNote.querySelector('h4').textContent=n[0];
+      phaseNote.querySelector('p').textContent=n[1];
+    });
+  }
+
+  /* isometric stack — plate and label stay in sync */
+  var isoStack=document.getElementById('isoStack');
+  if(isoStack){
+    var plates=Array.prototype.slice.call(isoStack.querySelectorAll('.plate'));
+    var labs=Array.prototype.slice.call(isoStack.querySelectorAll('.iso-lab .l'));
+    function hi(i){
+      plates.forEach(function(p){p.classList.toggle('on',p.dataset.i===String(i));});
+      labs.forEach(function(l){l.classList.toggle('on',l.dataset.i===String(i));});
+    }
+    function clr(){plates.forEach(function(p){p.classList.remove('on');});labs.forEach(function(l){l.classList.remove('on');});}
+    plates.concat(labs).forEach(function(el){
+      el.addEventListener('mouseenter',function(){hi(el.dataset.i);});
+      el.addEventListener('focus',function(){hi(el.dataset.i);});
+      el.addEventListener('mouseleave',clr);
+      el.addEventListener('blur',clr);
+    });
+  }
+
+  var tabs=document.getElementById('costTabs');
+  if(tabs){
+    tabs.addEventListener('click',function(e){
+      var b=e.target.closest('.tab'); if(!b)return;
+      Array.prototype.forEach.call(tabs.children,function(c){c.setAttribute('aria-selected','false');});
+      b.setAttribute('aria-selected','true');
+      var panes=b.closest('.slide').querySelectorAll('.pane');
+      Array.prototype.forEach.call(panes,function(p){p.classList.toggle('on',p.dataset.pane===b.dataset.pane);});
+    });
+  }
+})();
+</script>
+
+<style>
+  .chrome-top{padding-right:168px}
+  #pdfBtn{
+    position:fixed;top:7px;right:14px;z-index:60;
+    display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+    font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:#edc14f;background:rgba(212,160,23,.09);border:1px solid rgba(212,160,23,.42);
+    border-radius:999px;padding:7px 14px;transition:background .22s,border-color .22s,transform .22s;
+  }
+  #pdfBtn:hover{background:rgba(212,160,23,.18);border-color:#d4a017;transform:translateY(-1px)}
+  #pdfBtn:focus-visible{outline:2px solid #e6b43c;outline-offset:2px}
+  #pdfBtn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.7;
+    stroke-linecap:round;stroke-linejoin:round}
+  #pdfHint{
+    position:fixed;top:46px;right:14px;z-index:60;max-width:250px;
+    background:#101012;border:1px solid rgba(212,160,23,.35);border-radius:10px;padding:11px 13px;
+    font-family:var(--font-mono);font-size:10px;line-height:1.6;color:#b4b4ad;display:none;
+  }
+  #pdfHint.on{display:block}
+  #pdfHint b{color:#edc14f;font-weight:400}
+  @media (max-width:900px){ .chrome-top{padding-right:14px} #pdfBtn{top:auto;bottom:14px} }
+  @media print{
+    #pdfBtn,#pdfHint{display:none!important}
+    html,body{background:#050505!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  }
+  @page{ size:A4 landscape; margin:8mm }
+</style>
+
+<button id="pdfBtn" type="button" aria-describedby="pdfHint">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10.5l4 4 4-4"/><path d="M4.5 18.5h15"/></svg>
+  Download PDF
+</button>
+<div id="pdfHint" role="status">In the print dialog choose <b>Save as PDF</b>, layout <b>Landscape</b>, and switch on <b>Background graphics</b>.</div>
+
+<script>
+(function(){
+  var b=document.getElementById('pdfBtn'), h=document.getElementById('pdfHint'), t=null;
+  if(!b)return;
+  b.addEventListener('click',function(){
+    h.classList.add('on');
+    clearTimeout(t);
+    t=setTimeout(function(){ h.classList.remove('on'); window.print(); }, 900);
+  });
+  window.addEventListener('afterprint',function(){ h.classList.remove('on'); });
+})();
+</script>
+
+</body>
+</html>

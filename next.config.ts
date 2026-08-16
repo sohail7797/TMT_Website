@@ -30,6 +30,13 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  // Client proposal decks are self-contained HTML in public/quotes/<slug>/.
+  // The rewrite gives them a clean, sendable URL: /quotes/<slug>
+  async rewrites() {
+    return [
+      { source: "/quotes/:slug", destination: "/quotes/:slug/index.html" },
+    ];
+  },
 };
 
 export default nextConfig;
