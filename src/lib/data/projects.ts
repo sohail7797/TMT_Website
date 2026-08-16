@@ -2,6 +2,10 @@
  * Project portfolio. Real, confident case studies written from delivered work.
  * AI & automation cases are framed as client-engagement stories.
  */
+import { siteConfig } from "@/lib/site";
+
+/** GIS engagements are led by our COO & GIS Expert. */
+const GIS_LEAD = siteConfig.team.coo;
 
 export type Project = {
   slug: string;
@@ -21,6 +25,12 @@ export type Project = {
   solution: string;
   results: string[];
   stack: string[];
+  /** Delivery lead, shown on the case study when the engagement had a named owner. */
+  lead?: string;
+  /** Engagement window, e.g. "Jan 2022 – Apr 2022". */
+  period?: string;
+  /** Domain skills applied, distinct from the technology stack. */
+  skills?: string[];
   featured?: boolean;
 };
 
@@ -142,6 +152,218 @@ export const projects: Project[] = [
       "Zero recurring cost on the clients' own Google accounts",
     ],
     stack: ["Google Apps Script", "Google Forms", "Gmail API"],
+  },
+
+  /* ───────────── GIS & Geospatial (led by our COO & GIS Expert) ───────────── */
+  {
+    slug: "gis-land-management-system",
+    title: "GIS-Based Land Management & Records Digitisation",
+    category: "GIS",
+    client: "Confidential (name withheld by agreement)",
+    industry: "Land & Estate Management",
+    lead: GIS_LEAD,
+    summary:
+      "A complete GIS-based land management system that ties every land document, down to the oldest record in the archive, to the exact parcel it belongs to.",
+    challenge:
+      "The client approached us with an archive problem that had become an operating risk. Decades of land holdings existed only on paper: deeds, mutations, allotment letters, survey maps, court orders and correspondence, spread across registers and cupboards, some of them handwritten, fragile and older than anyone still working there. Nothing connected a document to the piece of land it described. Answering a simple ownership question meant days of digging, and when a boundary or title was challenged, the evidence was hard to assemble in time. The organisation's identity had to stay confidential throughout.",
+    solution:
+      "We built the system around one idea: the map is the index. We georeferenced the legacy cadastral sheets, digitised parcel geometry into a structured geodatabase, and then scanned, indexed and tagged the document archive from the oldest surviving record forward, by document type, date, parties and parcel reference. Every document was linked to its parcel, so selecting a parcel on the map returns its full chronological history in one view. On top of that we added search by owner, parcel and document number, role-based access so sensitive records stay restricted, and an audit trail of every view and change. The engagement ran under strict confidentiality: the client is never named, and the data never left their controlled environment.",
+    results: [
+      "Any parcel's complete document history retrievable in seconds instead of days",
+      "Ownership chains reconstructed and verifiable from the oldest available record onward",
+      "Boundary and title queries answered with mapped, document-backed evidence",
+      "Fragile originals preserved, with staff working from indexed digital copies",
+      "Role-based access and audit trails over confidential land records",
+    ],
+    stack: ["ArcGIS", "QGIS", "PostGIS", "Geodatabase Design", "Document Digitisation", "Web GIS"],
+    skills: [
+      "Cadastral Mapping",
+      "Georeferencing & Digitisation",
+      "Land Records Management",
+      "Geodatabase Design",
+      "Spatial Analysis",
+      "Data Governance & Confidentiality",
+    ],
+    featured: true,
+  },
+  {
+    slug: "sugarcane-harvest-monitoring",
+    title: "Sugarcane Harvest Monitoring using Multispectral Imagery",
+    category: "GIS",
+    client: "Sugarcane Supply & Grower Operations",
+    industry: "Agriculture & Agri-processing",
+    lead: GIS_LEAD,
+    period: "Jan 2022 – Apr 2022",
+    summary:
+      "Satellite-based harvest-readiness mapping that told a cane supply team which blocks to cut first, instead of relying on field-by-field guesswork.",
+    challenge:
+      "The client came to us during crushing season with a scheduling problem. Cane was being harvested block by block on the basis of field visits and habit, which meant some blocks were cut before they matured and others stood too long. Both cost sugar recovery, and with thousands of acres spread across a wide catchment, no team could physically inspect enough of it in time to fix the order.",
+    solution:
+      "We built a monitoring workflow on multispectral satellite imagery. Field boundaries were digitised into a parcel layer, then each new cloud-free acquisition was processed into vegetation and moisture indices and tracked as a time series per block. Comparing each block's curve against its own crop calendar let us classify maturity and flag the blocks approaching peak. The output was a plain harvest-readiness map, refreshed with every satellite pass, that the supply team could act on directly.",
+    results: [
+      "Harvest sequencing driven by observed crop condition, not manual scouting",
+      "Whole catchment covered every satellite pass, without extra field teams",
+      "Early and late cutting reduced, protecting sugar recovery",
+      "A repeatable workflow the team can re-run each season",
+    ],
+    stack: ["Sentinel-2", "ERDAS Imagine", "ArcGIS", "Python", "NDVI / NDMI", "Time-Series Analysis"],
+    skills: [
+      "Remote Sensing",
+      "Multispectral Image Processing",
+      "Vegetation Index Analysis",
+      "Crop Phenology",
+      "Spatial Analysis",
+      "Qualitative Research",
+    ],
+  },
+  {
+    slug: "crop-health-change-detection-yield",
+    title: "Crop Health Monitoring, Change Detection & Yield Estimation",
+    category: "GIS",
+    client: "Agricultural Programme Operator",
+    industry: "Agriculture",
+    lead: GIS_LEAD,
+    summary:
+      "A multi-season geospatial programme that flags crop stress early, tracks how cropped area changes year on year, and estimates yield before harvest.",
+    challenge:
+      "The client was managing crops across a large area with three blind spots: stress was noticed only once it was visible on the ground and already costly, nobody could say reliably how cropped area had shifted between seasons, and yield was a guess until the harvest was actually in. Procurement, storage and credit decisions were all being made on that guess.",
+    solution:
+      "We put a multi-temporal satellite stack behind all three questions. Health indices computed per field surface stress zones early enough to act on. Supervised classification of each season, compared post-classification, shows exactly where crop area expanded, contracted or switched type. Yield is modelled by regressing peak-season index values against field-sampled harvest records, so the estimate is calibrated to the client's own ground data rather than a generic curve. Everything is delivered as maps and season reports the operations team reads without needing GIS training.",
+    results: [
+      "Crop stress surfaced from imagery before it was visible on the ground",
+      "Season-to-season cropped-area change quantified per zone, not estimated",
+      "Pre-harvest yield estimates calibrated against the client's own field samples",
+      "Procurement and storage planning based on mapped evidence",
+    ],
+    stack: ["Sentinel-2", "Landsat", "ArcGIS", "ERDAS Imagine", "Python", "Supervised Classification"],
+    skills: [
+      "Remote Sensing",
+      "Image Classification",
+      "Change Detection",
+      "Yield Modelling",
+      "Spatial Statistics",
+      "Qualitative Research",
+    ],
+  },
+  {
+    slug: "dem-from-sentinel1-sar",
+    title: "DEM Generation from SAR Data (Sentinel-1)",
+    category: "GIS",
+    client: "Infrastructure Planning Team",
+    industry: "Surveying & Infrastructure",
+    lead: GIS_LEAD,
+    period: "Jul 2020",
+    summary:
+      "A site-specific digital elevation model built from Sentinel-1 radar imagery, where open global DEMs were too coarse and a ground survey was too slow.",
+    challenge:
+      "The client needed terrain heights for a planning study and was stuck between two bad options. The freely available global elevation data was too coarse and too dated for the decisions they had to make, while commissioning a ground or LiDAR survey over that area would have taken longer and cost more than the study itself justified.",
+    solution:
+      "We generated the elevation model from Sentinel-1 SAR using an interferometric workflow: selecting a suitable image pair, coregistration, interferogram formation, coherence assessment, phase filtering, unwrapping, conversion of unwrapped phase to height, and geocoding to the client's projection. The result was validated against reference elevation data and known control points before handover, and the areas of low coherence were reported honestly rather than smoothed over.",
+    results: [
+      "A site-specific DEM delivered in days, without a ground survey",
+      "Radar-derived elevation validated against reference data and control points",
+      "Low-confidence zones documented so planners knew what to trust",
+      "A repeatable SAR workflow the client can commission again for new sites",
+    ],
+    stack: ["Sentinel-1 SAR", "SNAP", "InSAR", "SNAPHU", "ArcGIS", "QGIS"],
+    skills: [
+      "SAR Interferometry",
+      "Radar Remote Sensing",
+      "Terrain & Elevation Modelling",
+      "Geodesy & Projections",
+      "Data Validation",
+      "Geography",
+    ],
+  },
+  {
+    slug: "gis-raster-publishing-caching-tool",
+    title: "Customised GIS Tool for Automatic Raster Publishing & Caching",
+    category: "GIS",
+    client: "Institutional GIS Data Team",
+    industry: "Geospatial Data Operations",
+    lead: GIS_LEAD,
+    period: "Jun 2020",
+    summary:
+      "A custom GIS tool that takes new raster data from folder to published, cached map service automatically, replacing a slow manual routine.",
+    challenge:
+      "Every time new imagery arrived, an analyst had to walk it through the same manual routine by hand: check it, mosaic it, publish it to the map server, then build cache tiles scale by scale. It ate hours, it varied depending on who did it, and when someone skipped the caching step the maps crawled for every user downstream.",
+    solution:
+      "We automated the whole routine into a customised GIS tool. It watches the drop folder, validates incoming rasters, handles projection and mosaicking, publishes the service to the map server, and generates cache tiles at the agreed scale levels, writing a log of every run so failures are visible instead of silent. The analysts kept control of the parameters; they just stopped doing the clicking.",
+    results: [
+      "Raster publishing and caching reduced from hours of clicking to an unattended run",
+      "Identical output every time, regardless of who is on shift",
+      "Cached services, so maps load fast for every downstream user",
+      "Run logs that make failures visible instead of silent",
+    ],
+    stack: ["ArcPy", "Python", "ArcGIS Server", "Raster Mosaicking", "Map Caching", "Automation"],
+    skills: [
+      "GIS Automation & Scripting",
+      "Raster Data Management",
+      "Map Service Publishing",
+      "Geoprocessing Workflow Design",
+      "Spatial Data Infrastructure",
+      "Geography",
+    ],
+  },
+  {
+    slug: "river-flow-prediction-gee",
+    title: "River Flow Prediction from Historical Data on Google Earth Engine",
+    category: "GIS",
+    client: "Water Resources Stakeholder",
+    industry: "Water Resources & Hydrology",
+    lead: GIS_LEAD,
+    period: "Dec 2019 – Jan 2020",
+    summary:
+      "A Google Earth Engine model that predicts river flow from historical climate and catchment data, for a basin with thin gauge coverage.",
+    challenge:
+      "The client needed to anticipate river flow for planning, but the basin had sparse and inconsistent gauge records. Decisions about water availability were being made on short, patchy history, and there was no practical way to install and wait on new instrumentation.",
+    solution:
+      "We rebuilt the picture from satellite and reanalysis archives on Google Earth Engine. The catchment was delineated from elevation data, then decades of precipitation, temperature and snow-cover records were extracted over it and aligned with the gauge discharge that did exist. A regression model trained on that relationship produces flow predictions, and because the whole thing runs on Earth Engine, it re-runs against fresh data without any local processing burden.",
+    results: [
+      "Flow prediction made possible despite sparse gauge records",
+      "Decades of climate and catchment history brought into the model",
+      "Runs entirely on Earth Engine, no local processing infrastructure needed",
+      "Re-runnable as new seasons of data become available",
+    ],
+    stack: ["Google Earth Engine", "JavaScript API", "CHIRPS", "MODIS", "Python", "Regression Modelling"],
+    skills: [
+      "Hydrological Modelling",
+      "Cloud Geospatial Analysis",
+      "Time-Series Analysis",
+      "Watershed Delineation",
+      "Statistical Modelling",
+      "Geography",
+    ],
+  },
+  {
+    slug: "solar-power-potential-gis",
+    title: "Estimating Solar Power Potential using Customised GIS Tools",
+    category: "GIS",
+    client: "Renewable Energy Planner",
+    industry: "Renewable Energy",
+    lead: GIS_LEAD,
+    period: "Dec 2019",
+    summary:
+      "Custom GIS tooling that ranks sites by solar potential using terrain, shading and land-use constraints, so siting decisions stop being guesswork.",
+    challenge:
+      "The client had candidate areas for solar deployment and no defensible way to choose between them. Terrain, shading from surrounding relief, slope and aspect, and land-use restrictions all changed the answer, but assessing each site by hand was slow and the reasoning was impossible to reproduce for anyone reviewing the decision.",
+    solution:
+      "We modelled incoming solar radiation across the study area from elevation data, accounting for slope, aspect and terrain shadowing through the year, then layered exclusion masks for unsuitable land use and constrained areas. The scoring was packaged into a customised GIS toolbox, so the client can change assumptions and re-run the ranking themselves, and every ranked site comes with the reasoning behind its score.",
+    results: [
+      "Candidate sites ranked on modelled radiation, not assumption",
+      "Terrain shading, slope and aspect factored into every score",
+      "Unsuitable and restricted land excluded before ranking",
+      "A reusable toolbox the client re-runs with their own parameters",
+    ],
+    stack: ["ArcGIS", "Solar Radiation Modelling", "Model Builder", "Python", "DEM Analysis", "Suitability Modelling"],
+    skills: [
+      "Solar Resource Assessment",
+      "Terrain & DEM Analysis",
+      "Multi-Criteria Site Suitability",
+      "GIS Tool Development",
+      "Spatial Analysis",
+      "Geography",
+    ],
   },
 
   /* ───────────── Web & Marketplace ───────────── */

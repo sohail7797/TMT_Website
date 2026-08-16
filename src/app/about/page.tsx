@@ -28,7 +28,7 @@ const timeline = [
   { year: "Early years", title: "Built on referrals", detail: "We started by quietly delivering GIS, software, websites, hardware and infrastructure for clients who found us through word of mouth." },
   { year: "Growth", title: "Broadened the stack", detail: "Projects expanded across web, mobile, enterprise software and large hardware and server deployments for private and public-sector clients." },
   { year: "Today", title: "Registered & AI-first", detail: "Now a formally registered business, with AI agents and automation at the centre of what we build, backed by full infrastructure capability." },
-  { year: "Coming soon", title: "Our own products", detail: "We are building EVA, our E-Virtual Assistant, and ZMap, a GIS tool for beginners and experts alike." },
+  { year: "Coming soon", title: "Our own products", detail: `We are building EVA, our E-Virtual Assistant, and ZMap, a GIS tool for beginners and experts alike, led by ${siteConfig.team.coo}, our ${siteConfig.team.cooRole}.` },
 ];
 
 const team: {
@@ -50,7 +50,7 @@ const team: {
     role: siteConfig.team.cooRole,
     photo: null,
     link: siteConfig.social.linkedinPartner,
-    bio: "Drives operations and technical direction across GIS, software, AI and infrastructure engagements.",
+    bio: "Leads our GIS and geospatial practice, from satellite crop and terrain analysis to full land-management systems, and heads ZMap, our upcoming GIS product.",
   },
 ];
 

@@ -46,3 +46,6 @@ next-env.d.ts
 
 # Personal CV (never commit to public repo)
 cv/
+
+# Local handoff notes (never commit — contains keys)
+HANDOFF.md

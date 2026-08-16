@@ -3,8 +3,8 @@ import { groq } from "next-sanity";
 export const allProjectsQuery = groq`
   *[_type == "project"] | order(coalesce(order, 999) asc, _createdAt desc){
     "slug": slug.current,
-    title, category, client, year, summary, challenge, solution,
-    results, stack, featured,
+    title, category, client, industry, year, period, lead, summary, challenge, solution,
+    results, stack, skills, featured,
     "coverImage": coverImage.asset->url
   }
 `;
@@ -14,8 +14,8 @@ export const projectSlugsQuery = groq`*[_type == "project" && defined(slug.curre
 export const projectBySlugQuery = groq`
   *[_type == "project" && slug.current == $slug][0]{
     "slug": slug.current,
-    title, category, client, year, summary, challenge, solution,
-    results, stack, featured,
+    title, category, client, industry, year, period, lead, summary, challenge, solution,
+    results, stack, skills, featured,
     "coverImage": coverImage.asset->url,
     "gallery": gallery[].asset->url
   }

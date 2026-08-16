@@ -44,7 +44,7 @@ export const siteConfig = {
   team: {
     ceo: "M. Sohail",
     ceoRole: "Founder, CEO & CTO",
-    coo: "Muhammad Adnan Zia",
+    coo: "M. A Zia",
     cooRole: "COO & GIS Expert",
     // kept for existing references (e.g. founder note)
     projectManager: "M. Sohail",

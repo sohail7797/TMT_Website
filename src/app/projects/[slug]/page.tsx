@@ -80,6 +80,16 @@ export default async function ProjectDetailPage({
               {project.industry}
             </span>
           )}
+          {project.period && (
+            <span className="rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-sm text-bone-300">
+              {project.period}
+            </span>
+          )}
+          {project.lead && (
+            <span className="rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-sm text-bone-300">
+              Project lead: <span className="text-bone-100">{project.lead}</span>
+            </span>
+          )}
           {project.href && (
             <a
               href={project.href}
@@ -142,6 +152,23 @@ export default async function ProjectDetailPage({
                   </span>
                 ))}
               </div>
+              {project.skills?.length ? (
+                <>
+                  <h3 className="mt-6 text-sm font-semibold uppercase tracking-widest text-gold-400">
+                    Skills applied
+                  </h3>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {project.skills.map((s) => (
+                      <span
+                        key={s}
+                        className="rounded-full border border-gold-400/20 bg-gold-400/[0.06] px-3 py-1 text-xs text-gold-200"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </>
+              ) : null}
             </div>
           </Reveal>
         </div>
