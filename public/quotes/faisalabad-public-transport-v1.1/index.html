@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" href="/brand/logo-mark.png">
 <link rel="apple-touch-icon" href="/brand/logo-mark.png">
 <meta property="og:image" content="/brand/logo-full.png">
-<style>*{box-sizing:border-box}html,body{margin:0;padding:0}img{max-width:100%}</style>
+<style>*{box-sizing:border-box}html,body{margin:0;padding:0;overflow-x:hidden}img{max-width:100%}</style>
 </head>
 <body>
 <style>
@@ -65,7 +65,7 @@ body{margin:0;background:var(--ground);color:var(--body);font-family:var(--font-
 .tick:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px}
 
 /* ---------- deck ---------- */
-.deck{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none}
+.deck{height:100vh;overflow-y:scroll;overflow-x:hidden;scroll-snap-type:y mandatory;scrollbar-width:none}
 .deck::-webkit-scrollbar{display:none}
 .slide{min-height:100vh;scroll-snap-align:start;scroll-snap-stop:always;
   padding:calc(44px + clamp(18px,3vh,44px)) var(--pad) clamp(26px,4vh,52px) calc(var(--rail) + var(--pad));
@@ -133,11 +133,13 @@ h3{font-size:clamp(15px,1.15vw,17px);font-weight:600;line-height:1.25}
   border-left:2px solid rgba(212,160,23,.4);padding-left:13px;margin-top:16px;max-width:78ch}
 
 /* ---------- reveal ---------- */
-.rv{opacity:0;transform:translateY(12px);transition:opacity .55s cubic-bezier(.2,.7,.3,1),transform .55s cubic-bezier(.2,.7,.3,1)}
-.slide.on .rv{opacity:1;transform:none}
-.slide.on .rv:nth-child(2){transition-delay:.05s}
-.slide.on .rv:nth-child(3){transition-delay:.1s}
-.grid.on > *{animation:pop .45s cubic-bezier(.2,.7,.3,1) backwards}
+/* Reveal is progressive enhancement only. Without the js-anim flag every
+   element stays fully visible, so the deck can never render blank. */
+.js-anim .rv{opacity:0;transform:translateY(12px);transition:opacity .55s cubic-bezier(.2,.7,.3,1),transform .55s cubic-bezier(.2,.7,.3,1)}
+.js-anim .slide.on .rv{opacity:1;transform:none}
+.js-anim .slide.on .rv:nth-child(2){transition-delay:.05s}
+.js-anim .slide.on .rv:nth-child(3){transition-delay:.1s}
+.js-anim .grid.on > *{animation:pop .45s cubic-bezier(.2,.7,.3,1) backwards}
 @keyframes pop{from{opacity:0;transform:translateY(10px)}}
 
 /* ---------- animated map bits ---------- */
@@ -495,12 +497,19 @@ td strong{color:var(--ink);font-weight:600}
     <div class="lockup"><img class="mark" src="/brand/logo-mark.png" alt="The Mahir Tech" width="22" height="22"><b>THE MAHIR TECH</b><span>Technology That Delivers</span></div>
     <div class="status">
       <span><i class="dot"></i>Proposal · Discovery Stage</span>
-      <span class="frame">FRAME <b id="frameNo">01</b> / 23</span>
+      <span class="frame">FRAME <b id="frameNo">01</b> / 12</span>
     </div>
   </div>
   <nav class="rail" id="rail" aria-label="Slide navigation"></nav>
 </div>
 
+<script>
+/* Reveal animation is progressive enhancement only. If this never runs,
+   the deck still renders fully visible. */
+try{ if('IntersectionObserver' in window) document.documentElement.classList.add('js-anim'); }catch(e){}
+</script>
+
+<main class="deck" id="deck">
 
 <!-- 01 ───────── COVER ───────── -->
 <section class="slide cover" data-t="Cover">
@@ -1083,6 +1092,16 @@ td strong{color:var(--ink);font-weight:600}
   },{threshold:[0.2,0.55],root:deck});
   slides.forEach(function(s){io.observe(s);});
 
+  /* Safety net: reveal everything if the observer has not done so,
+     so the page can never sit blank on an unusual viewport. */
+  setTimeout(function(){
+    slides.forEach(function(s){
+      s.classList.add('on');
+      Array.prototype.forEach.call(s.querySelectorAll('.grid'),function(g){g.classList.add('on');});
+      countUp(s);
+    });
+  }, 2500);
+
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function countUp(scope){
     var els=scope.querySelectorAll('[data-count]');
@@ -1200,6 +1219,64 @@ td strong{color:var(--ink);font-weight:600}
     *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   }
   @page{ size:A4 landscape; margin:8mm }
+
+/* ---------- mobile ---------- */
+@media (max-width:640px){
+  :root{--rail:0px;--pad:16px}
+  .rail{display:none}
+  .chrome-top{padding-left:14px;padding-right:14px;height:40px}
+  .lockup span{display:none}
+  .status span:first-child{display:none}
+  .deck{scroll-snap-type:none}
+  .slide{min-height:auto;padding:64px 16px 36px 16px}
+  .slide::before{background-size:40px 40px}
+  h2{font-size:23px;line-height:1.12}
+  .lede{font-size:13.5px}
+  .eyebrow{font-size:9.5px;letter-spacing:.14em}
+  .cover h1{font-size:34px;line-height:1.02}
+  .cover .sub{font-size:14px}
+  .cover-wrap,.split,.split-r{grid-template-columns:1fr;gap:20px}
+  .pillars{grid-template-columns:1fr 1fr;gap:8px}
+  .cover-meta{gap:14px}
+  .g2,.g3,.g4,.phases,.evo,.vs,.disc{grid-template-columns:1fr}
+  .evo-col::after,.pipe-cell::after{display:none}
+  .pipe{grid-template-columns:1fr 1fr}
+  .iso-wrap{grid-template-columns:1fr}
+  .iso-lab:not(.right) .l{text-align:left;padding-right:0;padding-left:14px;border-right:0;border-left:2px solid transparent}
+  /* wide drawings scroll inside their own frame instead of squashing */
+  figure{overflow-x:auto}
+  .diagram{min-width:560px}
+  .dash{overflow-x:auto}
+  .dash svg{min-width:720px}
+  .phone{--pw:min(64vw,215px)}
+  .stage{gap:12px}
+  .vs-row{grid-template-columns:1fr;gap:3px;padding:10px 14px}
+  .vs-row .k{padding-top:0}
+  .acc-q{padding:12px 13px;gap:9px}
+  .acc-q .qt{font-size:12.5px}
+  .acc-a div{padding:0 13px 13px 13px}
+  .acc-item[aria-expanded="true"] .acc-a{max-height:400px}
+  .total-bar{flex-direction:column;align-items:flex-start;gap:6px;padding:13px 15px}
+  .contact{grid-template-columns:1fr;gap:11px}
+  .disc-card{flex-direction:column;gap:9px}
+  table{font-size:11.5px}
+  td,th{padding:8px 9px}
+  .note{font-size:9.5px}
+  #pdfBtn{top:auto;bottom:14px;right:14px}
+  #pdfHint{top:auto;bottom:58px;right:14px}
+  /* nothing may widen the page: a single over-wide child stretches the
+     whole grid and clips every neighbour */
+  .cover-meta{gap:12px 16px}
+  .cover-meta div{min-width:0;flex:1 1 44%}
+  .cover-wrap>div,.split>div,.split-r>div,.slide>*{min-width:0}
+  .pillar b,.pillar span{overflow-wrap:anywhere}
+  .chips{gap:6px}
+}
+@media (max-width:400px){
+  .pillars{grid-template-columns:1fr}
+  .cover h1{font-size:29px}
+  h2{font-size:21px}
+}
 </style>
 
 <button id="pdfBtn" type="button" aria-describedby="pdfHint">
