@@ -423,7 +423,7 @@ td strong{color:var(--ink);font-weight:600}
 
 /* delivery disciplines */
 .disc{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
-.disc-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 15px;
+.disc-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 15px;align-items:center;
   display:flex;gap:12px;transition:border-color .25s,transform .25s}
 .disc-card:hover{border-color:rgba(212,160,23,.3);transform:translateY(-2px)}
 .disc-card h3{font-size:13px}
@@ -870,29 +870,45 @@ try{ if('IntersectionObserver' in window) document.documentElement.classList.add
 </section>
 
 <!-- 09 ───────── Q&A ACCORDION ───────── -->
-<section class="slide" data-t="Questions &amp; answers">
+<section class="slide" data-t="Discovery questions">
   <div class="slide-head">
-    <p class="eyebrow rv">Operational &amp; sensor architecture</p>
-    <h2 class="rv">Questions we are <span class="hl">most often asked</span></h2>
-    <p class="lede rv">Select a question to see the short answer.</p>
+    <p class="eyebrow rv">Discovery questions</p>
+    <h2 class="rv">What we need to <span class="hl">confirm with you</span></h2>
+    <p class="lede rv">Select any question and we will walk through what it means and why it matters.</p>
   </div>
-  <div class="split-r">
+  <div class="split-r qa-wrap">
     <div class="acc rv" id="qaAcc">
       <div class="acc-item" aria-expanded="true">
-        <button class="acc-q" type="button"><span class="qn">Q1</span><span class="qt">How do you confirm the driver is actually in the assigned vehicle?</span><span class="qi">+</span></button>
-        <div class="acc-a"><div>A low-cost <b>Bluetooth Low Energy beacon</b> is permanently fixed inside each vehicle and talks to the Driver App. If the driver moves outside the vehicle range, tracking is paused automatically and an alert is flagged on the Admin Dashboard.</div></div>
+        <button class="acc-q" type="button"><span class="qn">Q1</span><span class="qt">How many vehicles should be live in Phase 1, and what number should we plan for after that?</span><span class="qi">+</span></button>
+        <div class="acc-a"><div>We have sized the platform and the servers for <b>600 vehicles</b>. Confirming the real starting number, and the number you expect to reach later, fixes the server capacity and the monthly running cost so neither is over-bought.</div></div>
       </div>
       <div class="acc-item" aria-expanded="false">
-        <button class="acc-q" type="button"><span class="qn">Q2</span><span class="qt">What happens when several drivers share one vehicle across shifts?</span><span class="qi">+</span></button>
-        <div class="acc-a"><div>Vehicles and driver accounts are <b>decoupled</b>. Multiple drivers across different shifts operate the same vehicle simply by logging in and claiming the vehicle profile, so no reconfiguration is needed at shift change.</div></div>
+        <button class="acc-q" type="button"><span class="qn">Q2</span><span class="qt">Is the driver's own phone acceptable for tracking in Phase 1, or do you want fixed trackers from day one?</span><span class="qi">+</span></button>
+        <div class="acc-a"><div>The <b>driver phone</b> starts tracking immediately with no hardware to buy and no SIM per vehicle. A <b>fixed 4G tracker</b> works independently of the driver but must be procured, fitted and given its own SIM. Our recommendation is to start with phones and add trackers in Phase 2 only where they are genuinely needed.</div></div>
       </div>
       <div class="acc-item" aria-expanded="false">
-        <button class="acc-q" type="button"><span class="qn">Q3</span><span class="qt">Which sensors can be added in Phase 2?</span><span class="qi">+</span></button>
-        <div class="acc-a"><div>Support for <b>hardwired 4G and OBD-II trackers</b>, reporting ignition state and battery voltage, and <b>overhead Automated Passenger Counter</b> optical sensors for boarding and alighting counts.</div></div>
+        <button class="acc-q" type="button"><span class="qn">Q3</span><span class="qt">Do you already hold the route and stop data, and in what form?</span><span class="qi">+</span></button>
+        <div class="acc-a"><div>If routes and stops already exist as maps, spreadsheets, or even GPS logs from a survey, we import them directly. If they do not exist, they have to be surveyed and digitised first, and that changes the Phase 1 timeline. This is usually the single biggest unknown.</div></div>
       </div>
       <div class="acc-item" aria-expanded="false">
-        <button class="acc-q" type="button"><span class="qn">Q4</span><span class="qt">Who owns the source code and the data?</span><span class="qi">+</span></button>
-        <div class="acc-a"><div>The department does. <b>100% of the intellectual property</b>, deployment scripts, database schemas and codebase are handed over, and the spatial database is locally managed rather than held in a third-party cloud.</div></div>
+        <button class="acc-q" type="button"><span class="qn">Q4</span><span class="qt">Which vehicle categories are included in the programme?</span><span class="qi">+</span></button>
+        <div class="acc-a"><div>For example government buses, urban Hiace, and metro service. Each category can have different routes, different operators and different permissions, which shapes the dashboard and how drivers are onboarded.</div></div>
+      </div>
+      <div class="acc-item" aria-expanded="false">
+        <button class="acc-q" type="button"><span class="qn">Q5</span><span class="qt">Who will use the department dashboard, and what should each person be allowed to do?</span><span class="qi">+</span></button>
+        <div class="acc-a"><div>We set access by role. An operator can be limited to seeing only their own vehicles, while the authority sees the whole network and can edit routes and stops. Telling us the roles now avoids rework later.</div></div>
+      </div>
+      <div class="acc-item" aria-expanded="false">
+        <button class="acc-q" type="button"><span class="qn">Q6</span><span class="qt">Is seat booking and fare collection required, and through which payment channels?</span><span class="qi">+</span></button>
+        <div class="acc-a"><div>This is <b>Phase 3</b> work. Knowing early whether you need 1Link, JazzCash, cards, or a combination tells us which integrations and which bank approvals to begin, because those approvals take time on the client side.</div></div>
+      </div>
+      <div class="acc-item" aria-expanded="false">
+        <button class="acc-q" type="button"><span class="qn">Q7</span><span class="qt">Where should the system be hosted, and are there data-residency rules we must follow?</span><span class="qi">+</span></button>
+        <div class="acc-a"><div>Hosting location affects both cost and compliance. In every case the spatial database and the source code remain <b>owned by the department</b>, not held inside a third-party service.</div></div>
+      </div>
+      <div class="acc-item" aria-expanded="false">
+        <button class="acc-q" type="button"><span class="qn">Q8</span><span class="qt">Will this be awarded as a direct contract, or through a tender process?</span><span class="qi">+</span></button>
+        <div class="acc-a"><div>A tender needs compliance documents and a formal bid pack, which we prepare. A direct contract can begin as soon as Discovery is signed off. Both are fine, we simply need to know which one to prepare for.</div></div>
       </div>
     </div>
 
@@ -910,7 +926,7 @@ try{ if('IntersectionObserver' in window) document.documentElement.classList.add
         <g class="node"><rect x="10" y="168" width="400" height="72" rx="10"/><text class="t" x="26" y="194">Department Cloud Ingest</text><text class="s" x="26" y="212">VERIFIES CORRECT VEHICLE IS ON CORRECT ROUTE</text></g>
         <g class="node"><rect x="10" y="256" width="400" height="58" rx="10" stroke="rgba(201,118,47,.5)"/><text class="t" x="26" y="280" fill="#c9762f">Out of range</text><text class="s" x="26" y="298">TRACKING PAUSED AND ALERT RAISED ON DASHBOARD</text></g>
       </svg>
-      <figcaption>Proximity verification: the beacon proves the phone is inside the vehicle it claims.</figcaption>
+      <figcaption>Reference for question 2: how phone tracking is kept honest by an in-vehicle beacon.</figcaption>
     </figure>
   </div>
 </section>
@@ -923,10 +939,10 @@ try{ if('IntersectionObserver' in window) document.documentElement.classList.add
   </div>
   <div class="split-r">
     <div class="disc rv">
-      <div class="disc-card"><span class="ic-badge"><svg class="ic"><use href="#i-db"/></svg></span><div><h3>Lead Backend &amp; GIS Architect</h3><p>High-throughput telemetry APIs, PostgreSQL and PostGIS database design, real-time WebSocket broker, and self-hosted MapLibre and OSRM tile infrastructure.</p></div></div>
-      <div class="disc-card"><span class="ic-badge"><svg class="ic"><use href="#i-phone"/></svg></span><div><h3>Cross-Platform Mobile Engineer</h3><p>Driver Android application with background GNSS services and BLE beacon integration, plus Passenger Flutter applications for Android and iOS.</p></div></div>
-      <div class="disc-card"><span class="ic-badge"><svg class="ic"><use href="#i-monitor"/></svg></span><div><h3>Web GIS &amp; Frontend Engineer</h3><p>Department Web GIS Dashboard, interactive map layers, real-time fleet management and telemetry replay.</p></div></div>
-      <div class="disc-card"><span class="ic-badge"><svg class="ic"><use href="#i-check"/></svg></span><div><h3>QA, Field Testing &amp; Release</h3><p>Telemetry field trials, cross-device QA, app store submissions and end-to-end integration validation.</p></div></div>
+      <div class="disc-card"><span class="ic-badge"><svg class="ic"><use href="#i-db"/></svg></span><h3>Lead Backend &amp; GIS Architect</h3></div>
+      <div class="disc-card"><span class="ic-badge"><svg class="ic"><use href="#i-phone"/></svg></span><h3>Cross-Platform Mobile Engineer</h3></div>
+      <div class="disc-card"><span class="ic-badge"><svg class="ic"><use href="#i-monitor"/></svg></span><h3>Web GIS &amp; Frontend Engineer</h3></div>
+      <div class="disc-card"><span class="ic-badge"><svg class="ic"><use href="#i-check"/></svg></span><h3>QA, Field Testing &amp; Release</h3></div>
     </div>
     <div>
       <div class="card rv" style="padding:18px 20px">
@@ -1215,6 +1231,8 @@ try{ if('IntersectionObserver' in window) document.documentElement.classList.add
     /* every answer visible in the exported document */
     .acc-a{max-height:none!important}
     .acc-item{break-inside:avoid}
+    .qa-wrap{display:block!important}
+    .qa-wrap figure{margin-top:16px;max-width:520px}
     html,body{background:#050505!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   }
