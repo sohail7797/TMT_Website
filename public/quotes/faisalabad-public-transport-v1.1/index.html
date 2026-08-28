@@ -421,6 +421,10 @@ td strong{color:var(--ink);font-weight:600}
 .acc-a div{padding:0 16px 15px 46px;font-size:12.5px;line-height:1.55;color:var(--body)}
 .acc-a b{color:var(--gold-soft);font-weight:600}
 
+.acc-fig{margin-top:12px;max-width:420px}
+.acc-fig svg{width:100%;height:auto}
+.acc-item.has-fig[aria-expanded="true"] .acc-a{max-height:520px}
+
 /* delivery disciplines */
 .disc{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
 .disc-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 15px;align-items:center;
@@ -876,8 +880,7 @@ try{ if('IntersectionObserver' in window) document.documentElement.classList.add
     <h2 class="rv">What we need to <span class="hl">confirm with you</span></h2>
     <p class="lede rv">Select any question and we will walk through what it means and why it matters.</p>
   </div>
-  <div class="split-r qa-wrap">
-    <div class="acc rv" id="qaAcc">
+  <div class="acc rv" id="qaAcc">
       <div class="acc-item" aria-expanded="true">
         <button class="acc-q" type="button"><span class="qn">Q1</span><span class="qt">How many vehicles should be live in Phase 1, and what number should we plan for after that?</span><span class="qi">+</span></button>
         <div class="acc-a"><div>We have sized the platform and the servers for <b>600 vehicles</b>. Confirming the real starting number, and the number you expect to reach later, fixes the server capacity and the monthly running cost so neither is over-bought.</div></div>
@@ -886,48 +889,49 @@ try{ if('IntersectionObserver' in window) document.documentElement.classList.add
         <button class="acc-q" type="button"><span class="qn">Q2</span><span class="qt">Is the driver's own phone acceptable for tracking in Phase 1, or do you want fixed trackers from day one?</span><span class="qi">+</span></button>
         <div class="acc-a"><div>The <b>driver phone</b> starts tracking immediately with no hardware to buy and no SIM per vehicle. A <b>fixed 4G tracker</b> works independently of the driver but must be procured, fitted and given its own SIM. Our recommendation is to start with phones and add trackers in Phase 2 only where they are genuinely needed.</div></div>
       </div>
+      <div class="acc-item has-fig" aria-expanded="false">
+        <button class="acc-q" type="button"><span class="qn">Q3</span><span class="qt">How do you confirm the driver is actually in the assigned vehicle?</span><span class="qi">+</span></button>
+        <div class="acc-a"><div>A low-cost <b>Bluetooth Low Energy beacon</b> is permanently fixed inside each vehicle and talks to the Driver App. If the driver moves outside the vehicle range, tracking is paused automatically and an alert is flagged on the Admin Dashboard.
+          <figure class="acc-fig">
+            <svg class="diagram" viewBox="0 0 420 330" role="img" aria-label="The driver mobile app and a fixed in-vehicle BLE beacon exchange signal strength to confirm proximity, then the app transmits GPS with a confirmed vehicle identifier to the department cloud.">
+              <defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#d4a017"/></marker></defs>
+              <g class="node"><rect x="10" y="20" width="172" height="72" rx="10" stroke="#d4a017"/><text class="t" x="26" y="46">Driver Mobile</text><text class="s" x="26" y="64" fill="#edc14f">VALIDATES PROXIMITY</text><text class="s" x="26" y="80">APP OPEN, ON DUTY</text></g>
+              <g class="node"><rect x="238" y="20" width="172" height="72" rx="10"/><text class="t" x="254" y="46">BLE Smart Beacon</text><text class="s" x="254" y="64">FIXED TO DASHBOARD</text><text class="s" x="254" y="80">PERMANENT IN VEHICLE</text></g>
+              <path class="flow accent" d="M182 48 H238" marker-end="url(#a3)"/>
+              <path class="flow accent" d="M238 68 H182" marker-end="url(#a3)"/>
+              <text class="flow-l" x="196" y="112" text-anchor="middle">RSSI</text>
+              <path class="flow accent" d="M96 92 V160" marker-end="url(#a3)"/>
+              <text class="flow-l" x="106" y="130">GPS + CONFIRMED</text>
+              <text class="flow-l" x="106" y="142">VEHICLE UUID</text>
+              <g class="node"><rect x="10" y="168" width="400" height="72" rx="10"/><text class="t" x="26" y="194">Department Cloud Ingest</text><text class="s" x="26" y="212">VERIFIES CORRECT VEHICLE IS ON CORRECT ROUTE</text></g>
+              <g class="node"><rect x="10" y="256" width="400" height="58" rx="10" stroke="rgba(201,118,47,.5)"/><text class="t" x="26" y="280" fill="#c9762f">Out of range</text><text class="s" x="26" y="298">TRACKING PAUSED AND ALERT RAISED ON DASHBOARD</text></g>
+            </svg>
+          </figure></div></div>
+      </div>
       <div class="acc-item" aria-expanded="false">
-        <button class="acc-q" type="button"><span class="qn">Q3</span><span class="qt">Do you already hold the route and stop data, and in what form?</span><span class="qi">+</span></button>
+        <button class="acc-q" type="button"><span class="qn">Q4</span><span class="qt">What happens when several drivers share one vehicle across shifts?</span><span class="qi">+</span></button>
+        <div class="acc-a"><div>Vehicles and driver accounts are <b>decoupled</b>. Multiple drivers across different shifts operate the same vehicle simply by logging in and claiming the vehicle profile, so no reconfiguration is needed at shift change.</div></div>
+      </div>
+      <div class="acc-item" aria-expanded="false">
+        <button class="acc-q" type="button"><span class="qn">Q5</span><span class="qt">Do you already hold the route and stop data, and in what form?</span><span class="qi">+</span></button>
         <div class="acc-a"><div>If routes and stops already exist as maps, spreadsheets, or even GPS logs from a survey, we import them directly. If they do not exist, they have to be surveyed and digitised first, and that changes the Phase 1 timeline. This is usually the single biggest unknown.</div></div>
       </div>
       <div class="acc-item" aria-expanded="false">
-        <button class="acc-q" type="button"><span class="qn">Q4</span><span class="qt">Which vehicle categories are included in the programme?</span><span class="qi">+</span></button>
+        <button class="acc-q" type="button"><span class="qn">Q6</span><span class="qt">Which vehicle categories are included in the programme?</span><span class="qi">+</span></button>
         <div class="acc-a"><div>For example government buses, urban Hiace, and metro service. Each category can have different routes, different operators and different permissions, which shapes the dashboard and how drivers are onboarded.</div></div>
       </div>
       <div class="acc-item" aria-expanded="false">
-        <button class="acc-q" type="button"><span class="qn">Q5</span><span class="qt">Who will use the department dashboard, and what should each person be allowed to do?</span><span class="qi">+</span></button>
+        <button class="acc-q" type="button"><span class="qn">Q7</span><span class="qt">Who will use the department dashboard, and what should each person be allowed to do?</span><span class="qi">+</span></button>
         <div class="acc-a"><div>We set access by role. An operator can be limited to seeing only their own vehicles, while the authority sees the whole network and can edit routes and stops. Telling us the roles now avoids rework later.</div></div>
       </div>
       <div class="acc-item" aria-expanded="false">
-        <button class="acc-q" type="button"><span class="qn">Q6</span><span class="qt">Is seat booking and fare collection required, and through which payment channels?</span><span class="qi">+</span></button>
-        <div class="acc-a"><div>This is <b>Phase 3</b> work. Knowing early whether you need 1Link, JazzCash, cards, or a combination tells us which integrations and which bank approvals to begin, because those approvals take time on the client side.</div></div>
-      </div>
-      <div class="acc-item" aria-expanded="false">
-        <button class="acc-q" type="button"><span class="qn">Q7</span><span class="qt">Where should the system be hosted, and are there data-residency rules we must follow?</span><span class="qi">+</span></button>
+        <button class="acc-q" type="button"><span class="qn">Q8</span><span class="qt">Where should the system be hosted, and are there data-residency rules we must follow?</span><span class="qi">+</span></button>
         <div class="acc-a"><div>Hosting location affects both cost and compliance. In every case the spatial database and the source code remain <b>owned by the department</b>, not held inside a third-party service.</div></div>
       </div>
       <div class="acc-item" aria-expanded="false">
-        <button class="acc-q" type="button"><span class="qn">Q8</span><span class="qt">Will this be awarded as a direct contract, or through a tender process?</span><span class="qi">+</span></button>
+        <button class="acc-q" type="button"><span class="qn">Q9</span><span class="qt">Will this be awarded as a direct contract, or through a tender process?</span><span class="qi">+</span></button>
         <div class="acc-a"><div>A tender needs compliance documents and a formal bid pack, which we prepare. A direct contract can begin as soon as Discovery is signed off. Both are fine, we simply need to know which one to prepare for.</div></div>
       </div>
-    </div>
-
-    <figure class="rv">
-      <svg class="diagram" viewBox="0 0 420 330" role="img" aria-label="The driver mobile app and a fixed in-vehicle BLE beacon exchange signal strength to confirm proximity, then the app transmits GPS with a confirmed vehicle identifier to the department cloud.">
-        <defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#d4a017"/></marker></defs>
-        <g class="node"><rect x="10" y="20" width="172" height="72" rx="10" stroke="#d4a017"/><text class="t" x="26" y="46">Driver Mobile</text><text class="s" x="26" y="64" fill="#edc14f">VALIDATES PROXIMITY</text><text class="s" x="26" y="80">APP OPEN, ON DUTY</text></g>
-        <g class="node"><rect x="238" y="20" width="172" height="72" rx="10"/><text class="t" x="254" y="46">BLE Smart Beacon</text><text class="s" x="254" y="64">FIXED TO DASHBOARD</text><text class="s" x="254" y="80">PERMANENT IN VEHICLE</text></g>
-        <path class="flow accent" d="M182 48 H238" marker-end="url(#a3)"/>
-        <path class="flow accent" d="M238 68 H182" marker-end="url(#a3)"/>
-        <text class="flow-l" x="196" y="112" text-anchor="middle">RSSI</text>
-        <path class="flow accent" d="M96 92 V160" marker-end="url(#a3)"/>
-        <text class="flow-l" x="106" y="130">GPS + CONFIRMED</text>
-        <text class="flow-l" x="106" y="142">VEHICLE UUID</text>
-        <g class="node"><rect x="10" y="168" width="400" height="72" rx="10"/><text class="t" x="26" y="194">Department Cloud Ingest</text><text class="s" x="26" y="212">VERIFIES CORRECT VEHICLE IS ON CORRECT ROUTE</text></g>
-        <g class="node"><rect x="10" y="256" width="400" height="58" rx="10" stroke="rgba(201,118,47,.5)"/><text class="t" x="26" y="280" fill="#c9762f">Out of range</text><text class="s" x="26" y="298">TRACKING PAUSED AND ALERT RAISED ON DASHBOARD</text></g>
-      </svg>
-      <figcaption>Reference for question 2: how phone tracking is kept honest by an in-vehicle beacon.</figcaption>
-    </figure>
   </div>
 </section>
 
@@ -1231,8 +1235,9 @@ try{ if('IntersectionObserver' in window) document.documentElement.classList.add
     /* every answer visible in the exported document */
     .acc-a{max-height:none!important}
     .acc-item{break-inside:avoid}
-    .qa-wrap{display:block!important}
-    .qa-wrap figure{margin-top:16px;max-width:520px}
+    .acc-item.has-fig .acc-a{max-height:none!important}
+    .acc-item.has-fig{break-inside:auto}
+    .acc-fig{max-width:360px}
     html,body{background:#050505!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   }
