@@ -1,0 +1,1552 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>WASA Toba Tek Singh — Digital Systems Development &amp; Transformation Roadmap</title>
+<meta name="description" content="Proposal and quotation: initial billing and complaint management foundation, with a scalable roadmap for revenue, financial and asset management.">
+<meta property="og:title" content="WASA Toba Tek Singh — Digital Systems Development &amp; Transformation Roadmap">
+<meta property="og:description" content="Prepared by The Mahir Tech. Phase 1 quotation with a five-phase digital transformation roadmap.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23050505'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='700' fill='%23d4a017' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<style>
+/* ============================================================
+   THE MAHIR TECH — WASA Toba Tek Singh
+   Digital Systems Development & Transformation Roadmap
+   House deck system: single committed dark world, gold accent.
+   Water-utility blues appear ONLY inside diagrams and mockups.
+   ============================================================ */
+
+:root{
+  --ground:#050505; --panel:#0a0a0b; --panel-2:#101012; --raised:#16161a;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.15);
+  --gold:#d4a017; --gold-bright:#e6b43c; --gold-soft:#edc14f;
+  --ink:#fafaf8; --body:#b4b4ad; --mute:#8a8a82;
+  --live:#2fa36b; --data:#2f6fed; --warn:#c9762f; --aqua:#2fa8c9;
+  --font-display:"Space Grotesk","Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-body:"Inter","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-mono:ui-monospace,"Cascadia Mono","Cascadia Code",Consolas,"SF Mono","Roboto Mono",monospace;
+  --rail:60px; --pad:clamp(22px,3.6vw,66px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--body);font-family:var(--font-body);
+     font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+
+/* ---------- console chrome ---------- */
+.chrome{position:fixed;inset:0;pointer-events:none;z-index:40}
+.chrome-top{position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 18px 0 calc(var(--rail) + 6px);border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(5,5,5,.95),rgba(5,5,5,.72));backdrop-filter:blur(8px)}
+.lockup{display:flex;align-items:center;gap:10px}
+.mark{width:22px;height:22px;border:1px solid rgba(212,160,23,.45);border-radius:6px;display:grid;
+  place-items:center;background:linear-gradient(160deg,rgba(212,160,23,.2),transparent);
+  font-family:var(--font-display);font-size:11px;font-weight:700;color:var(--gold-soft)}
+.lockup b{font-family:var(--font-display);font-size:12.5px;font-weight:600;color:var(--ink)}
+.lockup span{font-family:var(--font-mono);font-size:10px;color:var(--mute);letter-spacing:.08em;text-transform:uppercase}
+.status{display:flex;align-items:center;gap:16px;font-family:var(--font-mono);font-size:10.5px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.status .dot{width:6px;height:6px;border-radius:50%;background:var(--live);display:inline-block;
+  margin-right:7px;box-shadow:0 0 0 3px rgba(47,163,107,.16)}
+.status .frame{color:var(--gold-soft)}
+.rail{position:absolute;top:44px;bottom:0;left:0;width:var(--rail);border-right:1px solid var(--line);
+  background:rgba(10,10,11,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;pointer-events:auto}
+.tick{width:18px;height:3px;border-radius:2px;border:0;padding:0;cursor:pointer;
+  background:rgba(255,255,255,.14);transition:background .25s,width .25s}
+.tick:hover{background:rgba(255,255,255,.3)}
+.tick[aria-current="true"]{background:var(--gold);width:26px}
+.tick:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
+
+.pdf-btn{position:fixed;top:8px;right:16px;z-index:60;font-family:var(--font-mono);font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--gold-soft);background:rgba(212,160,23,.09);
+  border:1px solid rgba(212,160,23,.35);border-radius:6px;padding:7px 13px;cursor:pointer;
+  display:flex;align-items:center;gap:7px;transition:background .2s,color .2s}
+.pdf-btn:hover{background:rgba(212,160,23,.18);color:var(--ink)}
+.pdf-btn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- deck ---------- */
+.deck{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none}
+.deck::-webkit-scrollbar{display:none}
+.slide{min-height:100vh;scroll-snap-align:start;scroll-snap-stop:always;
+  padding:calc(44px + clamp(18px,3vh,44px)) var(--pad) clamp(26px,4vh,52px) calc(var(--rail) + var(--pad));
+  display:flex;flex-direction:column;justify-content:center;position:relative;
+  border-bottom:1px solid rgba(255,255,255,.05)}
+.slide::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 40%,#000 30%,transparent 100%)}
+.slide > *{position:relative;z-index:1}
+
+/* ---------- type ---------- */
+.eyebrow{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold-soft);margin:0 0 12px;display:flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:16px;height:1px;background:var(--gold);opacity:.7}
+h1{font-family:var(--font-display);font-weight:600;color:var(--ink);margin:0;
+   font-size:clamp(30px,4.4vw,60px);line-height:1.06;letter-spacing:-.022em}
+h2{font-family:var(--font-display);font-weight:600;color:var(--ink);margin:0;
+   font-size:clamp(23px,2.9vw,40px);line-height:1.12;letter-spacing:-.018em}
+h2 em{font-style:normal;color:var(--gold-soft)}
+.lede{max-width:74ch;font-size:clamp(14px,1.06vw,16.5px);color:var(--body);margin:12px 0 0}
+.slide-head{margin-bottom:clamp(16px,2.4vh,30px)}
+.kicker{font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)}
+.slide.on .rv{opacity:1;transform:none}
+.slide.on .rv:nth-child(2){transition-delay:.06s}
+.slide.on .rv:nth-child(3){transition-delay:.12s}
+.slide.on .rv:nth-child(4){transition-delay:.18s}
+.grid > *{opacity:0;transform:translateY(14px)}
+.grid.on > *{animation:pop .6s cubic-bezier(.22,.61,.36,1) forwards}
+@keyframes pop{to{opacity:1;transform:none}}
+
+/* ---------- surfaces ---------- */
+.card{background:linear-gradient(160deg,var(--panel),var(--panel-2));border:1px solid var(--line);
+  border-radius:12px;padding:clamp(13px,1.4vw,20px);transition:border-color .3s,transform .3s}
+.card:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.card h4{font-family:var(--font-display);font-size:14.5px;font-weight:600;color:var(--ink);margin:0 0 6px}
+.card p{margin:0;font-size:13px;color:var(--mute);line-height:1.5}
+.grid{display:grid;gap:clamp(10px,1vw,15px)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(18px,2.4vw,42px);align-items:center}
+.split-r{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(18px,2.4vw,42px);align-items:center}
+
+.ico{width:22px;height:22px;fill:none;stroke:var(--gold);stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round;margin-bottom:9px}
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ---------- lists ---------- */
+.ul{list-style:none;padding:0;margin:0;display:grid;gap:7px}
+.ul li{position:relative;padding-left:17px;font-size:13.2px;color:var(--body);line-height:1.5}
+.ul li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:1px;
+  background:var(--gold);opacity:.75}
+.ul.tight li{font-size:12.4px}
+
+/* ---------- chips ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.05em;color:var(--body);
+  border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:5px 11px;
+  transition:border-color .25s,color .25s}
+.chip:hover{border-color:rgba(212,160,23,.4);color:var(--ink)}
+.chip.on{border-color:rgba(212,160,23,.5);color:var(--gold-soft);background:rgba(212,160,23,.07)}
+
+/* ---------- badges ---------- */
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:9.5px;
+  letter-spacing:.13em;text-transform:uppercase;padding:4px 9px;border-radius:4px;white-space:nowrap}
+.b-now{color:#7fd6a8;background:rgba(47,163,107,.12);border:1px solid rgba(47,163,107,.32)}
+.b-next{color:var(--gold-soft);background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.3)}
+.b-dem{color:#8fb4f5;background:rgba(47,111,237,.12);border:1px solid rgba(47,111,237,.3)}
+
+/* ---------- figures ---------- */
+.fig{font-family:var(--font-display);font-weight:600;color:var(--ink);letter-spacing:-.02em;
+  font-size:clamp(24px,3vw,42px);line-height:1}
+.fig small{font-size:.45em;color:var(--mute);font-weight:400;letter-spacing:.06em;margin-left:5px}
+.stat{background:linear-gradient(160deg,var(--panel),var(--panel-2));border:1px solid var(--line);
+  border-radius:12px;padding:clamp(13px,1.4vw,19px)}
+.stat .lbl{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mute);margin-bottom:8px}
+
+/* ---------- roadmap ---------- */
+.road{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;position:relative;margin-top:8px}
+.road::before{content:"";position:absolute;left:3%;right:3%;top:26px;height:1px;
+  background:linear-gradient(90deg,var(--gold),rgba(212,160,23,.5) 22%,rgba(255,255,255,.12) 45%,rgba(255,255,255,.08));}
+.ph{position:relative;padding-top:0}
+.ph .node{width:13px;height:13px;border-radius:50%;background:var(--ground);
+  border:2px solid rgba(255,255,255,.22);margin:20px auto 16px;position:relative;z-index:2}
+.ph.now .node{border-color:var(--gold);background:var(--gold);box-shadow:0 0 0 5px rgba(212,160,23,.15)}
+.ph-body{background:linear-gradient(160deg,var(--panel),var(--panel-2));border:1px solid var(--line);
+  border-radius:12px;padding:14px;height:100%;transition:border-color .3s,transform .3s}
+.ph.now .ph-body{border-color:rgba(212,160,23,.34);background:linear-gradient(160deg,rgba(212,160,23,.06),var(--panel-2))}
+.ph-body:hover{transform:translateY(-3px);border-color:var(--line-2)}
+.ph-n{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--mute)}
+.ph-t{font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--ink);margin:5px 0 9px;line-height:1.25}
+.ph-p{font-family:var(--font-mono);font-size:12px;color:var(--gold-soft);margin-top:10px;
+  padding-top:9px;border-top:1px solid var(--line)}
+.ph-p.dem{color:#8fb4f5;font-size:11px}
+.ph-w{font-family:var(--font-mono);font-size:9.5px;color:var(--mute);margin-top:4px}
+
+/* ---------- flow ---------- */
+.flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+.fstep{flex:1;min-width:104px;background:linear-gradient(160deg,var(--panel),var(--panel-2));
+  border:1px solid var(--line);border-radius:10px;padding:11px 10px;text-align:center;position:relative;
+  transition:border-color .3s,transform .3s}
+.fstep:hover{border-color:rgba(212,160,23,.4);transform:translateY(-2px)}
+.fstep + .fstep{margin-left:22px}
+.fstep + .fstep::before{content:"";position:absolute;left:-19px;top:50%;width:16px;height:1px;
+  background:rgba(212,160,23,.45)}
+.fstep + .fstep::after{content:"";position:absolute;left:-7px;top:50%;transform:translateY(-50%);
+  border-left:5px solid rgba(212,160,23,.65);border-top:3.5px solid transparent;border-bottom:3.5px solid transparent}
+.fstep b{display:block;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink)}
+.fstep span{display:block;font-size:10.5px;color:var(--mute);margin-top:4px;line-height:1.35}
+.fstep.alt{border-style:dashed;border-color:rgba(201,118,47,.4)}
+.fstep.alt b{color:#e0a56d}
+
+/* ---------- table ---------- */
+table.q{width:100%;border-collapse:collapse;font-size:13px}
+table.q th{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mute);text-align:left;padding:9px 12px;border-bottom:1px solid var(--line-2);font-weight:400}
+table.q td{padding:11px 12px;border-bottom:1px solid var(--line);color:var(--body);vertical-align:middle}
+table.q tr:last-child td{border-bottom:0}
+table.q tr.hl td{background:rgba(212,160,23,.05)}
+table.q tr.hl td:first-child{box-shadow:inset 2px 0 0 var(--gold)}
+table.q .pr{font-family:var(--font-mono);color:var(--gold-soft);white-space:nowrap}
+table.q .pr.dem{color:#8fb4f5;font-size:11.5px}
+table.q td b{color:var(--ink);font-weight:600}
+
+/* ---------- note ---------- */
+.note{border-left:2px solid rgba(212,160,23,.5);background:rgba(212,160,23,.045);
+  padding:12px 15px;border-radius:0 8px 8px 0;font-size:12.6px;color:var(--body);line-height:1.55}
+.note b{color:var(--gold-soft);font-weight:600}
+.note.plain{border-left-color:rgba(255,255,255,.18);background:rgba(255,255,255,.025)}
+.note.plain b{color:var(--ink)}
+
+/* ---------- mockups ---------- */
+.mock{background:var(--panel);border:1px solid var(--line-2);border-radius:12px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(0,0,0,.55)}
+.mock-bar{height:26px;background:var(--raised);border-bottom:1px solid var(--line);display:flex;
+  align-items:center;padding:0 10px;gap:5px}
+.mock-bar i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.16)}
+.mock-bar span{font-family:var(--font-mono);font-size:9px;color:var(--mute);margin-left:8px;letter-spacing:.08em}
+.mock svg{display:block;width:100%;height:auto}
+.cap{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--mute);margin-top:9px;text-align:center}
+
+/* ---------- price block ---------- */
+.price{background:linear-gradient(150deg,rgba(212,160,23,.11),var(--panel-2) 60%);
+  border:1px solid rgba(212,160,23,.34);border-radius:14px;padding:clamp(18px,2.2vw,28px)}
+.price .amt{font-family:var(--font-display);font-weight:600;color:var(--gold-soft);
+  font-size:clamp(34px,5vw,64px);line-height:1;letter-spacing:-.025em}
+.price .cur{font-size:.42em;color:var(--gold);letter-spacing:.06em;margin-right:6px;vertical-align:.28em}
+
+/* ---------- arch diagram ---------- */
+.arch{width:100%;height:auto}
+.arch .nd{transition:opacity .3s}
+.arch text{font-family:var(--font-mono);fill:#cfcfc8}
+
+/* ---------- misc ---------- */
+.hr{height:1px;background:var(--line);margin:clamp(12px,1.8vh,22px) 0}
+.two-col{column-count:2;column-gap:26px}
+.foot{display:flex;flex-wrap:wrap;gap:22px;font-family:var(--font-mono);font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.foot b{color:var(--ink);font-weight:500}
+
+/* ---------- responsive ---------- */
+@media (max-width:1080px){
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(2,1fr)}
+  .road{grid-template-columns:repeat(2,1fr)}
+  .road::before{display:none}
+  .split,.split-r{grid-template-columns:1fr}
+  .two-col{column-count:1}
+}
+@media (max-width:680px){
+  :root{--rail:38px}
+  .g4,.g3,.g2,.road{grid-template-columns:1fr}
+  .deck{scroll-snap-type:none}
+  .rail{display:none}
+  .fstep + .fstep{margin-left:0;margin-top:16px}
+  .fstep + .fstep::before,.fstep + .fstep::after{display:none}
+  .flow{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .rv{opacity:1;transform:none}
+  .grid > *{opacity:1;transform:none}
+}
+/* ---------- overflow guards ---------- */
+.slide{overflow-x:hidden}
+.mock,.card,.stat,.price,.note{min-width:0}
+.grid{min-width:0}
+.grid > *{min-width:0}
+table.q{table-layout:fixed}
+table.q td,table.q th{word-break:break-word}
+
+/* ---------- tablet ---------- */
+@media (max-width:1100px){
+  .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .fstep{min-width:0}
+  .fstep + .fstep{margin-left:0}
+  .fstep + .fstep::before,.fstep + .fstep::after{display:none}
+  .road{grid-template-columns:repeat(3,1fr)}
+  .ph .node{margin:8px auto 12px}
+}
+@media (max-width:860px){
+  .slide{padding-left:calc(var(--rail) + clamp(18px,4vw,30px));padding-right:clamp(18px,4vw,30px);
+         justify-content:flex-start}
+  .flow{grid-template-columns:repeat(2,1fr)}
+  .road{grid-template-columns:repeat(2,1fr)}
+  h1{font-size:clamp(28px,7vw,42px)}
+  h2{font-size:clamp(21px,4.6vw,30px)}
+  .card .grid.g2{grid-template-columns:1fr;gap:0}
+  .foot{gap:14px}
+}
+
+/* ---------- mobile ---------- */
+@media (max-width:680px){
+  :root{--rail:0px}
+  body{font-size:15px}
+  .chrome-top{padding-left:14px;height:40px}
+  .lockup span{display:none}
+  .status span:first-child{display:none}
+  .slide{padding:56px 16px 34px;min-height:auto;justify-content:flex-start}
+  .pdf-btn{top:auto;bottom:12px;right:12px;font-size:10px;padding:8px 12px}
+  .flow,.road,.grid.g2,.grid.g3,.grid.g4{grid-template-columns:1fr}
+  .split,.split-r{gap:20px}
+  .lede{font-size:14px}
+  .fig{font-size:26px}
+  .price .amt{font-size:38px}
+  .chips{gap:5px}
+  .chip{font-size:9.5px;padding:4px 9px}
+  .cap{font-size:9px}
+  /* table -> stacked cards */
+  table.q,table.q tbody,table.q tr,table.q td{display:block;width:100%}
+  table.q thead{display:none}
+  table.q tr{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:9px;
+    background:linear-gradient(160deg,var(--panel),var(--panel-2))}
+  table.q tr.hl{border-color:rgba(212,160,23,.34)}
+  table.q td{border:0;padding:3px 0;text-align:left!important}
+  table.q td::before{content:attr(data-l);display:block;font-family:var(--font-mono);font-size:9px;
+    letter-spacing:.13em;text-transform:uppercase;color:var(--mute);margin-bottom:2px}
+  table.q tr.hl td:first-child{box-shadow:none}
+}
+@media (max-width:400px){
+  .slide{padding:52px 13px 30px}
+  h1{font-size:26px}
+  .price .amt{font-size:32px}
+}
+
+@page{size:A4 landscape;margin:10mm}
+@media print{
+  .chrome,.pdf-btn{display:none}
+  .deck{height:auto;overflow:visible}
+  .slide{page-break-after:always;min-height:auto;padding:20px 24px;border:0}
+  .rv,.grid > *{opacity:1!important;transform:none!important;animation:none!important}
+  .slide::before{display:none}
+}
+</style>
+
+<!-- ============ icon sprite ============ -->
+<svg class="sprite" aria-hidden="true"><defs>
+<g id="i-drop"><path d="M12 3s6 6.4 6 10.4A6 6 0 0 1 6 13.4C6 9.4 12 3 12 3z"/></g>
+<g id="i-bill"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></g>
+<g id="i-msg"><path d="M4 5h16v11H8l-4 4V5z"/><path d="M8 9h8M8 12.5h5"/></g>
+<g id="i-grid"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></g>
+<g id="i-db"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></g>
+<g id="i-map"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><path d="M9 4v13M15 6.5v13"/></g>
+<g id="i-coin"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.6 10h4a1.6 1.6 0 0 1 0 3.2h-3.2a1.6 1.6 0 0 0 0 3.2h4"/></g>
+<g id="i-shield"><path d="M12 3 5 6v6c0 4.4 3 8 7 9 4-1 7-4.6 7-9V6l-7-3z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></g>
+<g id="i-users"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3.2 3.2 0 0 1 0 6M17 19a5.4 5.4 0 0 0-2-4.2"/></g>
+<g id="i-chart"><path d="M4 20V4"/><path d="M4 20h16"/><rect x="7.5" y="12" width="3" height="5" rx="1"/><rect x="12.5" y="8" width="3" height="9" rx="1"/><rect x="17" y="14" width="3" height="3" rx="1"/></g>
+<g id="i-flow"><rect x="3" y="4" width="6" height="5" rx="1.5"/><rect x="15" y="4" width="6" height="5" rx="1.5"/><rect x="9" y="15" width="6" height="5" rx="1.5"/><path d="M6 9v3.5h12V9M12 12.5V15"/></g>
+<g id="i-clock"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5.3l3.4 2"/></g>
+<g id="i-export"><path d="M12 3v11"/><path d="M8.4 10.6 12 14.2l3.6-3.6"/><path d="M4.5 16.5V19a1.5 1.5 0 0 0 1.5 1.5h12A1.5 1.5 0 0 0 19.5 19v-2.5"/></g>
+<g id="i-pipe"><path d="M3 8h6a3 3 0 0 1 3 3v2a3 3 0 0 0 3 3h6"/><rect x="2" y="5.6" width="2.4" height="4.8" rx="1"/><rect x="19.6" y="13.6" width="2.4" height="4.8" rx="1"/></g>
+<g id="i-check"><circle cx="12" cy="12" r="8.5"/><path d="M8.4 12.2l2.6 2.6 4.6-5"/></g>
+<g id="i-layers"><path d="M12 3 3 7.6l9 4.6 9-4.6L12 3z"/><path d="M3 12.4 12 17l9-4.6M3 16.8 12 21.4l9-4.6"/></g>
+</defs></svg>
+
+<button class="pdf-btn" id="pdfBtn" type="button">
+  <svg viewBox="0 0 24 24"><path d="M12 3v11"/><path d="M8.4 10.6 12 14.2l3.6-3.6"/><path d="M4.5 16.5V19a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-2.5"/></svg>
+  Download PDF
+</button>
+
+<div class="chrome" aria-hidden="true">
+  <div class="chrome-top">
+    <div class="lockup">
+      <div class="mark">M</div>
+      <b>The Mahir Tech</b>
+      <span>Proposal &amp; Quotation</span>
+    </div>
+    <div class="status">
+      <span><i class="dot"></i>WASA Toba Tek Singh</span>
+      <span class="frame">FRAME <b id="frameNo">01</b> / 12</span>
+    </div>
+  </div>
+  <nav class="rail" id="rail" aria-label="Slide navigation"></nav>
+</div>
+
+<main class="deck" id="deck" tabindex="-1">
+
+<!-- ==================== 01 · COVER ==================== -->
+<section class="slide cover" data-t="Cover">
+  <div class="split">
+    <div>
+      <p class="eyebrow rv">Digital Systems Development &amp; Transformation Roadmap</p>
+      <h1 class="rv">WASA<br>Toba Tek Singh</h1>
+      <p class="lede rv" style="margin-top:18px;max-width:56ch">
+        Initial billing and complaint management foundation, with a scalable roadmap for
+        revenue, financial, GIS and asset management.
+      </p>
+      <div class="rv" style="margin-top:26px;display:flex;gap:10px;flex-wrap:wrap">
+        <span class="badge b-now">Phase 1 · Fixed Quotation</span>
+        <span class="badge b-dem">Phases 2–5 · On Demand</span>
+      </div>
+      <div class="hr rv"></div>
+      <div class="foot rv">
+        <span>Prepared for<br><b>Water &amp; Sanitation Agency, Toba Tek Singh</b></span>
+        <span>Prepared by<br><b>The Mahir Tech</b></span>
+        <span>Date<br><b>29 August 2026</b></span>
+      </div>
+    </div>
+    <div class="rv">
+      <div class="mock">
+        <div class="mock-bar"><i></i><i></i><i></i><span>wasa-tts · operations overview</span></div>
+        <svg viewBox="0 0 480 300" role="img" aria-label="Illustrative operations overview showing a service-area map, complaint pins and billing tiles">
+          <defs>
+            <linearGradient id="cvg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0e1420"/><stop offset="1" stop-color="#0a0a0b"/>
+            </linearGradient>
+            <radialGradient id="glow" cx=".5" cy=".5" r=".5">
+              <stop offset="0" stop-color="#2fa8c9" stop-opacity=".28"/>
+              <stop offset="1" stop-color="#2fa8c9" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="480" height="300" fill="url(#cvg)"/>
+          <ellipse cx="250" cy="150" rx="180" ry="130" fill="url(#glow)"/>
+          <!-- ward boundaries -->
+          <g stroke="rgba(255,255,255,.13)" fill="rgba(47,168,201,.045)" stroke-width="1">
+            <path d="M60 60 L200 46 L232 128 L120 156 Z"/>
+            <path d="M200 46 L360 62 L372 140 L232 128 Z"/>
+            <path d="M120 156 L232 128 L246 232 L118 244 Z"/>
+            <path d="M232 128 L372 140 L386 236 L246 232 Z"/>
+          </g>
+          <!-- trunk mains -->
+          <g stroke="#2fa8c9" stroke-width="1.7" fill="none" opacity=".72" stroke-linecap="round">
+            <path d="M74 104 C150 96 190 150 250 148 S356 176 400 168"/>
+            <path d="M148 58 C160 120 152 190 168 240"/>
+            <path d="M312 56 C300 122 322 186 306 238"/>
+          </g>
+          <!-- flow pulses -->
+          <circle r="3" fill="#7fdcf0">
+            <animateMotion dur="7s" repeatCount="indefinite"
+              path="M74 104 C150 96 190 150 250 148 S356 176 400 168"/>
+          </circle>
+          <circle r="2.6" fill="#7fdcf0" opacity=".8">
+            <animateMotion dur="9s" begin="1.6s" repeatCount="indefinite"
+              path="M148 58 C160 120 152 190 168 240"/>
+          </circle>
+          <!-- complaint pins -->
+          <g>
+            <circle cx="196" cy="118" r="4.5" fill="#d4a017"/>
+            <circle cx="196" cy="118" r="4.5" fill="none" stroke="#d4a017" stroke-width="1.2" opacity=".7">
+              <animate attributeName="r" values="4.5;15" dur="2.8s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values=".7;0" dur="2.8s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="306" cy="196" r="4" fill="#c9762f"/>
+            <circle cx="306" cy="196" r="4" fill="none" stroke="#c9762f" stroke-width="1.2" opacity=".65">
+              <animate attributeName="r" values="4;13" dur="3.4s" begin="1s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values=".65;0" dur="3.4s" begin="1s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="140" cy="200" r="3.6" fill="#2fa36b"/>
+          </g>
+          <!-- floating tiles -->
+          <g transform="translate(292,34)">
+            <rect width="152" height="52" rx="8" fill="rgba(10,10,11,.9)" stroke="rgba(255,255,255,.14)"/>
+            <text x="13" y="20" font-size="8" letter-spacing="1.4" fill="#8a8a82">DUPLICATE BILL</text>
+            <text x="13" y="40" font-size="17" font-weight="600" fill="#edc14f" font-family="ui-monospace,Consolas,monospace">READY</text>
+          </g>
+          <g transform="translate(28,214)">
+            <rect width="152" height="52" rx="8" fill="rgba(10,10,11,.9)" stroke="rgba(255,255,255,.14)"/>
+            <text x="13" y="20" font-size="8" letter-spacing="1.4" fill="#8a8a82">COMPLAINTS TRACKED</text>
+            <text x="13" y="40" font-size="17" font-weight="600" fill="#fafaf8" font-family="ui-monospace,Consolas,monospace">END TO END</text>
+          </g>
+        </svg>
+      </div>
+      <p class="cap">Illustrative interface concept · placeholder data</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 02 · EXECUTIVE SUMMARY ==================== -->
+<section class="slide" data-t="Executive summary">
+  <div class="slide-head">
+    <p class="eyebrow rv">Executive summary</p>
+    <h2 class="rv">Begin with the two capabilities WASA needs <em>in operation now</em>.</h2>
+    <p class="lede rv">
+      Phase 1 brings existing billing data and public complaints into a structured digital workflow
+      quickly and at a fixed cost. It is deliberately scoped as an operational starting point — and
+      it is built on an architecture that later phases extend rather than replace.
+    </p>
+  </div>
+
+  <div class="grid g3 rv" style="margin-bottom:clamp(14px,2vh,24px)">
+    <div class="card">
+      <svg class="ico"><use href="#i-bill"/></svg>
+      <h4>Initial Billing Management</h4>
+      <p>Billing data imported and structured. Consumers retrieve and print a duplicate bill from the WASA website.</p>
+    </div>
+    <div class="card">
+      <svg class="ico"><use href="#i-msg"/></svg>
+      <h4>Complaint Management Foundation</h4>
+      <p>Complaints stored permanently, tracked through a defined status workflow, with a full history against every case.</p>
+    </div>
+    <div class="card">
+      <svg class="ico"><use href="#i-grid"/></svg>
+      <h4>Operational Dashboard</h4>
+      <p>A single view of complaint volume, status and category, with filtering and CSV export for the Complaint Cell.</p>
+    </div>
+  </div>
+
+  <div class="flow rv">
+    <div class="fstep"><b>Current need</b><span>Manual billing records and complaints with no persistent trail</span></div>
+    <div class="fstep"><b>Phase 1</b><span>Structured billing data, duplicate bills, tracked complaints, dashboard</span></div>
+    <div class="fstep"><b>Phases 2–5</b><span>Revenue, complaints, financial, GIS and asset systems</span></div>
+    <div class="fstep"><b>Integrated platform</b><span>One database, one management view, shared across departments</span></div>
+  </div>
+
+  <div class="note rv" style="margin-top:clamp(14px,2vh,22px)">
+    <b>Scope discipline.</b> Phase 1 is a foundation, not a complete Revenue Management System and not a
+    complete Complaint Management System. What each later phase adds is set out explicitly in this document.
+  </div>
+</section>
+
+<!-- ==================== 03 · ROADMAP ==================== -->
+<section class="slide" data-t="Transformation roadmap">
+  <div class="slide-head">
+    <p class="eyebrow rv">Digital transformation roadmap</p>
+    <h2 class="rv">Five phases. <em>One fixed quotation.</em></h2>
+    <p class="lede rv">
+      Only Phase 1 carries a committed price and timeline. Every later phase is quoted separately when
+      WASA decides to proceed, once its scope has been confirmed.
+    </p>
+  </div>
+
+  <div class="road grid rv">
+    <div class="ph now">
+      <div class="node"></div>
+      <div class="ph-body">
+        <div class="ph-n">Phase 1</div>
+        <div class="ph-t">Initial Operational Foundation</div>
+        <ul class="ul tight">
+          <li>Initial billing management</li>
+          <li>Complaint management foundation</li>
+          <li>Operational dashboard</li>
+          <li>CSV data management</li>
+        </ul>
+        <div class="ph-p">PKR 400,000</div>
+        <div class="ph-w">2–3 weeks · up to 1 month</div>
+      </div>
+    </div>
+    <div class="ph">
+      <div class="node"></div>
+      <div class="ph-body">
+        <div class="ph-n">Phase 2</div>
+        <div class="ph-t">Revenue Management System</div>
+        <ul class="ul tight">
+          <li>Consumer &amp; connection database</li>
+          <li>Tariffs, arrears, adjustments</li>
+          <li>Collection &amp; defaulter tracking</li>
+          <li>Revenue analytics</li>
+        </ul>
+        <div class="ph-p dem">On Demand · separate quotation</div>
+        <div class="ph-w">Indicative 6–10 weeks</div>
+      </div>
+    </div>
+    <div class="ph">
+      <div class="node"></div>
+      <div class="ph-body">
+        <div class="ph-n">Phase 3</div>
+        <div class="ph-t">Complete Complaint Management</div>
+        <ul class="ul tight">
+          <li>Departments, teams, assignment</li>
+          <li>Escalation &amp; SLA tracking</li>
+          <li>Field workflow &amp; verification</li>
+          <li>Performance analytics</li>
+        </ul>
+        <div class="ph-p dem">On Demand · separate quotation</div>
+        <div class="ph-w">Indicative 6–10 weeks</div>
+      </div>
+    </div>
+    <div class="ph">
+      <div class="node"></div>
+      <div class="ph-body">
+        <div class="ph-n">Phase 4</div>
+        <div class="ph-t">Financial Management System</div>
+        <ul class="ul tight">
+          <li>Budget &amp; expense management</li>
+          <li>Payables, receivables, ledger</li>
+          <li>Vendors &amp; approvals</li>
+          <li>Budget vs actual reporting</li>
+        </ul>
+        <div class="ph-p dem">On Demand · separate quotation</div>
+        <div class="ph-w">Indicative 8–12 weeks</div>
+      </div>
+    </div>
+    <div class="ph">
+      <div class="node"></div>
+      <div class="ph-body">
+        <div class="ph-n">Phase 5</div>
+        <div class="ph-t">Asset Management &amp; GIS</div>
+        <ul class="ul tight">
+          <li>Asset register &amp; lifecycle</li>
+          <li>Network and ward mapping</li>
+          <li>Complaint hotspot intelligence</li>
+          <li>Maintenance planning</li>
+        </ul>
+        <div class="ph-p dem">On Demand · separate quotation</div>
+        <div class="ph-w">Indicative 8–14 weeks</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note plain rv" style="margin-top:clamp(14px,2.2vh,24px)">
+    <b>Indicative timelines.</b> Durations shown for Phases 2–5 are planning estimates only and are
+    subject to detailed requirements, data availability, integrations, approvals and final scope.
+    They are not contractual commitments.
+  </div>
+</section>
+
+<!-- ==================== 04 · PHASE 1 BILLING ==================== -->
+<section class="slide" data-t="Phase 1 — Billing">
+  <div class="slide-head">
+    <p class="eyebrow rv">Phase 1 · Included <span class="badge b-now" style="margin-left:4px">In scope now</span></p>
+    <h2 class="rv">Initial Billing Management</h2>
+    <p class="lede rv">
+      Existing billing data is brought into a structured digital workflow, and consumers can retrieve
+      and print their bill from the WASA website without visiting an office.
+    </p>
+  </div>
+
+  <div class="split">
+    <div>
+      <div class="grid g2 rv" style="margin-bottom:14px">
+        <div class="card">
+          <svg class="ico"><use href="#i-db"/></svg>
+          <h4>CSV billing data import</h4>
+          <ul class="ul tight" style="margin-top:8px">
+            <li>Upload billing data through CSV</li>
+            <li>Structured field validation</li>
+            <li>Consumer record mapping</li>
+            <li>Update and synchronisation workflow</li>
+            <li>Duplicate and invalid record detection</li>
+            <li>Administrator-controlled data management</li>
+          </ul>
+        </div>
+        <div class="card">
+          <svg class="ico"><use href="#i-bill"/></svg>
+          <h4>Consumer bill retrieval</h4>
+          <ul class="ul tight" style="margin-top:8px">
+            <li>Search by consumer ID or connection number</li>
+            <li>Search by account number or other agreed identifier</li>
+            <li>System retrieves the matching billing record</li>
+            <li>Bill displayed in a structured digital format</li>
+            <li>Duplicate bill generation</li>
+            <li>View, print and download</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note rv">
+        <b>Not included in Phase 1.</b> Online payment, payment gateway integration, banking channels,
+        SMS and WhatsApp notification are outside this phase. They may be evaluated separately during
+        later phases.
+      </div>
+    </div>
+
+    <div class="rv">
+      <div class="mock">
+        <div class="mock-bar"><i></i><i></i><i></i><span>duplicate bill · conceptual layout</span></div>
+        <svg viewBox="0 0 420 300" role="img" aria-label="Conceptual digital bill layout with consumer details, readings, charges and total payable">
+          <rect width="420" height="300" fill="#f7f7f4"/>
+          <!-- header -->
+          <rect x="0" y="0" width="420" height="46" fill="#0f3350"/>
+          <circle cx="26" cy="23" r="12" fill="none" stroke="#7fdcf0" stroke-width="1.6"/>
+          <path d="M26 15s6 6.2 6 9.4a6 6 0 0 1-12 0c0-3.2 6-9.4 6-9.4z" fill="#7fdcf0" opacity=".85"/>
+          <text x="46" y="20" font-size="10.5" font-weight="700" fill="#ffffff" font-family="Segoe UI,system-ui">WATER &amp; SANITATION AGENCY</text>
+          <text x="46" y="33" font-size="8" fill="#a9c9dd" font-family="Segoe UI,system-ui" letter-spacing=".6">TOBA TEK SINGH</text>
+          <rect x="316" y="12" width="92" height="22" rx="3" fill="rgba(255,255,255,.12)"/>
+          <text x="362" y="26" font-size="8" fill="#ffffff" text-anchor="middle" font-family="ui-monospace,Consolas,monospace" letter-spacing="1">DUPLICATE BILL</text>
+
+          <!-- consumer block -->
+          <g font-family="Segoe UI,system-ui">
+            <rect x="14" y="58" width="196" height="74" rx="3" fill="#ffffff" stroke="#d8d8d2"/>
+            <text x="24" y="73" font-size="7" fill="#8a8a82" letter-spacing=".7">CONSUMER</text>
+            <text x="24" y="88" font-size="9.5" font-weight="600" fill="#111">[ Consumer Name ]</text>
+            <text x="24" y="103" font-size="8" fill="#555">[ Address / Locality ]</text>
+            <text x="24" y="118" font-size="8" fill="#555">Ward: [ __ ]   Book: [ __ ]</text>
+
+            <rect x="218" y="58" width="188" height="74" rx="3" fill="#ffffff" stroke="#d8d8d2"/>
+            <text x="228" y="73" font-size="7" fill="#8a8a82" letter-spacing=".7">ACCOUNT</text>
+            <text x="228" y="88" font-size="9.5" font-weight="600" fill="#111" font-family="ui-monospace,Consolas,monospace">[ CONSUMER NO. ]</text>
+            <text x="228" y="103" font-size="8" fill="#555">Connection: [ ______ ]</text>
+            <text x="228" y="118" font-size="8" fill="#555">Billing Month: [ MM / YYYY ]</text>
+          </g>
+
+          <!-- readings -->
+          <g font-family="Segoe UI,system-ui">
+            <rect x="14" y="140" width="392" height="40" rx="3" fill="#ffffff" stroke="#d8d8d2"/>
+            <line x1="112" y1="140" x2="112" y2="180" stroke="#e6e6e0"/>
+            <line x1="210" y1="140" x2="210" y2="180" stroke="#e6e6e0"/>
+            <line x1="308" y1="140" x2="308" y2="180" stroke="#e6e6e0"/>
+            <text x="24" y="155" font-size="7" fill="#8a8a82" letter-spacing=".6">METER NO.</text>
+            <text x="122" y="155" font-size="7" fill="#8a8a82" letter-spacing=".6">PREVIOUS</text>
+            <text x="220" y="155" font-size="7" fill="#8a8a82" letter-spacing=".6">CURRENT</text>
+            <text x="318" y="155" font-size="7" fill="#8a8a82" letter-spacing=".6">UNITS</text>
+            <g font-size="9.5" fill="#111" font-family="ui-monospace,Consolas,monospace">
+              <text x="24" y="171">[ ______ ]</text><text x="122" y="171">[ ____ ]</text>
+              <text x="220" y="171">[ ____ ]</text><text x="318" y="171">[ ___ ]</text>
+            </g>
+          </g>
+
+          <!-- charges -->
+          <g font-family="Segoe UI,system-ui" font-size="8.5" fill="#333">
+            <rect x="14" y="188" width="238" height="82" rx="3" fill="#ffffff" stroke="#d8d8d2"/>
+            <text x="24" y="203" font-size="7" fill="#8a8a82" letter-spacing=".7">CHARGES</text>
+            <text x="24" y="219">Water Charges</text><text x="240" y="219" text-anchor="end" font-family="ui-monospace,Consolas,monospace">[ ____ ]</text>
+            <text x="24" y="234">Sewerage Charges</text><text x="240" y="234" text-anchor="end" font-family="ui-monospace,Consolas,monospace">[ ____ ]</text>
+            <text x="24" y="249">Arrears</text><text x="240" y="249" text-anchor="end" font-family="ui-monospace,Consolas,monospace">[ ____ ]</text>
+            <text x="24" y="264">Surcharge / Adjustment</text><text x="240" y="264" text-anchor="end" font-family="ui-monospace,Consolas,monospace">[ ____ ]</text>
+          </g>
+
+          <!-- total -->
+          <g font-family="Segoe UI,system-ui">
+            <rect x="260" y="188" width="146" height="50" rx="3" fill="#0f3350"/>
+            <text x="272" y="205" font-size="7" fill="#a9c9dd" letter-spacing=".7">TOTAL PAYABLE</text>
+            <text x="272" y="228" font-size="16" font-weight="700" fill="#ffffff" font-family="ui-monospace,Consolas,monospace">[ _____ ]</text>
+            <rect x="260" y="244" width="146" height="26" rx="3" fill="#ffffff" stroke="#d8d8d2"/>
+            <text x="272" y="255" font-size="7" fill="#8a8a82" letter-spacing=".7">DUE DATE</text>
+            <text x="272" y="266" font-size="8.5" fill="#111" font-family="ui-monospace,Consolas,monospace">[ DD / MM / YYYY ]</text>
+          </g>
+          <text x="14" y="285" font-size="7" fill="#8a8a82" font-family="Segoe UI,system-ui">[ Payment instructions and office details as per the official WASA bill format ]</text>
+          <line x1="14" y1="290" x2="406" y2="290" stroke="#e0e0da"/>
+        </svg>
+      </div>
+      <p class="cap">Conceptual Digital Bill Interface · placeholder data</p>
+      <div class="note plain rv" style="margin-top:11px;font-size:12px">
+        <b>Bill design.</b> The digital bill will reproduce WASA's existing bill structure as closely as
+        practically possible, based on the official bill sample and data format provided by WASA, and
+        subject to validation and approval.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 05 · PHASE 1 COMPLAINTS ==================== -->
+<section class="slide" data-t="Phase 1 — Complaints">
+  <div class="slide-head">
+    <p class="eyebrow rv">Phase 1 · Included <span class="badge b-now" style="margin-left:4px">In scope now</span></p>
+    <h2 class="rv">Complaint Management Foundation</h2>
+    <p class="lede rv">
+      The website complaint form is connected to a persistent backend workflow. A complaint becomes a
+      tracked record with an owner, a status and a history — not a temporary notification.
+    </p>
+  </div>
+
+  <div class="grid g2 rv" style="margin-bottom:clamp(13px,1.8vh,20px)">
+    <div class="card">
+      <svg class="ico"><use href="#i-users"/></svg>
+      <h4>Public side</h4>
+      <div class="grid g2" style="gap:0 18px;margin-top:8px">
+        <ul class="ul tight">
+          <li>Complaint submission form</li>
+          <li>Contact information</li>
+          <li>Complaint category</li>
+        </ul>
+        <ul class="ul tight">
+          <li>Description and location details</li>
+          <li>Complaint reference number</li>
+          <li>Submission confirmation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <svg class="ico"><use href="#i-grid"/></svg>
+      <h4>Administrative side</h4>
+      <div class="grid g2" style="gap:0 18px;margin-top:8px">
+        <ul class="ul tight">
+          <li>View, search and filter complaints</li>
+          <li>Update complaint status</li>
+          <li>Assign and track responsible person</li>
+          <li>Add internal notes</li>
+        </ul>
+        <ul class="ul tight">
+          <li>Record resolution information</li>
+          <li>Full complaint history</li>
+          <li>Monitor pending and resolved cases</li>
+          <li>Flag cases needing follow-up</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="kicker rv" style="margin-bottom:9px">Case status workflow</p>
+  <div class="flow rv">
+    <div class="fstep"><b>New</b><span>Logged with reference number</span></div>
+    <div class="fstep"><b>Under review</b><span>Validated and categorised</span></div>
+    <div class="fstep"><b>Assigned</b><span>Responsible person recorded</span></div>
+    <div class="fstep"><b>Field action</b><span>Site visit or intervention</span></div>
+    <div class="fstep"><b>Resolved</b><span>Resolution recorded</span></div>
+    <div class="fstep"><b>Closed</b><span>Case completed</span></div>
+  </div>
+
+  <div class="grid g2 rv" style="margin-top:clamp(12px,1.8vh,20px)">
+    <div class="card" style="border-color:rgba(201,118,47,.28)">
+      <h4 style="color:#e0a56d">Referred or not resolved</h4>
+      <p style="margin-bottom:8px">Where a case cannot be closed, staff record the reason so nothing disappears silently:</p>
+      <div class="chips">
+        <span class="chip">Location not accessible</span>
+        <span class="chip">Consumer unavailable</span>
+        <span class="chip">Issue could not be verified</span>
+        <span class="chip">Field action pending</span>
+        <span class="chip">Belongs to another department</span>
+        <span class="chip">Requires further investigation</span>
+        <span class="chip">Other — recorded reason</span>
+      </div>
+    </div>
+    <div class="card">
+      <h4>Traceable history</h4>
+      <p style="margin-bottom:8px">Every case retains its full trail, giving management accountability and traceability:</p>
+      <p style="font-family:var(--font-mono);font-size:11px;color:var(--body);line-height:1.85">
+        Submitted → Assigned → Status changed → Field action →<br>
+        Resolution attempt → Reason recorded if unresolved →<br>
+        Referred or reopened → Final resolution → Closure
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 06 · DASHBOARD ==================== -->
+<section class="slide" data-t="Phase 1 — Dashboard">
+  <div class="slide-head">
+    <p class="eyebrow rv">Phase 1 · Included <span class="badge b-now" style="margin-left:4px">In scope now</span></p>
+    <h2 class="rv">Centralised Operational Dashboard</h2>
+    <p class="lede rv">
+      A single view of complaint volume, status and category, with the filtering and export the
+      Complaint Management Cell needs to decide what requires action.
+    </p>
+  </div>
+
+  <div class="split-r">
+    <div>
+      <div class="grid g2 rv" style="margin-bottom:13px">
+        <div class="stat"><div class="lbl">Total complaints</div><div class="fig"><span data-count="1284">0</span></div></div>
+        <div class="stat"><div class="lbl">Resolved</div><div class="fig" style="color:#7fd6a8"><span data-count="946">0</span></div></div>
+        <div class="stat"><div class="lbl">In progress</div><div class="fig" style="color:var(--gold-soft)"><span data-count="212">0</span></div></div>
+        <div class="stat"><div class="lbl">Referred / reopened</div><div class="fig" style="color:#e0a56d"><span data-count="126">0</span></div></div>
+      </div>
+      <p class="cap" style="text-align:left;margin:0 0 13px">Illustrative figures · placeholder data</p>
+
+      <div class="card rv">
+        <svg class="ico"><use href="#i-export"/></svg>
+        <h4>CSV export for the Complaint Cell</h4>
+        <p style="margin-bottom:8px">Authorised staff export complaint records for offline analysis and reporting:</p>
+        <div class="chips">
+          <span class="chip">Complaint ID</span><span class="chip">Date</span>
+          <span class="chip">Consumer information</span><span class="chip">Category</span>
+          <span class="chip">Description</span><span class="chip">Location</span>
+          <span class="chip">Status</span><span class="chip">Assigned to</span>
+          <span class="chip">Resolution</span><span class="chip">Unresolved reason</span>
+          <span class="chip">Remarks</span><span class="chip">Last updated</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rv">
+      <div class="mock">
+        <div class="mock-bar"><i></i><i></i><i></i><span>complaint operations · dashboard</span></div>
+        <svg viewBox="0 0 460 268" role="img" aria-label="Dashboard mockup showing status distribution, category breakdown and a recent complaints table">
+          <rect width="460" height="268" fill="#0a0a0b"/>
+          <!-- sidebar -->
+          <rect x="0" y="0" width="52" height="268" fill="#101012"/>
+          <g fill="rgba(255,255,255,.18)">
+            <rect x="14" y="18" width="24" height="3" rx="1.5"/>
+            <rect x="14" y="42" width="24" height="3" rx="1.5" fill="#d4a017"/>
+            <rect x="14" y="60" width="24" height="3" rx="1.5"/>
+            <rect x="14" y="78" width="24" height="3" rx="1.5"/>
+            <rect x="14" y="96" width="24" height="3" rx="1.5"/>
+          </g>
+          <!-- status donut -->
+          <g transform="translate(120,86)">
+            <circle r="42" fill="none" stroke="#16161a" stroke-width="15"/>
+            <circle r="42" fill="none" stroke="#2fa36b" stroke-width="15"
+              stroke-dasharray="0 264" stroke-linecap="butt" transform="rotate(-90)">
+              <animate attributeName="stroke-dasharray" values="0 264;194 264" dur="1.3s" fill="freeze"/>
+            </circle>
+            <circle r="42" fill="none" stroke="#d4a017" stroke-width="15"
+              stroke-dasharray="0 264" transform="rotate(174)">
+              <animate attributeName="stroke-dasharray" values="0 264;44 264" dur="1.3s" begin=".25s" fill="freeze"/>
+            </circle>
+            <circle r="42" fill="none" stroke="#c9762f" stroke-width="15"
+              stroke-dasharray="0 264" transform="rotate(234)">
+              <animate attributeName="stroke-dasharray" values="0 264;26 264" dur="1.3s" begin=".45s" fill="freeze"/>
+            </circle>
+            <text y="-3" font-size="17" font-weight="600" fill="#fafaf8" text-anchor="middle" font-family="ui-monospace,Consolas,monospace">74%</text>
+            <text y="11" font-size="7" fill="#8a8a82" text-anchor="middle" letter-spacing="1.1">RESOLVED</text>
+          </g>
+          <text x="76" y="26" font-size="8" fill="#8a8a82" letter-spacing="1.3" font-family="ui-monospace,Consolas,monospace">STATUS DISTRIBUTION</text>
+          <g font-size="7.5" fill="#b4b4ad" font-family="ui-monospace,Consolas,monospace">
+            <circle cx="80" cy="146" r="3.2" fill="#2fa36b"/><text x="89" y="149">Resolved / closed</text>
+            <circle cx="80" cy="160" r="3.2" fill="#d4a017"/><text x="89" y="163">In progress</text>
+            <circle cx="80" cy="174" r="3.2" fill="#c9762f"/><text x="89" y="177">Referred / reopened</text>
+          </g>
+
+          <!-- category bars -->
+          <text x="212" y="26" font-size="8" fill="#8a8a82" letter-spacing="1.3" font-family="ui-monospace,Consolas,monospace">BY CATEGORY</text>
+          <g font-size="7.5" fill="#8a8a82" font-family="ui-monospace,Consolas,monospace">
+            <text x="212" y="48">Water supply</text>
+            <rect x="300" y="41" width="0" height="8" rx="2" fill="#2fa8c9"><animate attributeName="width" values="0;134" dur="1s" begin=".3s" fill="freeze"/></rect>
+            <text x="212" y="70">Sewerage</text>
+            <rect x="300" y="63" width="0" height="8" rx="2" fill="#2f6fed"><animate attributeName="width" values="0;104" dur="1s" begin=".42s" fill="freeze"/></rect>
+            <text x="212" y="92">Billing query</text>
+            <rect x="300" y="85" width="0" height="8" rx="2" fill="#d4a017"><animate attributeName="width" values="0;76" dur="1s" begin=".54s" fill="freeze"/></rect>
+            <text x="212" y="114">Leakage</text>
+            <rect x="300" y="107" width="0" height="8" rx="2" fill="#c9762f"><animate attributeName="width" values="0;58" dur="1s" begin=".66s" fill="freeze"/></rect>
+            <text x="212" y="136">Other</text>
+            <rect x="300" y="129" width="0" height="8" rx="2" fill="#5a5a55"><animate attributeName="width" values="0;34" dur="1s" begin=".78s" fill="freeze"/></rect>
+          </g>
+
+          <!-- recent table -->
+          <line x1="66" y1="194" x2="446" y2="194" stroke="rgba(255,255,255,.1)"/>
+          <text x="66" y="188" font-size="8" fill="#8a8a82" letter-spacing="1.3" font-family="ui-monospace,Consolas,monospace">RECENT COMPLAINTS</text>
+          <g font-size="7.5" font-family="ui-monospace,Consolas,monospace">
+            <text x="66" y="210" fill="#8a8a82">CMP-0000</text><text x="132" y="210" fill="#b4b4ad">Water supply · Ward [ __ ]</text>
+            <rect x="368" y="203" width="60" height="11" rx="5.5" fill="rgba(47,163,107,.16)"/><text x="398" y="211" fill="#7fd6a8" text-anchor="middle" font-size="6.5">RESOLVED</text>
+            <text x="66" y="228" fill="#8a8a82">CMP-0000</text><text x="132" y="228" fill="#b4b4ad">Sewerage · Ward [ __ ]</text>
+            <rect x="368" y="221" width="60" height="11" rx="5.5" fill="rgba(212,160,23,.16)"/><text x="398" y="229" fill="#edc14f" text-anchor="middle" font-size="6.5">ASSIGNED</text>
+            <text x="66" y="246" fill="#8a8a82">CMP-0000</text><text x="132" y="246" fill="#b4b4ad">Billing query · Ward [ __ ]</text>
+            <rect x="368" y="239" width="60" height="11" rx="5.5" fill="rgba(201,118,47,.16)"/><text x="398" y="247" fill="#e0a56d" text-anchor="middle" font-size="6.5">REFERRED</text>
+          </g>
+        </svg>
+      </div>
+      <p class="cap">Illustrative dashboard concept · placeholder data</p>
+    </div>
+  </div>
+
+  <div class="note rv" style="margin-top:clamp(12px,1.8vh,20px)">
+    <b>Foundation, not the full system.</b> Team-level workflow, escalation, SLA monitoring, GIS
+    intelligence and performance analytics belong to the complete Complaint Management System in Phase 3.
+  </div>
+</section>
+
+<!-- ==================== 07 · PHASE 1 QUOTATION ==================== -->
+<section class="slide" data-t="Phase 1 — Quotation">
+  <div class="slide-head">
+    <p class="eyebrow rv">Phase 1 · Commercial quotation</p>
+    <h2 class="rv">Initial Implementation — <em>deliverables, timeline and price</em></h2>
+  </div>
+
+  <div class="split">
+    <div class="rv">
+      <p class="kicker" style="margin-bottom:9px">Included in this quotation — 14 deliverables</p>
+      <div class="grid g2" style="gap:0 26px">
+        <ul class="ul tight">
+          <li>Initial billing management</li>
+          <li>CSV billing data import</li>
+          <li>Consumer bill search and retrieval</li>
+          <li>Duplicate bill generation</li>
+          <li>Digital bill view</li>
+          <li>Print and download capability</li>
+          <li>Complaint submission integration</li>
+        </ul>
+        <ul class="ul tight">
+          <li>Persistent complaint records</li>
+          <li>Complaint dashboard</li>
+          <li>Complaint status tracking</li>
+          <li>Complaint history</li>
+          <li>Resolution and unresolved-reason recording</li>
+          <li>Complaint CSV export</li>
+          <li>Basic administrative controls</li>
+        </ul>
+      </div>
+
+      <div class="hr"></div>
+      <p class="kicker" style="margin-bottom:9px">Explicitly excluded from Phase 1</p>
+      <div class="chips">
+        <span class="chip">Online payment</span><span class="chip">Payment gateway</span>
+        <span class="chip">Banking integration</span><span class="chip">SMS notification</span>
+        <span class="chip">WhatsApp notification</span><span class="chip">Third-party communication charges</span>
+      </div>
+      <p style="font-size:12px;color:var(--mute);margin-top:10px">
+        There are no hidden costs in this quotation. The items above carry no charge because they are
+        not part of this phase.
+      </p>
+    </div>
+
+    <div class="rv">
+      <div class="price">
+        <p class="kicker" style="margin:0 0 6px">Phase 1 — fixed quotation</p>
+        <div class="amt"><span class="cur">PKR</span>400,000</div>
+        <div class="hr" style="margin:18px 0"></div>
+        <div class="grid g2" style="gap:16px">
+          <div>
+            <div class="lbl" style="font-family:var(--font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:6px">Estimated implementation</div>
+            <div style="font-family:var(--font-display);font-size:21px;font-weight:600;color:var(--ink)">2–3 weeks</div>
+          </div>
+          <div>
+            <div class="lbl" style="font-family:var(--font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:6px">Maximum working window</div>
+            <div style="font-family:var(--font-display);font-size:21px;font-weight:600;color:var(--ink)">Up to 1 month</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top:14px">
+        <b>Delivery conditions.</b> Final deployment timeline is subject to data availability, bill
+        format validation, stakeholder feedback, testing and approval.
+      </div>
+
+      <div class="note plain" style="margin-top:11px">
+        <b>Architecture commitment.</b> Phase 1 is intentionally designed as an initial operational
+        implementation. The system architecture remains scalable so that future Revenue Management,
+        Advanced Complaint Management, Financial Management, GIS and Asset Management capabilities can
+        be integrated without rebuilding the platform from scratch.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 08 · PHASE 2 REVENUE ==================== -->
+<section class="slide" data-t="Phase 2 — Revenue">
+  <div class="slide-head">
+    <p class="eyebrow rv">Phase 2 <span class="badge b-dem" style="margin-left:4px">On demand · separate quotation</span></p>
+    <h2 class="rv">Revenue Management System</h2>
+    <p class="lede rv">
+      Evolves the Phase 1 billing foundation into a complete revenue ecosystem. The capabilities below
+      are future scope and are <b style="color:var(--gold-soft)">not</b> included in the PKR 400,000 Phase 1 quotation.
+    </p>
+  </div>
+
+  <div class="grid g4 rv">
+    <div class="card">
+      <svg class="ico"><use href="#i-users"/></svg>
+      <h4>Consumers &amp; connections</h4>
+      <ul class="ul tight" style="margin-top:8px">
+        <li>Consumer database</li>
+        <li>Connection management</li>
+        <li>Consumer registration</li>
+        <li>New connection workflow</li>
+        <li>Connection transfer and status</li>
+        <li>Meter information</li>
+      </ul>
+    </div>
+    <div class="card">
+      <svg class="ico"><use href="#i-bill"/></svg>
+      <h4>Billing engine</h4>
+      <ul class="ul tight" style="margin-top:8px">
+        <li>Meter reading management</li>
+        <li>Billing cycles</li>
+        <li>Tariff management</li>
+        <li>Arrears and outstanding amounts</li>
+        <li>Penalties, surcharges, adjustments</li>
+        <li>Bill and duplicate bill generation</li>
+      </ul>
+    </div>
+    <div class="card">
+      <svg class="ico"><use href="#i-coin"/></svg>
+      <h4>Collection &amp; recovery</h4>
+      <ul class="ul tight" style="margin-top:8px">
+        <li>Payment status</li>
+        <li>Revenue collection tracking</li>
+        <li>Defaulter management</li>
+        <li>Collection reports</li>
+        <li>Consumer payment history</li>
+      </ul>
+    </div>
+    <div class="card">
+      <svg class="ico"><use href="#i-chart"/></svg>
+      <h4>Analytics &amp; control</h4>
+      <ul class="ul tight" style="margin-top:8px">
+        <li>Revenue analytics</li>
+        <li>Monthly and annual reports</li>
+        <li>Department and area-wise reports</li>
+        <li>Ward-wise reports</li>
+        <li>Role-based access</li>
+        <li>Audit trail</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid g2 rv" style="margin-top:clamp(13px,1.9vh,22px)">
+    <div class="card">
+      <h4>Potential integrations — to be evaluated</h4>
+      <div class="chips" style="margin-top:8px">
+        <span class="chip">Payment gateways</span><span class="chip">Banking &amp; payment channels</span>
+        <span class="chip">SMS notification</span><span class="chip">WhatsApp notification</span>
+        <span class="chip">Government systems</span><span class="chip">Other WASA / PWASA systems</span>
+      </div>
+    </div>
+    <div class="note plain" style="display:flex;align-items:center">
+      <span><b>Indicative timeline 6–10 weeks.</b> Scope, integrations and commercials are confirmed during
+      requirements finalisation, after which a separate quotation is issued.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 09 · PHASE 3 COMPLAINTS ==================== -->
+<section class="slide" data-t="Phase 3 — Complaints">
+  <div class="slide-head">
+    <p class="eyebrow rv">Phase 3 <span class="badge b-dem" style="margin-left:4px">On demand · separate quotation</span></p>
+    <h2 class="rv">Complete Complaint Management System</h2>
+    <p class="lede rv">
+      Phase 1 establishes the record and the status trail. Phase 3 adds the organisational structure —
+      departments, teams, escalation and performance measurement.
+    </p>
+  </div>
+
+  <div class="grid g3 rv" style="margin-bottom:clamp(13px,1.9vh,22px)">
+    <div class="card">
+      <svg class="ico"><use href="#i-flow"/></svg>
+      <h4>Structure &amp; assignment</h4>
+      <ul class="ul tight" style="margin-top:8px">
+        <li>Complaint registration and categories</li>
+        <li>Priority levels</li>
+        <li>Department and team management</li>
+        <li>Staff and member management</li>
+        <li>Automatic and manual assignment</li>
+        <li>Ward-based and area-based assignment</li>
+      </ul>
+    </div>
+    <div class="card">
+      <svg class="ico"><use href="#i-clock"/></svg>
+      <h4>Escalation &amp; field workflow</h4>
+      <ul class="ul tight" style="margin-top:8px">
+        <li>Complaint escalation</li>
+        <li>SLA tracking</li>
+        <li>Pending complaint monitoring</li>
+        <li>Field team workflow</li>
+        <li>Resolution verification</li>
+        <li>Reopening and referral</li>
+        <li>Attachments, photographs, evidence</li>
+      </ul>
+    </div>
+    <div class="card">
+      <svg class="ico"><use href="#i-chart"/></svg>
+      <h4>Accountability &amp; reporting</h4>
+      <ul class="ul tight" style="margin-top:8px">
+        <li>Internal remarks and audit logs</li>
+        <li>Complaint history</li>
+        <li>Performance analytics</li>
+        <li>Department and team-wise reports</li>
+        <li>Staff-wise performance</li>
+        <li>Ward-wise and resolution-time reports</li>
+        <li>Unresolved complaint analysis</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="kicker rv" style="margin-bottom:9px">Accountability chain</p>
+  <div class="flow rv">
+    <div class="fstep"><b>Complaint</b><span>Logged and categorised</span></div>
+    <div class="fstep"><b>Department</b><span>Routed by responsibility</span></div>
+    <div class="fstep"><b>Team</b><span>Ward or area team</span></div>
+    <div class="fstep"><b>Assigned member</b><span>Named owner</span></div>
+    <div class="fstep"><b>Action</b><span>Field intervention</span></div>
+    <div class="fstep"><b>Verification</b><span>Resolution confirmed</span></div>
+    <div class="fstep"><b>Closure</b><span>Recorded and reportable</span></div>
+  </div>
+
+  <div class="note plain rv" style="margin-top:clamp(12px,1.8vh,20px)">
+    <b>Indicative timeline 6–10 weeks</b>, subject to final scope. Every stage above is recorded, giving
+    management visibility of where a complaint stands and who is responsible for it.
+  </div>
+</section>
+
+<!-- ==================== 10 · PHASE 4 + 5 ==================== -->
+<section class="slide" data-t="Phases 4 &amp; 5">
+  <div class="slide-head">
+    <p class="eyebrow rv">Phases 4 &amp; 5 <span class="badge b-dem" style="margin-left:4px">On demand · separate quotation</span></p>
+    <h2 class="rv">Financial Management · Asset Management &amp; GIS</h2>
+  </div>
+
+  <div class="split">
+    <div class="rv">
+      <div class="card" style="margin-bottom:13px">
+        <svg class="ico"><use href="#i-coin"/></svg>
+        <h4>Phase 4 — Financial Management System</h4>
+        <div class="grid g2" style="gap:0 20px;margin-top:8px">
+          <ul class="ul tight">
+            <li>Budget management</li>
+            <li>Revenue and expense tracking</li>
+            <li>Accounts payable and receivable</li>
+            <li>Financial transactions</li>
+            <li>Bank account and cash management</li>
+            <li>Ledger management</li>
+          </ul>
+          <ul class="ul tight">
+            <li>Department and project-wise expenses</li>
+            <li>Vendor management and purchase records</li>
+            <li>Financial approvals</li>
+            <li>Monthly and annual reporting</li>
+            <li>Budget vs actual, cash-flow visibility</li>
+            <li>Audit trail and role-based permissions</li>
+          </ul>
+        </div>
+        <div class="chips" style="margin-top:11px">
+          <span class="chip on">Revenue</span><span class="chip on">Expenses</span>
+          <span class="chip on">Outstanding</span><span class="chip on">Cash position</span>
+          <span class="chip on">Budget utilisation</span><span class="chip on">Financial performance</span>
+        </div>
+        <p style="font-size:11.5px;color:var(--mute);margin-top:9px">
+          Indicative timeline 8–12 weeks. Final scope and commercial quotation will be prepared after
+          requirements finalisation.
+        </p>
+      </div>
+
+      <div class="card">
+        <svg class="ico"><use href="#i-layers"/></svg>
+        <h4>Phase 5 — Asset Management</h4>
+        <div class="chips" style="margin-top:9px">
+          <span class="chip">Asset registration</span><span class="chip">Asset ID</span>
+          <span class="chip">Location &amp; type</span><span class="chip">Installation information</span>
+          <span class="chip">Condition</span><span class="chip">Maintenance history</span>
+          <span class="chip">Inspection history</span><span class="chip">Replacement planning</span>
+          <span class="chip">Asset lifecycle</span><span class="chip">Responsible department</span>
+        </div>
+        <p style="font-size:11.5px;color:var(--mute);margin-top:9px">Indicative timeline 8–14 weeks, subject to final scope.</p>
+      </div>
+    </div>
+
+    <div class="rv">
+      <div class="mock">
+        <div class="mock-bar"><i></i><i></i><i></i><span>GIS · network, wards and complaint hotspots</span></div>
+        <svg viewBox="0 0 440 300" role="img" aria-label="GIS map concept showing ward boundaries, water and sewerage networks, assets and complaint hotspots">
+          <rect width="440" height="300" fill="#080d14"/>
+          <!-- wards -->
+          <g stroke="rgba(255,255,255,.12)" stroke-width="1">
+            <path d="M40 44 L188 32 L214 118 L92 142 Z" fill="rgba(47,168,201,.05)"/>
+            <path d="M188 32 L356 48 L370 130 L214 118 Z" fill="rgba(47,111,237,.05)"/>
+            <path d="M92 142 L214 118 L228 236 L86 250 Z" fill="rgba(212,160,23,.045)"/>
+            <path d="M214 118 L370 130 L388 244 L228 236 Z" fill="rgba(47,163,107,.04)"/>
+          </g>
+          <g font-family="ui-monospace,Consolas,monospace" font-size="7" fill="#6d7a85" letter-spacing="1">
+            <text x="96" y="90">WARD [ __ ]</text><text x="256" y="88">WARD [ __ ]</text>
+            <text x="126" y="196">WARD [ __ ]</text><text x="278" y="192">WARD [ __ ]</text>
+          </g>
+          <!-- water network -->
+          <g fill="none" stroke="#2fa8c9" stroke-width="1.8" opacity=".8" stroke-linecap="round">
+            <path d="M52 96 C130 86 176 138 236 134 S344 160 388 152"/>
+            <path d="M132 42 C144 104 136 178 150 244"/>
+          </g>
+          <!-- sewerage network -->
+          <g fill="none" stroke="#2f6fed" stroke-width="1.5" opacity=".65" stroke-dasharray="5 4" stroke-linecap="round">
+            <path d="M300 44 C288 110 310 176 296 240"/>
+            <path d="M60 176 C140 168 220 196 384 188"/>
+          </g>
+          <!-- flow -->
+          <circle r="2.8" fill="#7fdcf0">
+            <animateMotion dur="8s" repeatCount="indefinite" path="M52 96 C130 86 176 138 236 134 S344 160 388 152"/>
+          </circle>
+          <!-- assets -->
+          <g>
+            <rect x="146" y="126" width="11" height="11" rx="2" fill="none" stroke="#7fdcf0" stroke-width="1.4"/>
+            <rect x="292" y="152" width="11" height="11" rx="2" fill="none" stroke="#7fdcf0" stroke-width="1.4"/>
+            <circle cx="212" cy="196" r="5" fill="none" stroke="#8fb4f5" stroke-width="1.4"/>
+            <circle cx="98" cy="150" r="5" fill="none" stroke="#8fb4f5" stroke-width="1.4"/>
+          </g>
+          <!-- hotspots -->
+          <g>
+            <circle cx="186" cy="102" r="16" fill="rgba(212,160,23,.14)"/>
+            <circle cx="186" cy="102" r="5" fill="#d4a017"/>
+            <circle cx="186" cy="102" r="5" fill="none" stroke="#d4a017" stroke-width="1.2">
+              <animate attributeName="r" values="5;22" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values=".8;0" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="300" cy="204" r="13" fill="rgba(201,118,47,.14)"/>
+            <circle cx="300" cy="204" r="4.4" fill="#c9762f"/>
+            <circle cx="300" cy="204" r="4.4" fill="none" stroke="#c9762f" stroke-width="1.2">
+              <animate attributeName="r" values="4.4;18" dur="3.6s" begin="1.1s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values=".75;0" dur="3.6s" begin="1.1s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="120" cy="220" r="4" fill="#2fa36b"/>
+          </g>
+          <!-- legend -->
+          <g transform="translate(14,262)">
+            <rect width="412" height="26" rx="6" fill="rgba(10,10,11,.86)" stroke="rgba(255,255,255,.1)"/>
+            <g font-family="ui-monospace,Consolas,monospace" font-size="7" fill="#b4b4ad">
+              <line x1="14" y1="13" x2="28" y2="13" stroke="#2fa8c9" stroke-width="1.8"/><text x="33" y="16">Water main</text>
+              <line x1="98" y1="13" x2="112" y2="13" stroke="#2f6fed" stroke-width="1.5" stroke-dasharray="4 3"/><text x="117" y="16">Sewerage</text>
+              <rect x="180" y="9" width="8" height="8" rx="1.6" fill="none" stroke="#7fdcf0" stroke-width="1.3"/><text x="193" y="16">Disposal / pumping</text>
+              <circle cx="292" cy="13" r="4" fill="#d4a017"/><text x="302" y="16">Complaint hotspot</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <p class="cap">Illustrative GIS concept · placeholder data</p>
+      <div class="note plain" style="margin-top:11px;font-size:12px">
+        <b>Location intelligence.</b> Complaint → location → ward → area → responsible team → action.
+        Management can visually identify hotspots and recurring operational problem areas.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 11 · ECOSYSTEM ==================== -->
+<section class="slide" data-t="Integrated ecosystem">
+  <div class="slide-head">
+    <p class="eyebrow rv">Target architecture</p>
+    <h2 class="rv">An integrated digital ecosystem — <em>not disconnected modules</em></h2>
+    <p class="lede rv">
+      The long-term objective is a platform where operational, revenue, complaint, financial, GIS and
+      asset information work against one database and one management view.
+    </p>
+  </div>
+
+  <div class="split-r">
+    <div class="rv">
+      <svg class="arch" viewBox="0 0 520 330" role="img" aria-label="Architecture diagram: billing, complaints and revenue feed a central database, which supports financial, GIS and asset management, all surfaced in a management dashboard">
+        <defs>
+          <marker id="ar" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0 0 L8 4 L0 8 z" fill="rgba(212,160,23,.6)"/>
+          </marker>
+        </defs>
+        <!-- top: platform -->
+        <rect x="160" y="6" width="200" height="34" rx="8" fill="rgba(212,160,23,.09)" stroke="rgba(212,160,23,.42)"/>
+        <text x="260" y="27" font-size="11" fill="#edc14f" text-anchor="middle" letter-spacing="1.4">WASA DIGITAL PLATFORM</text>
+
+        <!-- tier 1 -->
+        <g class="nd">
+          <rect x="26" y="72" width="132" height="42" rx="8" fill="#0a0a0b" stroke="rgba(47,163,107,.4)"/>
+          <text x="92" y="92" font-size="9.5" fill="#7fd6a8" text-anchor="middle" letter-spacing="1.2">BILLING</text>
+          <text x="92" y="105" font-size="7" fill="#6d7a85" text-anchor="middle">Phase 1</text>
+          <rect x="194" y="72" width="132" height="42" rx="8" fill="#0a0a0b" stroke="rgba(47,163,107,.4)"/>
+          <text x="260" y="92" font-size="9.5" fill="#7fd6a8" text-anchor="middle" letter-spacing="1.2">COMPLAINTS</text>
+          <text x="260" y="105" font-size="7" fill="#6d7a85" text-anchor="middle">Phase 1 → Phase 3</text>
+          <rect x="362" y="72" width="132" height="42" rx="8" fill="#0a0a0b" stroke="rgba(47,111,237,.35)"/>
+          <text x="428" y="92" font-size="9.5" fill="#8fb4f5" text-anchor="middle" letter-spacing="1.2">REVENUE</text>
+          <text x="428" y="105" font-size="7" fill="#6d7a85" text-anchor="middle">Phase 2</text>
+        </g>
+
+        <!-- connectors down -->
+        <g stroke="rgba(212,160,23,.34)" stroke-width="1.2" fill="none" marker-end="url(#ar)">
+          <path d="M92 114 V132 H260 V150"/>
+          <path d="M260 114 V150"/>
+          <path d="M428 114 V132 H260 V150"/>
+        </g>
+
+        <!-- central db -->
+        <rect x="150" y="152" width="220" height="42" rx="8" fill="rgba(212,160,23,.07)" stroke="rgba(212,160,23,.45)"/>
+        <text x="260" y="172" font-size="10" fill="#edc14f" text-anchor="middle" letter-spacing="1.6">CENTRAL DATABASE</text>
+        <text x="260" y="185" font-size="7" fill="#8a8a82" text-anchor="middle">One consumer, complaint and asset record</text>
+
+        <g stroke="rgba(212,160,23,.34)" stroke-width="1.2" fill="none" marker-end="url(#ar)">
+          <path d="M260 194 V206 H92 V222"/>
+          <path d="M260 194 V222"/>
+          <path d="M260 194 V206 H428 V222"/>
+        </g>
+
+        <!-- tier 2 -->
+        <g class="nd">
+          <rect x="26" y="224" width="132" height="42" rx="8" fill="#0a0a0b" stroke="rgba(47,111,237,.35)"/>
+          <text x="92" y="244" font-size="9.5" fill="#8fb4f5" text-anchor="middle" letter-spacing="1.2">FINANCIAL</text>
+          <text x="92" y="257" font-size="7" fill="#6d7a85" text-anchor="middle">Phase 4</text>
+          <rect x="194" y="224" width="132" height="42" rx="8" fill="#0a0a0b" stroke="rgba(47,168,201,.4)"/>
+          <text x="260" y="244" font-size="9.5" fill="#7fdcf0" text-anchor="middle" letter-spacing="1.2">GIS / MAPS</text>
+          <text x="260" y="257" font-size="7" fill="#6d7a85" text-anchor="middle">Phase 5</text>
+          <rect x="362" y="224" width="132" height="42" rx="8" fill="#0a0a0b" stroke="rgba(47,168,201,.4)"/>
+          <text x="428" y="244" font-size="9.5" fill="#7fdcf0" text-anchor="middle" letter-spacing="1.2">ASSETS</text>
+          <text x="428" y="257" font-size="7" fill="#6d7a85" text-anchor="middle">Phase 5</text>
+        </g>
+
+        <g stroke="rgba(212,160,23,.34)" stroke-width="1.2" fill="none" marker-end="url(#ar)">
+          <path d="M92 266 V282 H260 V296"/>
+          <path d="M260 266 V296"/>
+          <path d="M428 266 V282 H260 V296"/>
+        </g>
+        <rect x="160" y="298" width="200" height="30" rx="8" fill="rgba(255,255,255,.045)" stroke="rgba(255,255,255,.18)"/>
+        <text x="260" y="317" font-size="9.5" fill="#fafaf8" text-anchor="middle" letter-spacing="1.5">MANAGEMENT DASHBOARD</text>
+      </svg>
+    </div>
+
+    <div>
+      <div class="card rv" style="margin-bottom:13px">
+        <svg class="ico"><use href="#i-users"/></svg>
+        <h4>Role-based access — future architecture</h4>
+        <div class="chips" style="margin-top:9px">
+          <span class="chip">Super Admin</span><span class="chip">Administrator</span>
+          <span class="chip">Billing Staff</span><span class="chip">Complaint Management Cell</span>
+          <span class="chip">Field Team</span><span class="chip">Finance Team</span>
+          <span class="chip">GIS Team</span><span class="chip">Management / Reporting</span>
+        </div>
+        <p style="font-size:11.5px;color:var(--mute);margin-top:9px">
+          Phase 1 keeps permissions simple and practical. Detailed role-based access control is
+          introduced in later phases.
+        </p>
+      </div>
+
+      <div class="card rv">
+        <svg class="ico"><use href="#i-shield"/></svg>
+        <h4>Security &amp; data management</h4>
+        <div class="grid g2" style="gap:0 20px;margin-top:8px">
+          <ul class="ul tight">
+            <li>Secure authentication</li>
+            <li>Role-based access</li>
+            <li>Data validation</li>
+            <li>Audit logs</li>
+          </ul>
+          <ul class="ul tight">
+            <li>Backup strategy</li>
+            <li>Database integrity</li>
+            <li>Controlled administrative access</li>
+            <li>Secure API architecture</li>
+          </ul>
+        </div>
+        <p style="font-size:11.5px;color:var(--mute);margin-top:9px">
+          Capabilities are stated as they will be implemented, scaled to each phase. No absolute
+          security or availability claims are made.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 12 · COMMERCIAL SUMMARY ==================== -->
+<section class="slide" data-t="Commercial summary">
+  <div class="slide-head">
+    <p class="eyebrow rv">Commercial summary &amp; next steps</p>
+    <h2 class="rv">One committed phase. <em>A defined path for the rest.</em></h2>
+  </div>
+
+  <div class="split">
+    <div class="rv">
+      <table class="q">
+        <thead>
+          <tr><th style="width:64px">Phase</th><th>System</th><th style="width:120px">Indicative timeline</th><th style="width:132px;text-align:right">Pricing</th></tr>
+        </thead>
+        <tbody>
+          <tr class="hl">
+            <td data-l="Phase"><b>Phase 1</b></td>
+            <td data-l="System"><b>Initial Billing + Complaint Management Foundation</b></td>
+            <td data-l="Timeline">2–3 weeks<br><span style="font-size:11px;color:var(--mute)">up to 1 month</span></td>
+            <td data-l="Pricing" style="text-align:right"><span class="pr" style="font-size:15px">PKR 400,000</span></td>
+          </tr>
+          <tr><td data-l="Phase">Phase 2</td><td data-l="System">Revenue Management System</td><td data-l="Timeline">6–10 weeks</td><td data-l="Pricing" style="text-align:right"><span class="pr dem">On Demand</span></td></tr>
+          <tr><td data-l="Phase">Phase 3</td><td data-l="System">Complete Complaint Management System</td><td data-l="Timeline">6–10 weeks</td><td data-l="Pricing" style="text-align:right"><span class="pr dem">On Demand</span></td></tr>
+          <tr><td data-l="Phase">Phase 4</td><td data-l="System">Financial Management System</td><td data-l="Timeline">8–12 weeks</td><td data-l="Pricing" style="text-align:right"><span class="pr dem">On Demand</span></td></tr>
+          <tr><td data-l="Phase">Phase 5</td><td data-l="System">Asset Management + GIS Integration</td><td data-l="Timeline">8–14 weeks</td><td data-l="Pricing" style="text-align:right"><span class="pr dem">On Demand</span></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:11.5px;color:var(--mute);margin-top:11px">
+        Only Phase 1 carries a fixed price. Timelines for Phases 2–5 are indicative planning estimates,
+        subject to detailed requirements, data availability, integrations, approvals and final scope.
+      </p>
+    </div>
+
+    <div>
+      <div class="price rv">
+        <p class="kicker" style="margin:0 0 6px">Initial implementation</p>
+        <div class="amt"><span class="cur">PKR</span>400,000</div>
+        <div class="hr" style="margin:16px 0"></div>
+        <p style="margin:0;font-size:13px;color:var(--body)">
+          Estimated delivery <b style="color:var(--ink)">2–3 weeks</b>, maximum working window
+          <b style="color:var(--ink)">up to 1 month</b>.<br>
+          Future systems: <b style="color:#8fb4f5">On Demand / separate quotation</b>.
+        </p>
+      </div>
+
+      <div class="note rv" style="margin-top:14px">
+        Phase 1 provides WASA Toba Tek Singh with an immediate, practical digital foundation for billing
+        and complaint operations, while establishing the architecture required for future expansion into
+        an integrated Revenue, Complaint, Financial, GIS and Asset Management ecosystem.
+      </div>
+
+      <p class="kicker rv" style="margin:clamp(14px,2vh,22px) 0 9px">Next steps</p>
+      <div class="flow rv">
+        <div class="fstep"><b>1 · Confirm</b><span>Approval of Phase 1 scope and quotation</span></div>
+        <div class="fstep"><b>2 · Provide</b><span>Bill format sample and billing data structure</span></div>
+        <div class="fstep"><b>3 · Build</b><span>Implementation, review and acceptance testing</span></div>
+      </div>
+
+      <div class="hr rv"></div>
+      <div class="foot rv">
+        <span>Prepared by<br><b>The Mahir Tech</b></span>
+        <span>Prepared for<br><b>WASA Toba Tek Singh</b></span>
+        <span>Date<br><b>29 August 2026</b></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var deck=document.getElementById('deck');
+  var slides=Array.prototype.slice.call(deck.querySelectorAll('.slide'));
+  var rail=document.getElementById('rail'), frameNo=document.getElementById('frameNo'), current=0;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.status .frame').forEach(function(f){
+    f.innerHTML='FRAME <b id="frameNo">01</b> / '+slides.length;
+  });
+  frameNo=document.getElementById('frameNo');
+
+  slides.forEach(function(s,i){
+    var b=document.createElement('button');
+    b.className='tick'; b.type='button';
+    b.setAttribute('aria-label','Slide '+(i+1)+': '+(s.dataset.t||''));
+    b.setAttribute('aria-current', i===0?'true':'false');
+    b.addEventListener('click',function(){go(i);});
+    rail.appendChild(b);
+  });
+  var ticks=Array.prototype.slice.call(rail.querySelectorAll('.tick'));
+
+  function go(i){
+    i=Math.max(0,Math.min(slides.length-1,i));
+    slides[i].scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+  }
+  function setCurrent(i){
+    if(i===current)return;
+    current=i;
+    ticks.forEach(function(t,n){t.setAttribute('aria-current',n===i?'true':'false');});
+    if(frameNo) frameNo.textContent=String(i+1).padStart(2,'0');
+  }
+
+  function countUp(scope){
+    var els=scope.querySelectorAll('[data-count]');
+    Array.prototype.forEach.call(els,function(el){
+      if(el.dataset.done)return;
+      el.dataset.done='1';
+      var target=parseInt(el.dataset.count,10);
+      if(reduce){el.textContent=target.toLocaleString('en-GB');return;}
+      var start=performance.now(),dur=1100;
+      function tick(now){
+        var p=Math.min(1,(now-start)/dur), eased=1-Math.pow(1-p,3);
+        el.textContent=Math.round(target*eased).toLocaleString('en-GB');
+        if(p<1)requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('on');
+        var grids=e.target.querySelectorAll('.grid');
+        Array.prototype.forEach.call(grids,function(g,gi){
+          if(g.dataset.staggered)return;
+          g.dataset.staggered='1';
+          g.classList.add('on');
+          Array.prototype.forEach.call(g.children,function(c,ci){
+            c.style.animationDelay=(gi*0.04+ci*0.05)+'s';
+          });
+        });
+        countUp(e.target);
+        if(e.intersectionRatio>0.5) setCurrent(slides.indexOf(e.target));
+      }
+    });
+  },{threshold:[0.2,0.55],root:deck});
+  slides.forEach(function(s){io.observe(s);});
+
+  document.addEventListener('keydown',function(ev){
+    var k=ev.key;
+    if(k==='ArrowDown'||k==='ArrowRight'||k===' '||k==='PageDown'){ev.preventDefault();go(current+1);}
+    else if(k==='ArrowUp'||k==='ArrowLeft'||k==='PageUp'){ev.preventDefault();go(current-1);}
+    else if(k==='Home'){ev.preventDefault();go(0);}
+    else if(k==='End'){ev.preventDefault();go(slides.length-1);}
+  });
+
+  document.getElementById('pdfBtn').addEventListener('click',function(){window.print();});
+})();
+</script>
+</body>
+</html>
